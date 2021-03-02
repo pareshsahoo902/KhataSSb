@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">SSB App</string>
 
+
+
     <!--    Splash Screen-->
     <string name="get_started">Let\'s Get Started</string>
 

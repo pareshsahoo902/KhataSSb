@@ -7,12 +7,14 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="windowBackground">#FFFFFFFF</color>
 
 
 <!--    theme colors-->
     <color name="colorPrimary">#531cb3</color>
     <color name="colorPrimaryDark">#451993</color>
     <color name="colorAccent">#c29ad9</color>
+
 
 
     <color name="headingTextColor">#4b4b4b</color>

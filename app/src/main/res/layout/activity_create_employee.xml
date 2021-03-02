@@ -282,6 +282,7 @@
             android:text="By Clicking Save you will create an Employee and in the next step you will add Payment and salary information."
             />
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/savebtn"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginLeft="10dp"
