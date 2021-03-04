@@ -17,7 +17,6 @@ import androidx.annotation.Nullable;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.ssb.ssbapp.R;
 
-
 public class ImagePickerDailog extends BottomSheetDialogFragment {
 
     private LinearLayout cameraPick, galleryPick;

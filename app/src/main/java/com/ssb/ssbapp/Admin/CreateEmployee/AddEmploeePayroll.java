@@ -19,13 +19,14 @@ import android.widget.ImageView;
 import com.ssb.ssbapp.DialogHelper.ImagePickerDailog;
 import com.ssb.ssbapp.R;
 import com.ssb.ssbapp.SuccessScreens.SucessActivity;
+import com.ssb.ssbapp.Utils.SSBBaseActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class AddEmploeePayroll extends AppCompatActivity implements ImagePickerDailog.ImagePickerListner {
+public class AddEmploeePayroll extends SSBBaseActivity implements ImagePickerDailog.ImagePickerListner {
     Button btn;
     EditText joiningDateText;
     Calendar myCalendar;
@@ -39,6 +40,7 @@ public class AddEmploeePayroll extends AppCompatActivity implements ImagePickerD
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_emploee_payroll);
 
+        setToolbar(getApplicationContext(),"Payroll Details");
 
         btn = findViewById(R.id.createButton);
         joiningDateText = findViewById(R.id.joiningDateText);
@@ -98,6 +100,7 @@ public class AddEmploeePayroll extends AppCompatActivity implements ImagePickerD
         String myFormat = "dd/MM/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
         joiningDateText.setText(sdf.format(myCalendar.getTime()));
+        showMessageToast("working",false);
 
     }
 

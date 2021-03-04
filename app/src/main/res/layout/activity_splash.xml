@@ -12,17 +12,15 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ssb_logo"
         android:padding="5dp"
+        android:visibility="gone"
+        android:elevation="11dp"
         />
-
-    <com.airbnb.lottie.LottieAnimationView
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:lottie_fileName="whitedotloader.json"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="30dp"
-        />
-
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/veggiewbg"
+        android:alpha="0.6"
+        app:tint="#CCCBCB"/>
 
 </RelativeLayout>

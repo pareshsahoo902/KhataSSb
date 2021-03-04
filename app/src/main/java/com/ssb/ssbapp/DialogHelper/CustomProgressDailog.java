@@ -16,6 +16,7 @@ public class CustomProgressDailog extends DialogFragment {
 
     static AlertDialog alertDialog;
 
+
     public static AlertDialog getLoadingDialog(Activity activity, String MSGText) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
@@ -33,4 +34,5 @@ public class CustomProgressDailog extends DialogFragment {
 
         return alertDialog;
     }
+
 }

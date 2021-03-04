@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/navigation_money"
+        android:icon="@drawable/ic_baseline_attach_money_24"
+        android:title="Money" />
+
+    <item
+        android:id="@+id/navigation_tray"
+        android:icon="@drawable/ic_tray"
+        android:title="Tray" />
+
+    <item
+        android:id="@+id/navigation_staff"
+        android:icon="@drawable/ic_staff"
+        android:title="Staff" />
+    <item
+        android:id="@+id/navigation_dashboard"
+        android:icon="@drawable/ic_baseline_dashboard_24"
+        android:title="Dashboard" />
+</menu>
