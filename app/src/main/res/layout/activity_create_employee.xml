@@ -208,6 +208,7 @@
             />
 
         <Spinner
+            android:id="@+id/branchSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:tooltipText="Branch List" />
@@ -225,12 +226,14 @@
  />
 
         <RadioGroup
+            android:id="@+id/designationRadioGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingLeft="20dp">
 
             <RadioButton
+                android:id="@+id/id1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/fontmedium"
@@ -240,6 +243,7 @@
                 android:textStyle="bold" />
 
             <RadioButton
+                android:id="@+id/id2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/fontmedium"
@@ -254,7 +258,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/fontmedium"
                 android:text="Money &amp; Tray(All)"
-
+                android:id="@+id/id3"
                 android:textColor="@color/headingTextColor"
                 android:textSize="16dp"
                 android:textStyle="bold" />
@@ -264,7 +268,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/fontmedium"
                 android:text="Only View All"
-
+                android:id="@+id/id4"
                 android:textColor="@color/headingTextColor"
                 android:textSize="16dp"
                 android:textStyle="bold" />

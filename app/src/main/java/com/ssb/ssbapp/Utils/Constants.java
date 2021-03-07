@@ -12,4 +12,7 @@ public class Constants {
     public static final String SSB_PREF_ADMIN = "isAdmin";
     public static final String SSB_PREF_PROFILE_PIC= "profilePic_Url";
 
+    //Intents
+    public static final String SSB_EMPLOYEE_DETAILS= "Employee Details";
+
 }

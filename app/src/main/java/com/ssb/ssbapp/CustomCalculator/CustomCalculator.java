@@ -10,7 +10,11 @@ import com.ssb.ssbapp.R;
 public class CustomCalculator extends LinearLayout {
 
     private LinearLayout body;
-    private Button one,two,three,four,five,six,seven,eight,nine,zero,memory_plus,memory_minus,all_clear,delete,add,sub,divide,multiply, decimal;
+    private Button one,two,three,
+            four,five,six,seven,
+            eight,nine,zero,memory_plus,
+            memory_minus, all_clear,delete,
+            add,sub,divide,multiply, decimal;
 
     public CustomCalculator(Context context) {
         super(context);

@@ -4,8 +4,12 @@
 
     <!--    Splash Screen-->
     <string name="get_started">Let\'s Get Started</string>
-    <string name="emailerr">Enter Valid Login-ID</string>
+    <string name="emailerr">Enter Valid Login-ID . Ending with @ssb.com</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="namerr">Enter Valid Name</string>
+    <string name="aadharerr">Enter Valid Aadhar</string>
+    <string name="passwordErr">Password Don\'t match</string>
+    <string name="phoneer">Enter Valid Number</string>
 
 </resources>

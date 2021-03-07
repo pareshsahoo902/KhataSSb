@@ -54,7 +54,6 @@ public class HomeActivity extends SSBBaseActivity {
                 public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                     Fragment selectedFragment =null;
 
-
                     switch (menuItem.getItemId()) {
                         case R.id.navigation_money:
                             selectedFragment= new MoneyFrag();
@@ -70,8 +69,6 @@ public class HomeActivity extends SSBBaseActivity {
                             break;
 
                     }
-
-
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
 
                     return true;

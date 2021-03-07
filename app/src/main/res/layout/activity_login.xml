@@ -8,13 +8,13 @@
     android:orientation="vertical"
     tools:context=".Login.LoginActivity">
 
-    <!--    <ImageView-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="match_parent"-->
-    <!--        android:scaleType="fitXY"-->
-    <!--        android:src="@drawable/veggiewbg"-->
-    <!--        android:alpha="0.6"-->
-    <!--        app:tint="#ddd"/>-->
+<!--        <ImageView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:scaleType="fitXY"-->
+<!--            android:src="@drawable/veggiewbg"-->
+<!--            android:alpha="0.6"-->
+<!--            app:tint="#ddd"/>-->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/email_id"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
