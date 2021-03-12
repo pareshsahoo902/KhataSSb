@@ -1,6 +1,7 @@
 package com.ssb.ssbapp.Login;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
@@ -22,8 +23,17 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.ssb.ssbapp.Home.HomeActivity;
+import com.ssb.ssbapp.KhataMaster.NewKhata;
 import com.ssb.ssbapp.R;
 import com.ssb.ssbapp.Utils.SSBBaseActivity;
+
+import static com.ssb.ssbapp.Utils.Constants.SSB_PREF_ADMIN;
+import static com.ssb.ssbapp.Utils.Constants.SSB_PREF_BRANCH;
+import static com.ssb.ssbapp.Utils.Constants.SSB_PREF_CONTACT;
+import static com.ssb.ssbapp.Utils.Constants.SSB_PREF_NAME;
+import static com.ssb.ssbapp.Utils.Constants.SSB_PREF_PROFILE_PIC;
+import static com.ssb.ssbapp.Utils.Constants.SSB_PREF_TYPE;
 
 public class LoginActivity extends SSBBaseActivity {
     private EditText email, password;
@@ -93,15 +103,31 @@ public class LoginActivity extends SSBBaseActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 dismissProgress();
-                int type = (int) snapshot.child("type").getValue();
+                long type = (long) snapshot.child("type").getValue();
+                String name = (String) snapshot.child("name").getValue();
                 boolean isAdmin = (boolean)snapshot.child("admin").getValue();
                 if (snapshot.exists()){
                     if (isAdmin){
+                        getLocalSession().putBoolean(SSB_PREF_ADMIN,true);
+                        getLocalSession().putString(SSB_PREF_NAME,name);
 
-
+                        startActivity(new Intent(LoginActivity.this, NewKhata.class)
+                                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
                     }
                     else if (!isAdmin){
+                        String profile_pic = (String) snapshot.child("profile_image").getValue();
+                        String branchAssinged = (String) snapshot.child("branch").getValue();
+                        String contactNumber = (String) snapshot.child("contact").getValue();
 
+                        getLocalSession().putString(SSB_PREF_NAME,name);
+                        getLocalSession().putString(SSB_PREF_BRANCH,branchAssinged);
+                        getLocalSession().putString(SSB_PREF_CONTACT,contactNumber);
+                        getLocalSession().putString(SSB_PREF_PROFILE_PIC,profile_pic);
+                        getLocalSession().putBoolean(SSB_PREF_ADMIN,false);
+                        getLocalSession().putLong(SSB_PREF_TYPE,type);
+
+                        startActivity(new Intent(LoginActivity.this, HomeActivity.class)
+                                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
                     }
                 }
             }

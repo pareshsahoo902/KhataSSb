@@ -209,7 +209,7 @@
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/homerecycler"
+            android:id="@+id/moneyrecycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -228,7 +228,7 @@
         android:clickable="true"
         android:tooltipText="Add Customer"
         android:layout_marginBottom="20dp"
-        android:src="@drawable/ic_baseline_add_24" />
+        android:src="@drawable/ic_baseline_staff_add_24" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

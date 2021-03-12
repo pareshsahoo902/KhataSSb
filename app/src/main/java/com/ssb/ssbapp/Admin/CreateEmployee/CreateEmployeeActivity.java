@@ -29,7 +29,7 @@ public class CreateEmployeeActivity extends SSBBaseActivity {
     private EditText firstname, lastname, aadharnumber, contact, loginID, password, confirmPassword;
     private Spinner branchSpinner;
     private RadioGroup ragioGroup;
-    private int type;
+    private long type;
     private AwesomeValidation awesomeValidation;
     private String branchAssinged = "main", designation, employee_details = "";
 
@@ -55,6 +55,7 @@ public class CreateEmployeeActivity extends SSBBaseActivity {
 
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
 
+
         awesomeValidation.addValidation(this, R.id.loginIDText, Patterns.EMAIL_ADDRESS, R.string.emailerr);
         awesomeValidation.addValidation(this, R.id.phoneNumberText, Patterns.PHONE, R.string.phoneer);
 
@@ -64,7 +65,7 @@ public class CreateEmployeeActivity extends SSBBaseActivity {
             public void onClick(View v) {
 
                 if (awesomeValidation.validate() && password.getText().toString().equals(confirmPassword.getText().toString())) {
-
+                    onclick();
                     validateEmployeeDeatils(new EmployeeModel(firstname.getText().toString() + " " + lastname.getText().toString(), aadharnumber.getText().toString(),
                             contact.getText().toString(), loginID.getText().toString(), password.getText().toString(), branchAssinged,type ));
 
@@ -82,7 +83,7 @@ public class CreateEmployeeActivity extends SSBBaseActivity {
         mBundle.putSerializable(SSB_EMPLOYEE_DETAILS+"model",employeeModel);
         startActivity(new Intent(CreateEmployeeActivity.this, AddEmploeePayroll.class)
                 .putExtras(mBundle)
-                .putExtra(SSB_EMPLOYEE_DETAILS, "Name : " + firstname.getText().toString() + " " + lastname.getText().toString() + "\nAadhar number : " + aadharnumber.getText().toString() + "\nContact : " + contact.getText().toString() + " \nBranch assinged : " + branchAssinged + "\nDesignation : " + onclick()));
+                .putExtra(SSB_EMPLOYEE_DETAILS, "Name : " + firstname.getText().toString() + " " + lastname.getText().toString() + "\nAadhar number : " + aadharnumber.getText().toString() + "\nContact : " + contact.getText().toString() + " \nBranch assinged : " + branchAssinged + "\nDesignation : " + onclick()+ String.valueOf(type)));
 
     }
 
@@ -99,7 +100,7 @@ public class CreateEmployeeActivity extends SSBBaseActivity {
             if (radioButton.getText().toString().equals("Tray Entry(All)")) {
                 type = 2;
             }
-            if (radioButton.getText().toString().equals("Money &amp; Tray(All)")) {
+            if (radioButton.getText().toString().equals("Money & Tray(All)")) {
                 type = 3;
             }
             if (radioButton.getText().toString().equals("Only View All")) {

@@ -8,9 +8,9 @@ import java.io.Serializable;
 public class EmployeeModel implements Serializable {
 
     private String name ,aadhar , contact , loginID , password , branchAssinged;
-    private int type;
+    private long type;
 
-    public EmployeeModel(String name, String aadhar, String contact, String loginID, String password, String branchAssinged, int type) {
+    public EmployeeModel(String name, String aadhar, String contact, String loginID, String password, String branchAssinged, long type) {
         this.name = name;
         this.aadhar = aadhar;
         this.contact = contact;
@@ -68,7 +68,7 @@ public class EmployeeModel implements Serializable {
         this.branchAssinged = branchAssinged;
     }
 
-    public int getType() {
+    public long getType() {
         return type;
     }
 

@@ -4,31 +4,52 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TrayMaster.TrayManagmentActivity">
+    tools:context=".KhataMaster.NewKhata">
+    <include layout="@layout/toolbar" />
 
+    <ImageView
+        android:id="@+id/vim"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_marginTop="60dp"
+        android:src="@drawable/vector_image" />
 
-    <include layout="@layout/toolbar"/>
+    <TextView
+        android:id="@+id/t2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:fontFamily="@font/fontregular"
+        android:layout_below="@+id/vim"
+        android:textColor="@color/subHeadingTextColor"
+        android:textSize="14dp"
+        android:layout_marginTop="10dp"
+        android:text="By Clicking Save you will create an Employee and in the next step you will add Payment and salary information."
+        />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tray_name"
+        android:id="@+id/newkhata_name"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/t2"
         android:layout_marginRight="30dp"
         android:layout_weight="1"
         android:textColorHint="@color/colorPrimary"
         app:boxStrokeColor="@color/colorPrimary"
         app:boxStrokeWidth="1dp"
-        app:startIconDrawable="@drawable/ic_tray"
+        app:startIconDrawable="@drawable/ic_baseline_menu_khata_24"
         app:startIconTint="@color/colorPrimary">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tray_nametext"
+            android:id="@+id/kahatnew_nametext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Tray Name"
+            android:hint="khata Name"
             android:inputType="textEmailAddress"
             android:text=""
             android:textColor="@color/headingTextColor"
@@ -36,34 +57,20 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/addTrayBtn"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_below="@+id/tray_name"
+        android:layout_below="@+id/newkhata_name"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="30dp"
         android:layout_marginBottom="20dp"
         android:fontFamily="@font/fontmedium"
-        android:text="Add"
+        android:text="Get Started"
         style="@style/appButtonStyle"
         android:textColor="@color/white"
         android:textSize="18dp" />
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#ddd"
-        android:layout_below="@id/addTrayBtn"
-        />
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/addTrayBtn"
-        android:layout_marginTop="5dp"
-        android:padding="5dp"
-        android:orientation="vertical"
-        tools:listitem="@layout/tray_item"
-        />
 </RelativeLayout>

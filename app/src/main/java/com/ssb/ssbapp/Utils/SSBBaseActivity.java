@@ -17,11 +17,13 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.ssb.ssbapp.DialogHelper.CustomProgressDailog;
 import com.ssb.ssbapp.R;
+import com.ssb.ssbapp.Sessions.LocalSession;
 
 public class SSBBaseActivity extends AppCompatActivity {
 
     private AlertDialog dialog;
     public static Toolbar mToolbar;
+    public LocalSession session;
 
     /**
      * Fetching the currency according the the phone number while login or sign up
@@ -119,6 +121,18 @@ public class SSBBaseActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         TextView toolbarTitle=mToolbar.findViewById(R.id.toolbarTitle);
         toolbarTitle.setText(toolbarTitleString);
+    }
+
+
+    /**
+     * Init the session class
+     * @return
+     */
+    public LocalSession getLocalSession() {
+        if (session == null) {
+            session = new LocalSession(SSBBaseActivity.this);
+        }
+        return session;
     }
 
 }

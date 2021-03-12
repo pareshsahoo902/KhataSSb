@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TrayMaster.TrayManagmentActivity">
+    tools:context=".KhataMaster.KhataManagment">
 
 
     <include layout="@layout/toolbar"/>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tray_name"
+        android:id="@+id/khata_name"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,14 +21,14 @@
         android:textColorHint="@color/colorPrimary"
         app:boxStrokeColor="@color/colorPrimary"
         app:boxStrokeWidth="1dp"
-        app:startIconDrawable="@drawable/ic_tray"
+        app:startIconDrawable="@drawable/ic_baseline_menu_khata_24"
         app:startIconTint="@color/colorPrimary">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tray_nametext"
+            android:id="@+id/khata_nametext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Tray Name"
+            android:hint="Khata Name"
             android:inputType="textEmailAddress"
             android:text=""
             android:textColor="@color/headingTextColor"
@@ -37,10 +37,10 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/addTrayBtn"
+        android:id="@+id/addKhataBtn"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_below="@+id/tray_name"
+        android:layout_below="@+id/khata_name"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="30dp"
@@ -55,15 +55,16 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="#ddd"
-        android:layout_below="@id/addTrayBtn"
+        android:layout_below="@id/addKhataBtn"
         />
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/addTrayBtn"
+        android:layout_below="@id/addKhataBtn"
         android:layout_marginTop="5dp"
         android:padding="5dp"
         android:orientation="vertical"
-        tools:listitem="@layout/tray_item"
+        tools:listitem="@layout/khata_item"
         />
+
 </RelativeLayout>

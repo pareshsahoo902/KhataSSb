@@ -77,6 +77,8 @@ public class AddEmploeePayroll extends SSBBaseActivity implements ImagePickerDai
         emploee_details = getIntent().getStringExtra(Constants.SSB_EMPLOYEE_DETAILS);
 
         mEmployee = (EmployeeModel) getIntent().getSerializableExtra(SSB_EMPLOYEE_DETAILS+"model");
+        userReference = FirebaseDatabase.getInstance().getReference();
+
 
         userStorage= FirebaseStorage.getInstance().getReference().child("SSB").child("Employee Passport Pic").child("employee"+mEmployee.getAadhar()+".jpg");
 
@@ -237,7 +239,32 @@ public class AddEmploeePayroll extends SSBBaseActivity implements ImagePickerDai
                     if (task.isSuccessful()){
                         picDowloadUrl = task.getResult().toString();
 
-                        startAddingToDB(picDowloadUrl);
+                        HashMap<String,Object> hashMap=new HashMap<>();
+                        hashMap.put("name",mEmployee.getName());
+                        hashMap.put("admin",false);
+                        hashMap.put("company","ssb");
+                        hashMap.put("branch",mEmployee.getBranchAssinged());
+                        hashMap.put("loginID",mEmployee.getLoginID());
+                        hashMap.put("password",mEmployee.getPassword());
+                        hashMap.put("type",mEmployee.getType());
+
+                        userReference.child("users").child(mEmployee.getAadhar()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+
+                                if (task.isSuccessful()){
+                                    startAddingToDB(picDowloadUrl);
+
+                                }
+                                else
+                                {
+                                    dismissProgress();
+                                    showMessageToast("SomeError Occurred",true);
+                                }
+
+                            }
+                        });
+
                     }
 
                 }
@@ -255,27 +282,25 @@ public class AddEmploeePayroll extends SSBBaseActivity implements ImagePickerDai
     //save Data to Firebase
     private void startAddingToDB( String imageUrl) {
 
-        userReference = FirebaseDatabase.getInstance().getReference().child("users");
-
         HashMap<String,Object> hashMap=new HashMap<>();
         hashMap.put("name",mEmployee.getName());
         hashMap.put("admin",false);
-        hashMap.put("company","ssb");
         hashMap.put("aadhar",mEmployee.getAadhar());
         hashMap.put("contact",mEmployee.getContact());
         hashMap.put("branch",mEmployee.getBranchAssinged());
-        hashMap.put("loginID",mEmployee.getLoginID());
-        hashMap.put("password",mEmployee.getPassword());
         hashMap.put("type",mEmployee.getType());
         hashMap.put("profile_image",imageUrl);
+        hashMap.put("date_of_joining",joiningDateText.getText().toString());
+        hashMap.put("salary",Integer.parseInt(salary.getText().toString().trim()));
 
-        userReference.child(mEmployee.getAadhar()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+        userReference.child("staff").child(mEmployee.getAadhar()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
 
                 if (task.isSuccessful()){
                     dismissProgress();
                     startActivity(new Intent(AddEmploeePayroll.this, SucessActivity.class)
+                            .putExtra(Constants.SSB_SUCESS_INTENT,"staff")
                             .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
 
                 }

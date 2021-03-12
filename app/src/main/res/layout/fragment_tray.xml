@@ -237,6 +237,6 @@
         android:clickable="true"
         android:tooltipText="Add Tray"
         android:tint="@android:color/white"
-        android:src="@drawable/add_tray" />
+        android:src="@drawable/ic_baseline_staff_add_24" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
