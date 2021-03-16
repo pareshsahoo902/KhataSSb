@@ -10,7 +10,7 @@
     <ImageView
         android:id="@+id/vim"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="230dp"
         android:layout_marginTop="60dp"
         android:src="@drawable/vector_image" />
 
@@ -26,7 +26,7 @@
         android:textColor="@color/subHeadingTextColor"
         android:textSize="14dp"
         android:layout_marginTop="10dp"
-        android:text="By Clicking Save you will create an Employee and in the next step you will add Payment and salary information."
+        android:text="Start a Buisness and Log each and every expense ,keep track of every expenditure for future and the past !\nAll the best!"
         />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -42,6 +42,7 @@
         android:textColorHint="@color/colorPrimary"
         app:boxStrokeColor="@color/colorPrimary"
         app:boxStrokeWidth="1dp"
+        app:errorEnabled="true"
         app:startIconDrawable="@drawable/ic_baseline_menu_khata_24"
         app:startIconTint="@color/colorPrimary">
 
@@ -59,7 +60,7 @@
 
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/addTrayBtn"
+        android:id="@+id/addKBtn"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_below="@+id/newkhata_name"

@@ -29,12 +29,12 @@
                 android:layout_marginRight="15dp"
                 android:background="?attr/selectableItemBackground"
                 android:src="@drawable/ic_baseline_calendar_today_24"
-                android:tint="@android:color/white" />
+                app:tint="@android:color/white" />
             <TextView
                 android:id="@+id/datetext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
+                android:textSize="17dp"
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:layout_marginRight="60dp"

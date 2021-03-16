@@ -21,6 +21,7 @@
         android:textColorHint="@color/colorPrimary"
         app:boxStrokeColor="@color/colorPrimary"
         app:boxStrokeWidth="1dp"
+        app:errorEnabled="true"
         app:startIconDrawable="@drawable/ic_baseline_menu_khata_24"
         app:startIconTint="@color/colorPrimary">
 
@@ -58,6 +59,7 @@
         android:layout_below="@id/addKhataBtn"
         />
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/khataMasterRecycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/addKhataBtn"

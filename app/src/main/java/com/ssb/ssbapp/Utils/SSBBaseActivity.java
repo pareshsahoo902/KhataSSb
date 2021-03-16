@@ -1,5 +1,6 @@
 package com.ssb.ssbapp.Utils;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -7,6 +8,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,15 +17,21 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.ssb.ssbapp.Admin.CreateEmployee.AddEmploeePayroll;
 import com.ssb.ssbapp.DialogHelper.CustomProgressDailog;
 import com.ssb.ssbapp.R;
 import com.ssb.ssbapp.Sessions.LocalSession;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class SSBBaseActivity extends AppCompatActivity {
 
     private AlertDialog dialog;
     public static Toolbar mToolbar;
     public LocalSession session;
+    public Calendar myCalendar;
+
 
     /**
      * Fetching the currency according the the phone number while login or sign up
@@ -134,5 +142,8 @@ public class SSBBaseActivity extends AppCompatActivity {
         }
         return session;
     }
+
+
+
 
 }

@@ -6,11 +6,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.amulyakhare.textdrawable.TextDrawable;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -18,6 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 import com.ssb.ssbapp.Admin.CreateEmployee.CreateEmployeeActivity;
+import com.ssb.ssbapp.Home.HomeActivity;
+import com.ssb.ssbapp.KhataMaster.NewKhata;
 import com.ssb.ssbapp.R;
 import com.ssb.ssbapp.Utils.SSBBaseActivity;
 import com.ssb.ssbapp.ViewHolder.StaffViewHolder;
@@ -66,10 +70,19 @@ public class StaffManagmentActivity extends SSBBaseActivity {
         staffRecycleradapter = new FirebaseRecyclerAdapter<StaffModel, StaffViewHolder>(staffoptions) {
             @Override
             protected void onBindViewHolder(@NonNull StaffViewHolder staffViewHolder, int i, @NonNull StaffModel staffModel) {
+                TextDrawable initial = TextDrawable.builder()
+                        .beginConfig().textColor(Color.WHITE)
+                        .fontSize(11) /* size in px */
+                        .toUpperCase()
+                        .width(20)  // width in px
+                        .height(20)
+                        .endConfig()
+                        .buildRect(staffModel.getName().substring(0, 2), R.color.colorPrimaryDark);
+
                 staffViewHolder.name.setText("Name : "+staffModel.getName());
                 staffViewHolder.DOJ.setText("Date of Joining : "+staffModel.getDate_of_joining());
                 staffViewHolder.salary.setText("Salary : "+"₹"+String.valueOf(staffModel.getSalary())+"/Month");
-                Picasso.with(getApplicationContext()).load(staffModel.getProfile_image()).error(R.drawable.ic_baseline_account_box_24)
+                Picasso.with(getApplicationContext()).load(staffModel.getProfile_image()).error(initial)
                         .into(staffViewHolder.staffImage);
 
                 staffViewHolder.viewDetails.setOnClickListener(new View.OnClickListener() {
@@ -104,5 +117,13 @@ public class StaffManagmentActivity extends SSBBaseActivity {
     protected void onStop() {
         super.onStop();
         staffRecycleradapter.stopListening();
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(StaffManagmentActivity.this, HomeActivity.class)
+                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 }

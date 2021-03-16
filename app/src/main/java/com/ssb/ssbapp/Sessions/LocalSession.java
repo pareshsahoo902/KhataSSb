@@ -18,7 +18,7 @@ public class LocalSession {
     /**
      * for clearing the complete session of the application
      */
-    public void clear() {
+    public static void clear() {
         SharedPreferences.Editor edit = getPreferences().edit();
         edit.clear().apply();
     }
@@ -41,7 +41,7 @@ public class LocalSession {
         return value;
     }
 
-    public boolean putString(String key, String value) {
+    public static boolean putString(String key, String value) {
         return getPreferences().edit().putString(key, value).commit();
     }
 

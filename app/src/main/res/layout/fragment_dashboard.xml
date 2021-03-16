@@ -14,6 +14,7 @@
         app:cardBackgroundColor="@android:color/white"
         >
         <ImageView
+            android:id="@+id/profile_pic"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:src="@drawable/ic_baseline_account_box_24"
@@ -22,6 +23,7 @@
             />
 
         <TextView
+            android:id="@+id/profile_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|top"
@@ -106,6 +108,76 @@
 
     </androidx.cardview.widget.CardView>
 
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/khatamanage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="6dp"
+        android:background="?attr/selectableItemBackground"
+        app:cardBackgroundColor="@android:color/white"
+        >
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_baseline_menu_khata_24"
+            android:tint="@color/colorPrimary"
+            android:layout_margin="10dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Khata Management"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textColor="#191919"
+            android:layout_marginLeft="60dp"
+            android:layout_gravity="center_vertical"
+            />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#ddd"
+            android:layout_gravity="bottom"
+            />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/staffmanage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="6dp"
+        android:background="?attr/selectableItemBackground"
+        app:cardBackgroundColor="@android:color/white"
+        >
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_staff"
+            android:tint="@color/colorPrimary"
+            android:layout_margin="10dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Staff Managment"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textColor="#191919"
+            android:layout_marginLeft="60dp"
+            android:layout_gravity="center_vertical"
+            />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#ddd"
+            android:layout_gravity="bottom"
+            />
+
+    </androidx.cardview.widget.CardView>
     <androidx.cardview.widget.CardView
         android:id="@+id/mdetails"
         android:layout_width="match_parent"
@@ -168,75 +240,6 @@
             android:layout_gravity="center_vertical"
             />
 
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#ddd"
-            android:layout_gravity="bottom"
-            />
-
-    </androidx.cardview.widget.CardView>
-    <androidx.cardview.widget.CardView
-        android:id="@+id/khatamanage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardElevation="6dp"
-        android:background="?attr/selectableItemBackground"
-        app:cardBackgroundColor="@android:color/white"
-        >
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_baseline_menu_khata_24"
-            android:tint="@color/colorPrimary"
-            android:layout_margin="10dp"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Khata Management"
-            android:gravity="center"
-            android:textSize="20sp"
-            android:textColor="#191919"
-            android:layout_marginLeft="60dp"
-            android:layout_gravity="center_vertical"
-            />
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#ddd"
-            android:layout_gravity="bottom"
-            />
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/staffmanage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardElevation="6dp"
-        android:background="?attr/selectableItemBackground"
-        app:cardBackgroundColor="@android:color/white"
-        >
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_staff"
-            android:tint="@color/colorPrimary"
-            android:layout_margin="10dp"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Staff Managment"
-            android:gravity="center"
-            android:textSize="20sp"
-            android:textColor="#191919"
-            android:layout_marginLeft="60dp"
-            android:layout_gravity="center_vertical"
-            />
 
         <ImageView
             android:layout_width="match_parent"

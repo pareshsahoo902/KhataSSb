@@ -24,7 +24,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/MyMaterialTheme">
-        <activity android:name=".KhataMaster.NewKhata"></activity>
+        <activity android:name=".TransactionPage.StaffTransactionPage"></activity>
+        <activity android:name=".Tray.TrayDetails" />
+        <activity android:name=".Money.MoneyDetails" />
+        <activity android:name=".DataEntry.MoneyEntryActivity" />
+        <activity android:name=".TransactionPage.MoneyTransaction" />
+        <activity android:name=".ProfileDetails.ProfilePage" />
+        <activity android:name=".KhataMaster.NewKhata" />
         <activity android:name=".Staff.ViewStaffDetails" />
         <activity android:name=".KhataMaster.KhataManagment" />
         <activity android:name=".Staff.StaffManagmentActivity" />

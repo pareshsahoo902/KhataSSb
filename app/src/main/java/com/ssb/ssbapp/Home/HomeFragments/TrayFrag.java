@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.ssb.ssbapp.Customer.CustomerModel;
 import com.ssb.ssbapp.DialogHelper.AddCustomerBottomSheet;
 import com.ssb.ssbapp.R;
+import com.ssb.ssbapp.Utils.UtilsMethod;
 import com.ssb.ssbapp.ViewHolder.CustomerListViewHolder;
 
 public class TrayFrag extends Fragment {
@@ -72,7 +73,7 @@ public class TrayFrag extends Fragment {
         custRecycleradapter = new FirebaseRecyclerAdapter<CustomerModel, CustomerListViewHolder>(custoptions) {
             @Override
             protected void onBindViewHolder(@NonNull CustomerListViewHolder viewHolder, int i, @NonNull CustomerModel custModel) {
-                viewHolder.nameCust.setText(custModel.getName());
+                viewHolder.nameCust.setText(UtilsMethod.capitalize(custModel.getName()));
 //                viewHolder.amount.setText("Salary : "+"₹"+String.valueOf(custModel.get())+"/Month");
 
                 TextDrawable initial = TextDrawable.builder()

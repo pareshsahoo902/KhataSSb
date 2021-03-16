@@ -10,6 +10,7 @@
         android:layout_height="?attr/actionBarSize"
         local:theme="@style/ThemeOverlay.MaterialComponents.Light"
         local:popupTheme="@style/ThemeOverlay.MaterialComponents.Light">
+
         <TextView
             android:id="@+id/toolbarTitle"
             android:layout_width="match_parent"

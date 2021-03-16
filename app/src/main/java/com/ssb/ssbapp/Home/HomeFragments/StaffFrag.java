@@ -1,5 +1,6 @@
 package com.ssb.ssbapp.Home.HomeFragments;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -20,8 +21,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 import com.ssb.ssbapp.R;
 import com.ssb.ssbapp.Staff.StaffModel;
+import com.ssb.ssbapp.TransactionPage.StaffTransactionPage;
+import com.ssb.ssbapp.Utils.UtilsMethod;
 import com.ssb.ssbapp.ViewHolder.StaffListItem;
 import com.ssb.ssbapp.ViewHolder.StaffViewHolder;
+
+import static com.ssb.ssbapp.Utils.Constants.SSB_EMPLOYEE_DETAILS;
 
 public class StaffFrag extends Fragment {
 
@@ -61,7 +66,7 @@ public class StaffFrag extends Fragment {
         staffRecycleradapter = new FirebaseRecyclerAdapter<StaffModel, StaffListItem>(staffoptions) {
             @Override
             protected void onBindViewHolder(@NonNull StaffListItem staffViewHolder, int i, @NonNull StaffModel staffModel) {
-                staffViewHolder.nameStaff.setText(staffModel.getName());
+                staffViewHolder.nameStaff.setText(UtilsMethod.capitalize(staffModel.getName()));
 //                staffViewHolder.amount.setText("Salary : "+"₹"+String.valueOf(staffModel.getSalary())+"/Month");
 
                 TextDrawable initial = TextDrawable.builder()
@@ -78,7 +83,9 @@ public class StaffFrag extends Fragment {
                 staffViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        Bundle mBundle = new Bundle();
+                        mBundle.putSerializable(SSB_EMPLOYEE_DETAILS,staffModel);
+                        startActivity(new Intent(getContext(), StaffTransactionPage.class).putExtras(mBundle));
                     }
                 });
             }

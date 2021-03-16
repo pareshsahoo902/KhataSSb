@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TransactionPage.StaffTransactionPage">
+
+    <include layout="@layout/toolbar"/>
+
+    <include layout="@layout/staff_item"
+        android:id="@+id/staff_details"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/statusbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/staff_details"
+        android:layout_marginTop="5dp"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardElevation="5dp"
+        >
+        <TextView
+            android:id="@+id/geta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total Salary Credited  : ₹  0"
+            android:textColor="@color/primaryRed"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical|start"
+            android:layout_marginLeft="20dp"
+            />
+        <ImageView
+            android:id="@+id/getPdf"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/pdf"
+            android:tint="@color/colorPrimary"
+            />
+    </androidx.cardview.widget.CardView>
+
+<!--    <LinearLayout-->
+<!--        android:id="@+id/table"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="30dp"-->
+<!--        android:layout_marginTop="7dp"-->
+<!--        android:layout_below="@+id/statusbar"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:weightSum="4"-->
+
+<!--        >-->
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="ENTRIES"-->
+<!--            android:textSize="13dp"-->
+<!--            android:textStyle="bold"-->
+<!--            android:layout_weight="3"-->
+<!--            android:layout_gravity="start|center_vertical"-->
+<!--            />-->
+
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="YOU GAVE"-->
+<!--            android:textSize="13dp"-->
+<!--            android:textStyle="bold"-->
+<!--            android:layout_weight="0.5"-->
+<!--            android:gravity="center"-->
+<!--            android:paddingLeft="20dp"-->
+<!--            android:layout_gravity="center_vertical"-->
+<!--            />-->
+
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="YOU GOT"-->
+<!--            android:textSize="13dp"-->
+<!--            android:layout_weight="0.5"-->
+<!--            android:textStyle="bold"-->
+<!--            android:gravity="right"-->
+<!--            android:paddingRight="10dp"-->
+<!--            android:layout_gravity="center_vertical"-->
+<!--            />-->
+<!--    </LinearLayout>-->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/entryRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/statusbar"
+        android:background="@android:color/transparent"
+        android:layout_marginBottom="70dp"
+        android:paddingTop="15dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        />
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/gavebtn"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_alignParentBottom="true"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="4dp"
+        android:layout_gravity="center_vertical"
+        app:cardBackgroundColor="@color/primaryRed"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Credit Salary ₹"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:textAllCaps="true"
+            android:layout_gravity="center"
+            android:fontFamily="sans-serif-black"
+            />
+    </androidx.cardview.widget.CardView>
+
+
+</RelativeLayout>

@@ -8,22 +8,55 @@
     android:orientation="vertical"
     tools:context=".Login.LoginActivity">
 
-<!--        <ImageView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:scaleType="fitXY"-->
-<!--            android:src="@drawable/veggiewbg"-->
-<!--            android:alpha="0.6"-->
-<!--            app:tint="#ddd"/>-->
+
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:src="@drawable/log"
+        android:scaleType="fitEnd"
+        android:layout_marginRight="-7dp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_toStartOf="@+id/adminSwitch"
+        android:layout_below="@+id/img"
+        android:layout_marginTop="10dp"
+        android:gravity="start"
+        android:padding="5dp"
+        android:textSize="45dp"
+        android:text="Log-In"
+        android:textColor="@color/colorPrimary"
+        android:letterSpacing="0.05"
+        />
+
+    <Switch
+        android:id="@+id/adminSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Admin"
+        android:layout_below="@+id/img"
+        android:textSize="18dp"
+        android:layout_marginTop="70dp"
+        android:switchPadding="7dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:textColor="@color/colorPrimary"
+        android:shadowColor="@color/colorAccent"
+        />
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/email_id"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:layout_marginRight="10dp"
         android:layout_weight="1"
+        android:layout_below="@+id/adminSwitch"
         android:textColorHint="@color/colorPrimary"
         app:boxStrokeColor="@color/colorPrimary"
         app:boxStrokeWidth="1dp"
@@ -72,13 +105,28 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <TextView
+        android:id="@+id/text4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/fontregular"
+        android:layout_below="@+id/password"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:gravity="center"
+        android:text="If you are a Admin Please Click the admin switch on to LogIn as a Admin. \nIf you are a employee Enter your Aadhar Number As LoginID and Password as provided by your employer!"
+        android:textColor="@color/subHeadingTextColor"
+        android:textSize="12dp" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/loginbtn"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_below="@+id/password"
+        android:layout_below="@+id/text4"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="30dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="30dp"
         android:fontFamily="@font/fontmedium"

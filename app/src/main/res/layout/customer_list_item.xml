@@ -4,9 +4,9 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardBackgroundColor="@android:color/white"
-    app:cardCornerRadius="9dp"
+    app:cardCornerRadius="3dp"
     app:cardElevation="4dp"
-    android:layout_margin="3dp">
+    android:layout_margin="4dp">
 
     <ImageView
         android:id="@+id/imguserCust"

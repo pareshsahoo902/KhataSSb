@@ -18,6 +18,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.ssb.ssbapp.R;
+import com.ssb.ssbapp.Utils.UtilsMethod;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -65,16 +66,12 @@ public class AddCustomerBottomSheet extends BottomSheetDialogFragment {
 
     private void addCusotmerToDB() {
         custRef = FirebaseDatabase.getInstance().getReference().child("customers");
-
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat currentdate = new SimpleDateFormat("dd/MM/yyyy-hh:mm:ss");
-        String CurrentDate = currentdate.format(new Date());
         String custUid = UUID.randomUUID().toString().substring(0,12);
 
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("name", name.getText().toString().trim());
         hashMap.put("contact", phone.getText().toString().trim());
-        hashMap.put("updated", CurrentDate);
+        hashMap.put("updated", UtilsMethod.getCurrentDate());
         hashMap.put("uid", custUid);
 
         dismiss();

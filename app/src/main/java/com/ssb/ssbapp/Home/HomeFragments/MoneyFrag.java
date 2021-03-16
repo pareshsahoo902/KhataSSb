@@ -1,5 +1,6 @@
 package com.ssb.ssbapp.Home.HomeFragments;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -22,6 +23,8 @@ import com.ssb.ssbapp.Customer.CustomerModel;
 import com.ssb.ssbapp.DialogHelper.AddCustomerBottomSheet;
 import com.ssb.ssbapp.R;
 import com.ssb.ssbapp.Staff.StaffModel;
+import com.ssb.ssbapp.TransactionPage.MoneyTransaction;
+import com.ssb.ssbapp.Utils.UtilsMethod;
 import com.ssb.ssbapp.ViewHolder.CustomerListViewHolder;
 import com.ssb.ssbapp.ViewHolder.StaffListItem;
 
@@ -66,7 +69,7 @@ public class MoneyFrag extends Fragment {
         custRecycleradapter = new FirebaseRecyclerAdapter<CustomerModel, CustomerListViewHolder>(custoptions) {
             @Override
             protected void onBindViewHolder(@NonNull CustomerListViewHolder viewHolder, int i, @NonNull CustomerModel custModel) {
-                viewHolder.nameCust.setText(custModel.getName());
+                viewHolder.nameCust.setText(UtilsMethod.capitalize(custModel.getName()));
 //                viewHolder.amount.setText("Salary : "+"₹"+String.valueOf(custModel.get())+"/Month");
 
                 TextDrawable initial = TextDrawable.builder()
@@ -84,6 +87,8 @@ public class MoneyFrag extends Fragment {
                     @Override
                     public void onClick(View v) {
 
+                        startActivity(new Intent(getContext(), MoneyTransaction.class)
+                        .putExtra("name",custModel.getName()));
                     }
                 });
             }
