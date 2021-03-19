@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.ssb.ssbapp.DataEntry.MoneyEntryActivity;
+import com.ssb.ssbapp.DialogHelper.EntryPickerDialog;
+import com.ssb.ssbapp.DialogHelper.ImagePickerDailog;
 import com.ssb.ssbapp.R;
 import com.ssb.ssbapp.Utils.SSBBaseActivity;
 import com.ssb.ssbapp.Utils.UtilsMethod;
@@ -30,7 +32,10 @@ public class MoneyTransaction extends SSBBaseActivity {
         getBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MoneyTransaction.this, MoneyEntryActivity.class));
+//                startActivity(new Intent(MoneyTransaction.this, MoneyEntryActivity.class));
+
+                EntryPickerDialog dailog = new EntryPickerDialog();
+                dailog.show(getSupportFragmentManager(), "Select Entry Type !");
             }
         });
     }

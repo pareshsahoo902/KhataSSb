@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        >
+
+        <ImageView
+            android:id="@+id/custPick"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/consumer"
+            android:padding="18dp"
+            android:background="?attr/selectableItemBackground"
+            />
+
+
+        <ImageView
+            android:id="@+id/cashPick"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/cashpng"
+            android:padding="7dp"
+            android:background="?attr/selectableItemBackground"
+            />
+
+
+        <ImageView
+            android:id="@+id/partyPick"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/partypng"
+            android:padding="7dp"
+            android:background="?attr/selectableItemBackground"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="30dp"
+        android:weightSum="3"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Customer"
+            android:textStyle="bold"
+            android:textSize="17dp"
+            android:textColor="@color/colorPrimary"
+            android:gravity="center"
+            android:layout_weight="1"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cash"
+            android:textStyle="bold"
+            android:textSize="17dp"
+            android:textColor="@color/colorPrimary"
+            android:gravity="center"
+            android:layout_weight="1"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Party"
+            android:textStyle="bold"
+            android:textSize="17dp"
+            android:textColor="@color/colorPrimary"
+            android:gravity="center"
+            android:layout_weight="1"
+            />
+    </LinearLayout>
+
+</RelativeLayout>

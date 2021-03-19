@@ -18,6 +18,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.ssb.ssbapp.R;
+import com.ssb.ssbapp.Sessions.LocalSession;
+import com.ssb.ssbapp.Utils.Constants;
 import com.ssb.ssbapp.Utils.UtilsMethod;
 
 import java.text.SimpleDateFormat;
@@ -25,6 +27,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
+
+import static com.ssb.ssbapp.Utils.Constants.SSB_PREF_KID;
 
 public class AddCustomerBottomSheet extends BottomSheetDialogFragment {
 
@@ -73,6 +77,7 @@ public class AddCustomerBottomSheet extends BottomSheetDialogFragment {
         hashMap.put("contact", phone.getText().toString().trim());
         hashMap.put("updated", UtilsMethod.getCurrentDate());
         hashMap.put("uid", custUid);
+        hashMap.put("kid", LocalSession.getString(SSB_PREF_KID));
 
         dismiss();
         custRef.child(custUid).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {

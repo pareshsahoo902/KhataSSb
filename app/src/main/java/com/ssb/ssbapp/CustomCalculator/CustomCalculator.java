@@ -229,24 +229,38 @@ public class CustomCalculator extends LinearLayout implements View.OnClickListen
                 break;
             case R.id.btnMPlus:
                 //TODO
+                calctext="M+"+calctext;
+                mListner.onMemoryPlusPressListner("M+",calctext);
                 break;
             case R.id.btnMminus:
                 //TODO
+                calctext="M-"+calctext;
+                mListner.onMemoryMinusPressListner("M-",calctext);
                 break;
             case R.id.btnAdd:
                 //TODO
+                calctext+="+";
+                mListner.onAddButtonPressListner("+",calctext);
                 break;
             case R.id.btnSubtract:
                 //TODO
+                calctext+="-";
+                mListner.onSubButtonPressListner("-",calctext);
                 break;
             case R.id.btnDivide:
                 //TODO
+                calctext+="/";
+                mListner.onDivideButtonPressListner("/",calctext);
                 break;
             case R.id.btnMultiply:
                 //TODO
+                calctext+="*";
+                mListner.onMultiplyButtonPressListner("*",calctext);
                 break;
             case R.id.btnEquals:
                 //TODO
+                calctext+="=";
+                mListner.onEqualsPressListner("=",calctext);
                 break;
 
         }

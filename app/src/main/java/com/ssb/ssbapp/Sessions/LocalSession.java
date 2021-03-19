@@ -77,7 +77,7 @@ public class LocalSession {
         return value;
     }
 
-    public boolean putLong(String key, long value) {
+    public static boolean putLong(String key, long value) {
         return getPreferences().edit().putLong(key, value).commit();
     }
 
@@ -105,6 +105,7 @@ public class LocalSession {
 
     public boolean getBoolean(String key, boolean fallback) {
         boolean value = fallback;
+
         try {
             value = getPreferences().getBoolean(key, fallback);
         } catch (Exception e) {

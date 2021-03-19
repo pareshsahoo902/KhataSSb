@@ -9,9 +9,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -22,18 +25,23 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.ssb.ssbapp.Customer.CustomerModel;
 import com.ssb.ssbapp.DialogHelper.AddCustomerBottomSheet;
 import com.ssb.ssbapp.R;
+import com.ssb.ssbapp.Sessions.LocalSession;
 import com.ssb.ssbapp.Staff.StaffModel;
 import com.ssb.ssbapp.TransactionPage.MoneyTransaction;
 import com.ssb.ssbapp.Utils.UtilsMethod;
 import com.ssb.ssbapp.ViewHolder.CustomerListViewHolder;
 import com.ssb.ssbapp.ViewHolder.StaffListItem;
 
+import static com.ssb.ssbapp.Utils.Constants.SSB_PREF_KID;
+
 public class MoneyFrag extends Fragment {
 
     private FloatingActionButton moneyFab;
     private RecyclerView custRecycler;
     private DatabaseReference custRef;
+    private EditText searchBar;
 
+    private String searchText;
     private FirebaseRecyclerOptions<CustomerModel> custoptions;
     private FirebaseRecyclerAdapter<CustomerModel, CustomerListViewHolder> custRecycleradapter;
 
@@ -50,7 +58,27 @@ public class MoneyFrag extends Fragment {
         custRecycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         custRecycler.hasFixedSize();
         moneyFab = view.findViewById(R.id.addcustfloatingActionButton);
+        searchBar = view.findViewById(R.id.searchhome);
         custRef = FirebaseDatabase.getInstance().getReference().child("customers");
+
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                searchText = searchBar.getText().toString().trim();
+
+            }
+        });
 
         moneyFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,7 +92,8 @@ public class MoneyFrag extends Fragment {
 
     private void loadCustomers() {
         custoptions = new FirebaseRecyclerOptions.Builder<CustomerModel>()
-                .setQuery(custRef, CustomerModel.class).build();
+//                .setQuery(  custRef.orderByChild("name").startAt(searchText),CustomerModel.class)
+                .setQuery(custRef.orderByChild("kid").equalTo(LocalSession.getString(SSB_PREF_KID)), CustomerModel.class).build();
 
         custRecycleradapter = new FirebaseRecyclerAdapter<CustomerModel, CustomerListViewHolder>(custoptions) {
             @Override

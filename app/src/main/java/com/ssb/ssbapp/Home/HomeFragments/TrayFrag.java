@@ -21,8 +21,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.ssb.ssbapp.Customer.CustomerModel;
 import com.ssb.ssbapp.DialogHelper.AddCustomerBottomSheet;
 import com.ssb.ssbapp.R;
+import com.ssb.ssbapp.Sessions.LocalSession;
 import com.ssb.ssbapp.Utils.UtilsMethod;
 import com.ssb.ssbapp.ViewHolder.CustomerListViewHolder;
+
+import static com.ssb.ssbapp.Utils.Constants.SSB_PREF_KID;
 
 public class TrayFrag extends Fragment {
 
@@ -68,7 +71,7 @@ public class TrayFrag extends Fragment {
 
     private void loadCustomers() {
         custoptions = new FirebaseRecyclerOptions.Builder<CustomerModel>()
-                .setQuery(custRef, CustomerModel.class).build();
+                .setQuery(custRef.orderByChild("kid").equalTo(LocalSession.getString(SSB_PREF_KID)),CustomerModel.class).build();
 
         custRecycleradapter = new FirebaseRecyclerAdapter<CustomerModel, CustomerListViewHolder>(custoptions) {
             @Override
