@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".KhataMaster.KhataManagment">
 
-
     <include layout="@layout/toolbar"/>
 
     <com.google.android.material.textfield.TextInputLayout

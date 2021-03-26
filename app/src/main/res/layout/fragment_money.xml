@@ -228,6 +228,8 @@
         android:clickable="true"
         android:tooltipText="Add Customer"
         android:layout_marginBottom="20dp"
+        app:tint="@color/white"
+        android:backgroundTint="@color/colorPrimary"
         android:src="@drawable/ic_baseline_staff_add_24" />
 
 

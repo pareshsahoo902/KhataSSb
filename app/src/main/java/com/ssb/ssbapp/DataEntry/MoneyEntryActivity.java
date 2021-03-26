@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.ssb.ssbapp.CustomCalculator.CustomCalculator;
 import com.ssb.ssbapp.R;
@@ -19,7 +20,9 @@ public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalcula
 
     private CustomCalculator customCalculator;
     private EditText entryText,itemName;
+    private TextView entries_text;
     private LinearLayout entryLayout;
+    private String descText;
 
 
     @Override
@@ -31,6 +34,7 @@ public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalcula
         customCalculator = findViewById(R.id.custom_calc);
         entryText = findViewById(R.id.calcEntry);
         itemName = findViewById(R.id.itemName);
+        entries_text = findViewById(R.id.entries_text);
         entryLayout = findViewById(R.id.detailsLayout);
 
         entryText.setOnClickListener(new View.OnClickListener() {
@@ -50,15 +54,20 @@ public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalcula
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+                descText = itemName.getText().toString()+":" +entryText.getText().toString();
+                entries_text.setText(descText);
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 if (!entryText.getText().toString().equals("")){
                     entryLayout.setVisibility(View.VISIBLE);
+                    entries_text.setVisibility(View.VISIBLE);
                 }
                 else{
                     entryLayout.setVisibility(View.GONE);
+                    entries_text.setVisibility(View.GONE);
 
                 }
 

@@ -11,9 +11,10 @@
 
 
 <!--    theme colors-->
-    <color name="colorPrimary">#531cb3</color>
-    <color name="colorPrimaryDark">#451993</color>
-    <color name="colorAccent">#c29ad9</color>
+    <color name="colorPrimary">#03503E</color>
+    <color name="colorPrimaryDark">#003928</color>
+    <color name="colorAccent">#408268</color>
+    <color name="disabledColor">#E3E6E5</color>
 
 
 
@@ -25,5 +26,7 @@
 
     <color name="primaryRed">#ff7582</color>
     <color name="primaryGreen">#3dcc8e</color>
+    <color name="liteGreen">#85DDB7</color>
+    <color name="litered">#FDCACF</color>
 
 </resources>

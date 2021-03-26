@@ -5,146 +5,181 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".DataEntry.MoneyEntryActivity">
-
     <include layout="@layout/toolbar" />
 
-    <LinearLayout
-        android:id="@+id/entryBar"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:elevation="4dp"
-        android:background="@drawable/edittext_background"
-        android:layout_marginTop="65dp"
-        android:orientation="horizontal"
-        android:weightSum="3">
-
-        <EditText
-            android:id="@+id/itemName"
-            style="@style/appEditTextStyle"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_weight="2.2"
-            android:gravity="center_vertical"
-            android:hint="Item"
-            android:clickable="true"
-            android:paddingLeft="10dp"
-            android:textSize="16dp" />
-        <ImageView
-            android:layout_width="2dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/text_cursor_drawable"/>
-
-        <EditText
-            android:id="@+id/calcEntry"
-            style="@style/appEditTextStyle"
-            android:layout_width="match_parent"
-            android:clickable="true"
-            android:layout_height="50dp"
-            android:layout_weight="0.8"
-            android:drawableStart="@drawable/rupee"
-            android:drawablePadding="8dp"
-            android:drawableTint="@color/colorPrimary"
-            android:focusable="false"
-            android:gravity="center_vertical"
-            android:hint="Enter Amount"
-            android:paddingLeft="10dp"
-            android:textSize="18dp" />
-
-    </LinearLayout>
-
-
-    <TextView
-        android:id="@+id/entries_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/entryBar"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:gravity="center_vertical"
-        android:textSize="13dp"
-        android:visibility="gone" />
-
-
-    <LinearLayout
-        android:id="@+id/detailsLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/entries_text"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingTop="5dp"
-        android:paddingBottom="10dp"
-        android:visibility="gone">
-
-        <EditText
-            android:id="@+id/entryDescription"
-            style="@style/appEditTextStyle"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_margin="7dp"
-            android:elevation="4dp"
-            android:gravity="center_vertical"
-            android:hint="Enter Details (item name , quantity , weight)"
-            android:paddingLeft="10dp"
-            android:textSize="15dp" />
+        android:layout_height="match_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_above="@+id/calc">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="7dp"
-            android:padding="5dp">
+            android:layout_height="match_parent"
+            android:layout_marginTop="?attr/actionBarSize"
+
+            >
+
+            <LinearLayout
+                android:id="@+id/entryBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/edittext_background"
+                android:elevation="4dp"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <EditText
+                    android:id="@+id/itemName"
+                    style="@style/appEditTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_weight="2.2"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    android:hint="Item"
+                    android:paddingLeft="10dp"
+                    android:text="Tomato"
+                    android:textSize="16dp" />
+
+                <ImageView
+                    android:layout_width="2dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/text_cursor_drawable" />
+
+                <EditText
+                    android:id="@+id/calcEntry"
+                    style="@style/appEditTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_weight="0.8"
+                    android:clickable="true"
+                    android:drawableStart="@drawable/rupee"
+                    android:drawablePadding="8dp"
+                    android:drawableTint="@color/colorPrimary"
+                    android:focusable="false"
+                    android:gravity="center_vertical"
+                    android:hint="Enter Amount"
+                    android:paddingLeft="10dp"
+                    android:textSize="18dp" />
+
+            </LinearLayout>
+
 
             <TextView
-                android:id="@+id/calcTextBtn"
-                android:layout_width="wrap_content"
+                android:id="@+id/entries_text"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/entryBar"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:background="@drawable/edittext_background"
-                android:drawableStart="@drawable/ic_baseline_calendar_today_24"
-                android:drawableEnd="@drawable/ic_baseline_expand_more_24"
-                android:drawableTint="@color/colorPrimary"
-                android:elevation="4dp"
-                android:gravity="center"
-                android:padding="10dp"
-                android:text="   15/03/21   "
-                android:textColor="@color/colorPrimary"
-                android:textSize="14dp"
-                android:textStyle="bold"
+                android:elevation="6dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:paddingTop="7dp"
+                android:textSize="13dp"
+                android:visibility="gone" />
 
-                />
 
-            <TextView
-                android:id="@+id/imageTextBtn"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/detailsLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:background="@drawable/edittext_background"
-                android:drawableStart="@drawable/ic_baseline_camera_alt_24"
-                android:drawableTint="@color/colorPrimary"
-                android:elevation="4dp"
+                android:layout_below="@+id/entries_text"
                 android:gravity="center"
-                android:padding="10dp"
-                android:text=" Attach Bills"
-                android:textColor="@color/colorPrimary"
-                android:textSize="12dp"
-                android:textStyle="bold" />
+                android:orientation="vertical"
+                android:paddingTop="5dp"
+                android:paddingBottom="10dp"
+                android:visibility="visible">
+
+                <EditText
+                    android:id="@+id/entryDescription"
+                    style="@style/appEditTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_margin="7dp"
+                    android:elevation="4dp"
+                    android:gravity="center_vertical"
+                    android:hint="Enter Details (item name , quantity , weight)"
+                    android:paddingLeft="10dp"
+                    android:textSize="15dp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="7dp"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/calcTextBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:background="@drawable/edittext_background"
+                        android:drawableStart="@drawable/ic_baseline_calendar_today_24"
+                        android:drawableEnd="@drawable/ic_baseline_expand_more_24"
+                        android:drawableTint="@color/colorPrimary"
+                        android:elevation="4dp"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="   15/03/21   "
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="14dp"
+                        android:textStyle="bold"
+
+                        />
+
+                    <TextView
+                        android:id="@+id/imageTextBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:background="@drawable/edittext_background"
+                        android:drawableStart="@drawable/ic_baseline_camera_alt_24"
+                        android:drawableTint="@color/colorPrimary"
+                        android:elevation="4dp"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text=" Attach Bills"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="12dp"
+                        android:textStyle="bold" />
+
+
+                    <ImageView
+                        android:id="@+id/billIMageMoney"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_below="@+id/imageTextBtn"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="20dp"
+                        android:scaleType="centerCrop"
+                        android:src="@color/colorAccent" />
+
+
+                </RelativeLayout>
+
+            </LinearLayout>
 
 
         </RelativeLayout>
-
-    </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 
     <RelativeLayout
+        android:id="@+id/calc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/addKBtn"
+            android:id="@+id/saveEntry"
             style="@style/appButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -161,7 +196,8 @@
             android:id="@+id/custom_calc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/addKBtn" />
+            android:layout_below="@+id/saveEntry"
+            />
     </RelativeLayout>
 
 

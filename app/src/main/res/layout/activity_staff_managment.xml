@@ -27,6 +27,8 @@
         android:clickable="true"
         android:layout_margin="20dp"
         android:tooltipText="Add Customer"
+        app:tint="@color/white"
+        android:backgroundTint="@color/colorPrimary"
         android:tint="@android:color/white"
         android:src="@drawable/ic_baseline_staff_add_24" />
 

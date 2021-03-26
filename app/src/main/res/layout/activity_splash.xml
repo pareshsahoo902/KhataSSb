@@ -12,15 +12,25 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ssb_logo"
         android:padding="5dp"
-        android:visibility="gone"
+        android:visibility="visible"
         android:elevation="11dp"
+        app:tint="@color/colorPrimaryDark"
         />
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
         android:src="@drawable/veggiewbg"
-        android:alpha="0.6"
+        android:alpha="0.4"
         app:tint="#CCCBCB"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="14dp"
+        android:text="v1.00"
+        android:textColor="@color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="15dp"/>
 </RelativeLayout>

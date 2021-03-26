@@ -236,7 +236,8 @@
         android:layout_marginBottom="20dp"
         android:clickable="true"
         android:tooltipText="Add Tray"
-        android:tint="@android:color/white"
+        app:tint="@color/white"
+        android:backgroundTint="@color/colorPrimary"
         android:src="@drawable/ic_baseline_staff_add_24" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
