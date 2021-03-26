@@ -28,6 +28,7 @@ import com.ssb.ssbapp.R;
 import com.ssb.ssbapp.Sessions.LocalSession;
 import com.ssb.ssbapp.Staff.StaffModel;
 import com.ssb.ssbapp.TransactionPage.MoneyTransaction;
+import com.ssb.ssbapp.Utils.Constants;
 import com.ssb.ssbapp.Utils.UtilsMethod;
 import com.ssb.ssbapp.ViewHolder.CustomerListViewHolder;
 import com.ssb.ssbapp.ViewHolder.StaffListItem;
@@ -118,6 +119,7 @@ public class MoneyFrag extends Fragment {
 
                         startActivity(new Intent(getContext(), MoneyTransaction.class)
                         .putExtra("name",custModel.getName()));
+                        LocalSession.putString(Constants.SSB_PREF_CID,custModel.getUid());
                     }
                 });
             }

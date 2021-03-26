@@ -16,6 +16,8 @@ public class CustomCalculator extends LinearLayout implements View.OnClickListen
 
     private CalculatorListner mListner;
     LayoutInflater inflater;
+    private double opreand1, opreand2;
+    private String opreator = "";
 
     String calctext = "";
     boolean isDecimal = false;
@@ -208,7 +210,7 @@ public class CustomCalculator extends LinearLayout implements View.OnClickListen
             case R.id.btnClear:
                 //TODO
                 calctext = "";
-                isDecimal=false;
+                isDecimal = false;
                 mListner.onAllClearPressListner(" ", calctext);
                 break;
             case R.id.btnDelete:
@@ -222,45 +224,68 @@ public class CustomCalculator extends LinearLayout implements View.OnClickListen
                 if (!isDecimal) {
                     calctext += ".";
                     mListner.onNinePressListner(".", calctext);
-                    isDecimal=true;
-                }else {
+                    isDecimal = true;
+                } else {
 
                 }
                 break;
             case R.id.btnMPlus:
                 //TODO
-                calctext="M+"+calctext;
-                mListner.onMemoryPlusPressListner("M+",calctext);
+                calctext="";
+                mListner.onMemoryPlusPressListner("M+", calctext);
                 break;
             case R.id.btnMminus:
                 //TODO
-                calctext="M-"+calctext;
-                mListner.onMemoryMinusPressListner("M-",calctext);
+                calctext = calctext + "M+";
+                mListner.onMemoryMinusPressListner("M-", calctext);
                 break;
             case R.id.btnAdd:
                 //TODO
-                calctext+="+";
-                mListner.onAddButtonPressListner("+",calctext);
+                opreand1 = Double.parseDouble(calctext);
+                calctext += "+";
+                mListner.onAddButtonPressListner("+", calctext);
+                opreator = "+";
+                calctext = "";
                 break;
             case R.id.btnSubtract:
                 //TODO
-                calctext+="-";
-                mListner.onSubButtonPressListner("-",calctext);
+                opreand1 = Double.parseDouble(calctext);
+                calctext += "-";
+                mListner.onSubButtonPressListner("-", calctext);
+
+                opreator = "-";
+                calctext = "";
                 break;
             case R.id.btnDivide:
                 //TODO
-                calctext+="/";
-                mListner.onDivideButtonPressListner("/",calctext);
+                opreand1 = Double.parseDouble(calctext);
+                calctext += "/";
+
+                mListner.onDivideButtonPressListner("/", calctext);
+
+                opreator = "/";
+                calctext = "";
                 break;
             case R.id.btnMultiply:
                 //TODO
+                opreand1 = Double.parseDouble(calctext);
                 calctext+="*";
-                mListner.onMultiplyButtonPressListner("*",calctext);
+                mListner.onMultiplyButtonPressListner("*", calctext);
+                opreator = "*";
+                calctext = "";
                 break;
             case R.id.btnEquals:
                 //TODO
-                calctext+="=";
-                mListner.onEqualsPressListner("=",calctext);
+                if (opreator == "+") {
+                    calctext = String.valueOf(opreand1 + Double.parseDouble(calctext));
+                } else if (opreator == "-") {
+                    calctext = String.valueOf(opreand1 - Double.parseDouble(calctext));
+                } else if (opreator == "/") {
+                    calctext = String.valueOf(opreand1 / Double.parseDouble(calctext));
+                } else if (opreator == "*") {
+                    calctext = String.valueOf(opreand1 * Double.parseDouble(calctext));
+                }
+                mListner.onEqualsPressListner("=", calctext);
                 break;
 
         }
