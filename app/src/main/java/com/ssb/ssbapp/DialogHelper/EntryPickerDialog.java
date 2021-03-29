@@ -15,10 +15,12 @@ import com.ssb.ssbapp.DataEntry.CashEntryActivity;
 import com.ssb.ssbapp.DataEntry.MoneyEntryActivity;
 import com.ssb.ssbapp.DataEntry.PartyEntryActivity;
 import com.ssb.ssbapp.R;
+import com.ssb.ssbapp.Utils.Constants;
 
 public class EntryPickerDialog extends BottomSheetDialogFragment {
 
     private ImageView cash ,customer , party;
+    private String type;
 
     @Nullable
     @Override
@@ -34,6 +36,13 @@ public class EntryPickerDialog extends BottomSheetDialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+       if (getArguments().getString("transaction_type").equals("gave")){
+           type = "gave";
+       }
+       else {
+           type = "got";
+       }
+
 
         cash = view.findViewById(R.id.cashPick);
         customer = view.findViewById(R.id.custPick);
@@ -42,21 +51,21 @@ public class EntryPickerDialog extends BottomSheetDialogFragment {
         cash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getContext(), CashEntryActivity.class));
+                startActivity(new Intent(getContext(), CashEntryActivity.class).putExtra(Constants.SSB_TRANSACTION_TYPE,type));
                 dismiss();
             }
         });
         customer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getContext(), MoneyEntryActivity.class));
+                startActivity(new Intent(getContext(), MoneyEntryActivity.class).putExtra(Constants.SSB_TRANSACTION_TYPE,type));
                 dismiss();
             }
         });
         party.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getContext(), PartyEntryActivity.class));
+                startActivity(new Intent(getContext(), PartyEntryActivity.class).putExtra(Constants.SSB_TRANSACTION_TYPE,type));
                 dismiss();
             }
         });

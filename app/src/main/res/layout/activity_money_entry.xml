@@ -28,6 +28,8 @@
                 android:layout_marginRight="8dp"
                 android:background="@drawable/edittext_background"
                 android:elevation="4dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="7dp"
                 android:orientation="horizontal"
                 android:weightSum="3">
 
@@ -76,8 +78,8 @@
                 android:layout_below="@+id/entryBar"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:background="@drawable/edittext_background"
                 android:elevation="6dp"
+                android:layout_marginTop="3dp"
                 android:gravity="center_vertical"
                 android:paddingLeft="10dp"
                 android:paddingTop="7dp"

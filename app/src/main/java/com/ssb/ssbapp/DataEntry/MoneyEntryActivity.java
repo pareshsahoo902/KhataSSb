@@ -41,6 +41,7 @@ public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalcula
 
     private CustomCalculator customCalculator;
     private Button saveEntry;
+    String type;
     private EditText entryText, itemName,descripition;
     private TextView entries_text,dateTextBtn,imageTextBtn;
     private LinearLayout entryLayout;
@@ -62,6 +63,8 @@ public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalcula
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_money_entry);
+
+        type = getIntent().getStringExtra(Constants.SSB_TRANSACTION_TYPE);
 
         setToolbar(getApplicationContext(), "You got " + getCurrencyStr() + " 0 ");
         customCalculator = findViewById(R.id.custom_calc);
@@ -93,6 +96,7 @@ public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalcula
         });
 
         moneyTransactionRef = FirebaseDatabase.getInstance().getReference().child("customerTransaction");
+        moneyTransactionRef.keepSynced(true);
 
         saveEntry.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,6 +106,7 @@ public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalcula
                     saveEntryToDB();
                 }
                 else {
+                    entryText.setText((String.valueOf(totalAmount)));
                     saveEntry.setTag(true);
                     saveEntry.setText("Save");
                 }
@@ -147,21 +152,17 @@ public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalcula
     }
 
     private void saveEntryToDB() {
-        showProgress();
+//        showProgress();
 
         String ceid = UUID.randomUUID().toString();
 
         MoneyTransactionModel model = new MoneyTransactionModel(ceid,getLocalSession().getString(Constants.SSB_PREF_CID),getLocalSession().getString(Constants.SSB_PREF_KID)
-        ,UtilsMethod.getCurrentDate(),UtilsMethod.getCurrentDate(),"",descripition.getText().toString(),itemName.getText().toString()+": "+descText,"got",totalAmount);
+        ,UtilsMethod.getCurrentDate(),UtilsMethod.getCurrentDate(),"",descripition.getText().toString(),itemName.getText().toString()+": "+descText,type,totalAmount);
 
         if (model.getCid()!=null){
-            moneyTransactionRef.child(ceid).setValue(model).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    startActivity(new Intent(MoneyEntryActivity.this, SucessActivity.class).putExtra(Constants.SSB_SUCESS_INTENT,"money"));
-                    finish();
-                }
-            });
+            moneyTransactionRef.child(ceid).setValue(model);
+            startActivity(new Intent(MoneyEntryActivity.this, SucessActivity.class).putExtra(Constants.SSB_SUCESS_INTENT,"money"));
+            finish();
 
         }
 

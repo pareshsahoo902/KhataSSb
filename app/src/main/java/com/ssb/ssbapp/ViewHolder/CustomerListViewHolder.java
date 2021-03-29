@@ -12,7 +12,7 @@ import com.ssb.ssbapp.R;
 
 public class CustomerListViewHolder extends RecyclerView.ViewHolder {
 
-    public TextView nameCust, amount;
+    public TextView nameCust, amount,status;
     public ImageView custImage;
 
     public CustomerListViewHolder(@NonNull View itemView) {
@@ -21,6 +21,7 @@ public class CustomerListViewHolder extends RecyclerView.ViewHolder {
 
         nameCust = itemView.findViewById(R.id.cust_name);
         amount = itemView.findViewById(R.id.custamount);
+        status = itemView.findViewById(R.id.custstatus);
         custImage = itemView.findViewById(R.id.imguserCust);
 
     }

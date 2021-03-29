@@ -8,15 +8,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.ssb.ssbapp.Customer.CustomerModel;
 import com.ssb.ssbapp.DataEntry.MoneyEntryActivity;
 import com.ssb.ssbapp.DialogHelper.EntryPickerDialog;
@@ -29,16 +34,19 @@ import com.ssb.ssbapp.Utils.UtilsMethod;
 import com.ssb.ssbapp.ViewHolder.CustomerListViewHolder;
 import com.ssb.ssbapp.ViewHolder.MOneyTransactionviewHolder;
 
+import java.util.Objects;
+
 public class MoneyTransaction extends SSBBaseActivity {
 
-    private CardView getBtn;
+    private CardView getBtn, gaveBtn;
     private String name;
     private RecyclerView entryRecyclerView;
-
     private DatabaseReference enrtyRef;
-
+    private boolean isGave;
     private FirebaseRecyclerOptions<MoneyTransactionModel> entryoptions;
     private FirebaseRecyclerAdapter<MoneyTransactionModel, MOneyTransactionviewHolder> entryRecycleradapter;
+    private TextView geta;
+    private double totalGave, totalGot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +55,10 @@ public class MoneyTransaction extends SSBBaseActivity {
 
         name = getIntent().getStringExtra("name");
 
-        setToolbar(getApplicationContext(),"  "+ UtilsMethod.capitalize(name));
+        setToolbar(getApplicationContext(), "  " + UtilsMethod.capitalize(name));
         getBtn = findViewById(R.id.getbtn);
+        gaveBtn = findViewById(R.id.gavebtn);
+        geta = findViewById(R.id.geta);
         entryRecyclerView = findViewById(R.id.entryRecycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         layoutManager.setReverseLayout(true);
@@ -66,17 +76,86 @@ public class MoneyTransaction extends SSBBaseActivity {
 //                startActivity(new Intent(MoneyTransaction.this, MoneyEntryActivity.class));
 
                 EntryPickerDialog dailog = new EntryPickerDialog();
+                Bundle bundle = new Bundle();
+
+                bundle.putString("transaction_type", "got");
+                dailog.setArguments(bundle);
                 dailog.show(getSupportFragmentManager(), "Select Entry Type !");
             }
         });
 
+
+        gaveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                startActivity(new Intent(MoneyTransaction.this, MoneyEntryActivity.class));
+
+                EntryPickerDialog dailog = new EntryPickerDialog();
+                Bundle bundle = new Bundle();
+
+                bundle.putString("transaction_type", "gave");
+                dailog.setArguments(bundle);
+                dailog.show(getSupportFragmentManager(), "Select Entry Type !");
+            }
+        });
+
+
+        calculateTotalBalance();
+
         loadEntries();
+    }
+
+    private void calculateTotalBalance() {
+
+
+        enrtyRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                totalGot = 0;
+                totalGave = 0;
+                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                    if (snapshot1.child("cid").getValue().equals(getLocalSession().getString(Constants.SSB_PREF_CID))) {
+                        if (snapshot1.child("status").getValue().equals("got")) {
+                            long t = (long) snapshot1.child("total").getValue();
+                            totalGot += t;
+                        } else {
+                            long tg = (long) snapshot1.child("total").getValue();
+                            totalGave += tg;
+                        }
+                    }
+
+                }
+                calcText();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+    }
+
+    private void calcText() {
+
+        if (totalGave - totalGot < 0) {
+            geta.setTextColor(Color.parseColor("#FFCC0000"));
+            geta.setText("You will give : ₹" + String.valueOf(Math.abs(totalGave - totalGot)));
+        } else {
+            geta.setTextColor(Color.parseColor("#FF669900"));
+            int num = (int) Math.abs(totalGave - totalGot);
+            geta.setText("You will get : ₹" + String.valueOf(num));
+
+        }
     }
 
     private void loadEntries() {
 
         entryoptions = new FirebaseRecyclerOptions.Builder<MoneyTransactionModel>()
-                .setQuery(enrtyRef.orderByChild("cid").equalTo(getLocalSession().getString(Constants.SSB_PREF_CID)),MoneyTransactionModel.class).build();
+                .setQuery(enrtyRef.orderByChild("cid").equalTo(getLocalSession().getString(Constants.SSB_PREF_CID)), MoneyTransactionModel.class).build();
 
         entryRecycleradapter = new FirebaseRecyclerAdapter<MoneyTransactionModel, MOneyTransactionviewHolder>(entryoptions) {
             @Override
@@ -85,16 +164,16 @@ public class MoneyTransaction extends SSBBaseActivity {
                 moneyTransactionviewHolder.entryText.setText(moneyTransactionModel.getEntriesText());
                 moneyTransactionviewHolder.date.setText(moneyTransactionModel.getDate());
                 moneyTransactionviewHolder.desc.setText(moneyTransactionModel.getDescription());
-                moneyTransactionviewHolder.amountTotal.setText("Amount: "+getCurrencyStr()+String.valueOf( moneyTransactionModel.getTotal()));
-                moneyTransactionviewHolder.balance.setText("Balance: "+getCurrencyStr()+String.valueOf( moneyTransactionModel.getTotal()));
+                moneyTransactionviewHolder.amountTotal.setText("Amount: " + getCurrencyStr() + String.valueOf(moneyTransactionModel.getTotal()));
+                moneyTransactionviewHolder.balance.setText("Balance: " + getCurrencyStr() + String.valueOf(moneyTransactionModel.getTotal()));
 
-                if (moneyTransactionModel.getStatus().equals("got")){
+                if (moneyTransactionModel.getStatus().equals("got")) {
                     moneyTransactionviewHolder.gaveText.setVisibility(View.INVISIBLE);
-                    moneyTransactionviewHolder.gotText.setText(getCurrencyStr()+String.valueOf( moneyTransactionModel.getTotal()));
-                }
-                else {
+                    moneyTransactionviewHolder.gotText.setText(getCurrencyStr() + String.valueOf(moneyTransactionModel.getTotal()));
+                } else {
                     moneyTransactionviewHolder.gotLayout.setVisibility(View.INVISIBLE);
-                    moneyTransactionviewHolder.gaveText.setText(getCurrencyStr()+String.valueOf( moneyTransactionModel.getTotal()));
+                    moneyTransactionviewHolder.gaveText.setVisibility(View.VISIBLE);
+                    moneyTransactionviewHolder.gaveText.setText(getCurrencyStr() + String.valueOf(moneyTransactionModel.getTotal()));
                 }
 
                 moneyTransactionviewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -108,7 +187,7 @@ public class MoneyTransaction extends SSBBaseActivity {
             @NonNull
             @Override
             public MOneyTransactionviewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                return new MOneyTransactionviewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.transaction_item,parent,false));
+                return new MOneyTransactionviewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.transaction_item, parent, false));
             }
         };
 
