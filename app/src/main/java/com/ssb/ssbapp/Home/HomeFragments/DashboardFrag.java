@@ -52,7 +52,7 @@ public class DashboardFrag extends Fragment {
         edit_btn = v.findViewById(R.id.edit_btn);
 
 
-        profile_name.setText(LocalSession.getString(Constants.SSB_PREF_NAME));
+//        profile_name.setText(LocalSession.getString(Constants.SSB_PREF_NAME));
 
         edit_btn.setOnClickListener(new View.OnClickListener() {
             @Override

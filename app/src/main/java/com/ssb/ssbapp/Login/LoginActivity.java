@@ -24,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ssb.ssbapp.Home.HomeActivity;
+import com.ssb.ssbapp.KhataMaster.KhataManagment;
 import com.ssb.ssbapp.KhataMaster.NewKhata;
 import com.ssb.ssbapp.R;
 import com.ssb.ssbapp.Utils.SSBBaseActivity;
@@ -39,7 +40,9 @@ public class LoginActivity extends SSBBaseActivity {
     private EditText email, password;
     private Button login;
     private FirebaseAuth mAuth;
+    private DatabaseReference khataref;
     private AwesomeValidation awesomeValidation;
+    private boolean isNewAdmin= false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,22 @@ public class LoginActivity extends SSBBaseActivity {
 
         mAuth = FirebaseAuth.getInstance();
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
+
+        khataref=FirebaseDatabase.getInstance().getReference().child("khata");
+        khataref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                if (snapshot.exists()){
+                    isNewAdmin = true;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         awesomeValidation.addValidation(this, R.id.login_email, Patterns.EMAIL_ADDRESS, R.string.emailerr);
 
@@ -88,10 +107,17 @@ public class LoginActivity extends SSBBaseActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (!task.isSuccessful()) {
                             dismissProgress();
-                            showMessageToast("Login Failed !", true);
+                            showMessageToast(task.getException()+"Login Failed !", true);
                         } else {
+                            if (isNewAdmin){
+                                startActivity(new Intent(LoginActivity.this, NewKhata.class)
+                                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+                            }else {
+                                startActivity(new Intent(LoginActivity.this, KhataManagment.class)
+                                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+                            }
 
-                            checkUserTypeAndUpdateHomeUi(mAuth.getCurrentUser().getUid());
+//                            checkUserTypeAndUpdateHomeUi(mAuth.getCurrentUser().getUid());
                         }
                     }
                 });
@@ -108,6 +134,7 @@ public class LoginActivity extends SSBBaseActivity {
                 long type = (long) snapshot.child("type").getValue();
                 String name = (String) snapshot.child("name").getValue();
                 boolean isAdmin = (boolean)snapshot.child("admin").getValue();
+                Toast.makeText(LoginActivity.this, ""+name, Toast.LENGTH_SHORT).show();
                 if (snapshot.exists()){
                     if (isAdmin){
                         getLocalSession().putBoolean(SSB_PREF_ADMIN,true);

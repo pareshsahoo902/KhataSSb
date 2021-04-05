@@ -16,23 +16,38 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="2"
+            android:weightSum="3"
             >
             <TextView
+                android:id="@+id/giveallText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="youll give"
+                android:text=""
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
                 android:textSize="14dp"
+                android:textColor="@color/black"
                 />
 
 
             <TextView
+                android:id="@+id/getallText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="youll get"
+                android:text=""
+                android:textColor="@color/black"
+                android:layout_weight="1"
+                android:textSize="14dp"
+                />
+
+            <TextView
+                android:id="@+id/pendingText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text=""
+                android:textColor="@color/colorAccent"
                 android:layout_weight="1"
                 android:textSize="14dp"
                 />
@@ -42,36 +57,51 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:weightSum="1"
+            android:gravity="center"
             >
+
             <TextView
+                android:id="@+id/allgavedis"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="youll pending"
-                android:layout_weight="0.5"
-                android:textSize="14dp"
+                android:textSize="20dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:text=""
                 />
-
             <EditText
+                android:id="@+id/disText"
                 android:layout_width="60dp"
-                android:layout_weight="0.1"
                 android:layout_height="wrap_content"
                 android:text="3"
                 android:inputType="number"
                 android:gravity="center"
                 />
             <TextView
+                android:id="@+id/result1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="= 300"
-                android:layout_weight="0.4"
+                android:text="= "
                 android:textSize="19dp"
                 android:textStyle="bold"
                 />
 
+            <TextView
+                android:id="@+id/totalResult"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="= "
+                android:fontFamily="@font/roboto_slab"
+                android:textSize="19dp"
+                android:textStyle="bold"
+                android:textColor="@color/colorAccent"
+                />
+
         </LinearLayout>
+
+
 
 
 

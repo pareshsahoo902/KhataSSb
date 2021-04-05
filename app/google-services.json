@@ -8,7 +8,7 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:777073680463:android:20623b7156a95ab2460a3a",
+        "mobilesdk_app_id": "1:777073680463:android:1c51ead815e179d3460a3a",
         "android_client_info": {
           "package_name": "com.ssb.ssbapp"
         }
@@ -22,35 +22,6 @@
             "certificate_hash": "11b4fd475b16ac573865a928dc4784343815a26a"
           }
         },
-        {
-          "client_id": "777073680463-laohj3ijgmf18ueqbie00db53h1ho121.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBlJ0ZABEQC75n2LOWpl0C3juXI3EfWbTY"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "777073680463-laohj3ijgmf18ueqbie00db53h1ho121.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:777073680463:android:d66aff9fef1162d8460a3a",
-        "android_client_info": {
-          "package_name": "com.technoboot.ssb"
-        }
-      },
-      "oauth_client": [
         {
           "client_id": "777073680463-laohj3ijgmf18ueqbie00db53h1ho121.apps.googleusercontent.com",
           "client_type": 3

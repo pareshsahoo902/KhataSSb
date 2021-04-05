@@ -36,7 +36,6 @@
         <activity android:name=".Staff.ViewStaffDetails" />
         <activity android:name=".KhataMaster.KhataManagment" />
         <activity android:name=".Staff.StaffManagmentActivity" />
-        <activity android:name=".Login.AddBranchActivity" />
         <activity android:name=".Home.HomeActivity" />
         <activity android:name=".TrayMaster.TrayManagmentActivity" />
         <activity android:name=".Login.LoginActivity" />

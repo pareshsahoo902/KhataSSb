@@ -79,6 +79,8 @@ public class MoneyTransaction extends SSBBaseActivity {
                 Bundle bundle = new Bundle();
 
                 bundle.putString("transaction_type", "got");
+                bundle.putDouble("allGave",totalGave );
+                bundle.putDouble("allGot",totalGot );
                 dailog.setArguments(bundle);
                 dailog.show(getSupportFragmentManager(), "Select Entry Type !");
             }

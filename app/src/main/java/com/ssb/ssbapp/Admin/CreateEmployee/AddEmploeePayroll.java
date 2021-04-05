@@ -307,7 +307,7 @@ public class AddEmploeePayroll extends SSBBaseActivity implements ImagePickerDai
                 else
                 {
                     dismissProgress();
-                    showMessageToast("SomeError Occurred",true);
+                    showMessageToast(task.getException().getMessage()+"SomeError Occurred",true);
                 }
 
             }

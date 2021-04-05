@@ -7,146 +7,137 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.ssb.ssbapp.CustomCalculator.CustomCalculator;
 import com.ssb.ssbapp.DialogHelper.ImagePickerDailog;
 import com.ssb.ssbapp.R;
+import com.ssb.ssbapp.SuccessScreens.SucessActivity;
+import com.ssb.ssbapp.TransactionModel.MoneyTransactionModel;
+import com.ssb.ssbapp.Utils.Constants;
 import com.ssb.ssbapp.Utils.SSBBaseActivity;
 import com.ssb.ssbapp.Utils.UtilsMethod;
 
-public class CashEntryActivity extends SSBBaseActivity implements CustomCalculator.CalculatorListner, ImagePickerDailog.ImagePickerListner {
+import java.util.UUID;
+
+public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDailog.ImagePickerListner {
 
     private boolean isUri;
     private Bitmap bitmap;
     private ImageView billIMageMoney;
-    private TextView dateTextBtn,imageTextButton;
+    private EditText cashType, cashEntryText, discount,description;
+    private TextView dateTextBtn, imageTextButton, entriesText;
     private Uri picUri;
+    private Button saveEntry;
+    private double totalCash, cashAmount;
+    private String type;
+    private DatabaseReference moneyTransactionRef;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cash_entry);
 
-        setToolbar(getApplicationContext(),"Cash Entry");
+        setToolbar(getApplicationContext(), "Cash Entry");
+        type=getIntent().getStringExtra(Constants.SSB_TRANSACTION_TYPE);
 
         billIMageMoney = findViewById(R.id.billIMage);
         dateTextBtn = findViewById(R.id.dateTextBtn);
         imageTextButton = findViewById(R.id.imageTextBtn);
+        cashEntryText = findViewById(R.id.calcEntry);
+        cashType = findViewById(R.id.cashType);
+        entriesText = findViewById(R.id.entriescash_text);
+        discount = findViewById(R.id.discount);
+        saveEntry = findViewById(R.id.savecashEnrty);
+        description = findViewById(R.id.entryDescription);
 
-        dateTextBtn.setText(UtilsMethod.getCurrentDate().substring(0,10));
+        moneyTransactionRef = FirebaseDatabase.getInstance().getReference().child("customerTransaction");
+        moneyTransactionRef.keepSynced(true);
+
+        saveEntry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveEntryToDB();
+            }
+        });
+        cashEntryText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cashEntryText.selectAll();
+            }
+        });
+
+
+        cashEntryText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try {
+                    calcDis();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    cashEntryText.setText("0");
+                    cashEntryText.selectAll();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                entriesText.setVisibility(View.VISIBLE);
+            }
+        });
+
+        dateTextBtn.setText(UtilsMethod.getCurrentDate().substring(0, 10));
 
         imageTextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ImagePickerDailog dailog = new ImagePickerDailog();
-                dailog.show(getSupportFragmentManager(),"Pick Image");
+                dailog.show(getSupportFragmentManager(), "Pick Image");
             }
         });
 
     }
 
-    @Override
-    public void onOnePressListner(String btn, String chrSequence) {
+    private void saveEntryToDB() {
+        String ceid = UUID.randomUUID().toString();
+
+        MoneyTransactionModel model = new MoneyTransactionModel(ceid,getLocalSession().getString(Constants.SSB_PREF_CID),getLocalSession().getString(Constants.SSB_PREF_KID)
+                ,UtilsMethod.getCurrentDate(),UtilsMethod.getCurrentDate(),"",description.getText().toString(),entriesText.getText().toString(),type,totalCash);
+
+        if (model.getCid()!=null){
+            moneyTransactionRef.child(ceid).setValue(model);
+            startActivity(new Intent(CashEntryActivity.this, SucessActivity.class).putExtra(Constants.SSB_SUCESS_INTENT,"money"));
+            finish();
+
+        }
+    }
+
+    private void calcDis() {
+        double disText=0.0;
+        if (Double.parseDouble(cashEntryText.getText().toString()) != 0 && Double.parseDouble(discount.getText().toString()) != 0)
+            disText = Double.parseDouble(cashEntryText.getText().toString()) + Double.parseDouble(discount.getText().toString());
+
+        cashAmount= Double.parseDouble(cashEntryText.getText().toString());
+        totalCash = disText;
+        entriesText.setText(cashType.getText().toString() + " : " + cashEntryText.getText().toString() + " + " + discount.getText().toString()+ " = "+String.format("%.2f",disText));
 
     }
 
-    @Override
-    public void onTwoPressListner(String btn, String chrSequence) {
-
-    }
-
-    @Override
-    public void onThreePressListner(String btn, String chrSequence) {
-
-    }
-
-    @Override
-    public void onFourPressListner(String btn, String chrSequence) {
-
-    }
-
-    @Override
-    public void onFivePressListner(String btn, String chrSequence) {
-
-    }
-
-    @Override
-    public void onSixPressListner(String btn, String chrSequence) {
-
-    }
-
-    @Override
-    public void onSevenPressListner(String btn, String chrSequence) {
-
-    }
-
-    @Override
-    public void onEightPressListener(String btn, String chrSequence) {
-
-    }
-
-    @Override
-    public void onNinePressListner(String btn, String chrSequence) {
-
-    }
-
-    @Override
-    public void onZeroPressListner(String btn, String chrSequence) {
-
-    }
-
-    @Override
-    public void onMemoryPlusPressListner(String btn, String chrSequence) {
-
-    }
-
-    @Override
-    public void onMemoryMinusPressListner(String btn, String chrSequence) {
-
-    }
-
-    @Override
-    public void onAllClearPressListner(String btn, String chrSequence) {
-
-    }
-
-    @Override
-    public void onDeletePressListner(String btn, String chrSequence) {
-
-    }
-
-    @Override
-    public void onEqualsPressListner(String btn, String chrSequence) {
-
-    }
-
-    @Override
-    public void onAddButtonPressListner(String btn, String chrSequence) {
-
-    }
-
-    @Override
-    public void onSubButtonPressListner(String btn, String chrSequence) {
-
-    }
-
-    @Override
-    public void onDivideButtonPressListner(String btn, String chrSequence) {
-
-    }
-
-    @Override
-    public void onMultiplyButtonPressListner(String btn, String chrSequence) {
-
-    }
-
-    @Override
-    public void onDecimalPointPressListner(String btn, String chrSequence) {
-
-    }
 
     @Override
     public void pickImageIntent(int type) {

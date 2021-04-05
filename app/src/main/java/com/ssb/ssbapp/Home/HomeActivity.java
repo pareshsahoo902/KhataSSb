@@ -65,7 +65,6 @@ public class HomeActivity extends SSBBaseActivity {
         getLocalSession().putString(SSB_PREF_DATE, UtilsMethod.getCurrentDate().substring(0, 10));
 
 
-
         myCalendar = Calendar.getInstance();
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
@@ -118,37 +117,17 @@ public class HomeActivity extends SSBBaseActivity {
 
                     switch (menuItem.getItemId()) {
                         case R.id.navigation_money:
-                            if (isAdmin || type == 1 || type == 4 || type == 3) {
-                                selectedFragment = new MoneyFrag();
-                            } else {
-                                showMessageToast("Access Denied !", true);
-                            }
+                            selectedFragment = new MoneyFrag();
                             break;
                         case R.id.navigation_tray:
-                            if (isAdmin || type == 2 || type == 4 || type == 3) {
-                                selectedFragment = new TrayFrag();
-
-                            } else {
-                                showMessageToast("Access Denied !", true);
-                            }
+                            selectedFragment = new TrayFrag();
                             break;
+
                         case R.id.navigation_staff:
-                            if (isAdmin) {
-                                selectedFragment = new StaffFrag();
-
-                            } else {
-                                showMessageToast("Access Denied !", true);
-
-                            }
+                            selectedFragment = new StaffFrag();
                             break;
                         case R.id.navigation_dashboard:
-                            if (isAdmin) {
-                                selectedFragment = new DashboardFrag();
-
-                            } else {
-                                showMessageToast("Access Denied !", true);
-
-                            }
+                            selectedFragment = new DashboardFrag();
                             break;
 
                     }

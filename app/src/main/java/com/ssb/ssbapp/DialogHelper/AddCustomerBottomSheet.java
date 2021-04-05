@@ -88,7 +88,7 @@ public class AddCustomerBottomSheet extends BottomSheetDialogFragment {
                     dismiss();
                 } else {
                     dismiss();
-                    Toast.makeText(getContext(), "Network Error\nTry Again!", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), "Network Error\nTry Again!", Toast.LENGTH_SHORT).show();
                 }
 
             }
