@@ -112,7 +112,6 @@ public class StaffFrag extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        staffRecycleradapter.notifyDataSetChanged();
     }
 
     @Override

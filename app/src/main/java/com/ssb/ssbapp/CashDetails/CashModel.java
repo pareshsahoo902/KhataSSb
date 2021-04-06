@@ -1,37 +1,51 @@
-package com.ssb.ssbapp.TransactionModel;
+package com.ssb.ssbapp.CashDetails;
 
 import java.io.Serializable;
 
-public class MoneyTransactionModel implements Serializable {
+public class CashModel implements Serializable {
 
+    public String id;
     public String ceid;
     public String cid;
     public String kid;
+    public String customerName;
 
     public String date;
     public String edit_date;
 
-    public String imageurl;
-    public String description;
-    public String entriesText;
     public String status;
 
     public double total;
 
-    public MoneyTransactionModel() {
+    public CashModel() {
     }
 
-    public MoneyTransactionModel(String ceid, String cid, String kid, String date, String edit_date, String imageurl, String description, String entriesText, String status, double total) {
+    public CashModel(String id, String ceid, String cid, String kid, String customerName, String date, String edit_date, String status, double total) {
+        this.id = id;
         this.ceid = ceid;
         this.cid = cid;
         this.kid = kid;
+        this.customerName = customerName;
         this.date = date;
         this.edit_date = edit_date;
-        this.imageurl = imageurl;
-        this.description = description;
-        this.entriesText = entriesText;
         this.status = status;
         this.total = total;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getCeid() {
@@ -72,30 +86,6 @@ public class MoneyTransactionModel implements Serializable {
 
     public void setEdit_date(String edit_date) {
         this.edit_date = edit_date;
-    }
-
-    public String getImageurl() {
-        return imageurl;
-    }
-
-    public void setImageurl(String imageurl) {
-        this.imageurl = imageurl;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getEntriesText() {
-        return entriesText;
-    }
-
-    public void setEntriesText(String entriesText) {
-        this.entriesText = entriesText;
     }
 
     public String getStatus() {

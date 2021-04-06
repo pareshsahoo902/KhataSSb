@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.ssb.ssbapp.CashDetails.CashDetailsActivity;
 import com.ssb.ssbapp.Home.HomeActivity;
 import com.ssb.ssbapp.KhataMaster.KhataManagment;
 import com.ssb.ssbapp.Login.LoginActivity;
@@ -29,7 +30,7 @@ import com.ssb.ssbapp.Utils.FirebaseHelper;
 
 public class DashboardFrag extends Fragment {
 
-    private CardView logout, khataCard, trayCard, staffCard;
+    private CardView logout, khataCard, trayCard, staffCard,moneyDetails;
     private TextView profile_name;
     private ImageView profile_pic;
     private FrameLayout edit_btn;
@@ -49,6 +50,7 @@ public class DashboardFrag extends Fragment {
         staffCard = v.findViewById(R.id.staffmanage);
         profile_name = v.findViewById(R.id.profile_name);
         profile_pic = v.findViewById(R.id.profile_pic);
+        moneyDetails = v.findViewById(R.id.moneyDetails);
         edit_btn = v.findViewById(R.id.edit_btn);
 
 
@@ -79,6 +81,13 @@ public class DashboardFrag extends Fragment {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getContext(), StaffManagmentActivity.class));
+            }
+        });
+
+        moneyDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), CashDetailsActivity.class));
             }
         });
 

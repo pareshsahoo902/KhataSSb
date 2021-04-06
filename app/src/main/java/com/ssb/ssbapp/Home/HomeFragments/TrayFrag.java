@@ -129,7 +129,6 @@ public class TrayFrag extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        custRecycleradapter.notifyDataSetChanged();
     }
 
     @Override

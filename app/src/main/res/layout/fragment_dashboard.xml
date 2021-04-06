@@ -179,7 +179,7 @@
 
     </androidx.cardview.widget.CardView>
     <androidx.cardview.widget.CardView
-        android:id="@+id/mdetails"
+        android:id="@+id/moneyDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardElevation="6dp"
@@ -196,7 +196,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Money Details"
+            android:text="CashBook"
             android:gravity="center"
             android:textSize="20sp"
             android:textColor="#191919"

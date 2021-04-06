@@ -166,8 +166,8 @@ public class MoneyTransaction extends SSBBaseActivity {
                 moneyTransactionviewHolder.entryText.setText(moneyTransactionModel.getEntriesText());
                 moneyTransactionviewHolder.date.setText(moneyTransactionModel.getDate());
                 moneyTransactionviewHolder.desc.setText(moneyTransactionModel.getDescription());
-                moneyTransactionviewHolder.amountTotal.setText("Amount: " + getCurrencyStr() + String.valueOf(moneyTransactionModel.getTotal()));
-                moneyTransactionviewHolder.balance.setText("Balance: " + getCurrencyStr() + String.valueOf(moneyTransactionModel.getTotal()));
+                moneyTransactionviewHolder.amountTotal.setText("Amt:" + getCurrencyStr() + String.valueOf(moneyTransactionModel.getTotal()));
+                moneyTransactionviewHolder.balance.setText("Bal:" + getCurrencyStr() + String.valueOf(moneyTransactionModel.getTotal()));
 
                 if (moneyTransactionModel.getStatus().equals("got")) {
                     moneyTransactionviewHolder.gaveText.setVisibility(View.INVISIBLE);
@@ -182,6 +182,12 @@ public class MoneyTransaction extends SSBBaseActivity {
                     @Override
                     public void onClick(View v) {
 
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable(Constants.SSB_MONEYTRANSACTION_INTENT,moneyTransactionModel);
+
+                        startActivity(new Intent(MoneyTransaction.this,ViewTransactonPage.class)
+                                .putExtras(bundle)
+                        );
                     }
                 });
             }

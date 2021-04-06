@@ -36,18 +36,19 @@
         android:background="@drawable/edittext_background"
         android:elevation="4dp"
         android:orientation="horizontal"
-        android:weightSum="3">
+        android:weightSum="1">
 
         <EditText
             android:id="@+id/itemName"
             style="@style/appEditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_weight="2.2"
+            android:layout_weight="0.65"
             android:clickable="true"
             android:gravity="center_vertical"
             android:hint="Item"
             android:text="Tomato"
+            android:cursorVisible="false"
             android:paddingLeft="10dp"
             android:textSize="16dp" />
 
@@ -62,7 +63,7 @@
             style="@style/appEditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_weight="0.8"
+            android:layout_weight="0.35"
             android:clickable="true"
             android:drawableStart="@drawable/rupee"
             android:drawablePadding="8dp"
@@ -183,7 +184,7 @@
             android:padding="5dp">
 
             <TextView
-                android:id="@+id/calcTextBtn"
+                android:id="@+id/dateTextBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"

@@ -24,7 +24,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/MyMaterialTheme">
-        <activity android:name=".DataEntry.PartyEntryActivity"></activity>
+        <activity android:name=".CashDetails.CashDetailsActivity"></activity>
+        <activity android:name=".TransactionPage.ViewTransactonPage" />
+        <activity android:name=".DataEntry.PartyEntryActivity" />
         <activity android:name=".DataEntry.CashEntryActivity" />
         <activity android:name=".TransactionPage.StaffTransactionPage" />
         <activity android:name=".Tray.TrayDetails" />

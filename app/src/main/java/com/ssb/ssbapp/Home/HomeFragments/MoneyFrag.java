@@ -1,15 +1,18 @@
 package com.ssb.ssbapp.Home.HomeFragments;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,9 +29,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.ssb.ssbapp.Customer.CustomerModel;
 import com.ssb.ssbapp.DialogHelper.AddCustomerBottomSheet;
+import com.ssb.ssbapp.KhataMaster.KhataManagment;
 import com.ssb.ssbapp.R;
 import com.ssb.ssbapp.Sessions.LocalSession;
 import com.ssb.ssbapp.Staff.StaffModel;
@@ -179,8 +184,25 @@ public class MoneyFrag extends Fragment {
 
                 viewHolder.custImage.setImageDrawable(initial);
 
+                viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        new AlertDialog.Builder(getContext())
+                                .setTitle(Html.fromHtml("<font color='#03503E'>Delete Customer</font>"))
+                                .setMessage("Are you sure you want to delete all entries of this customer ?")
+                                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // Continue with delete operation
+                                        deletetransactionInDB(custModel.getUid());
+                                        custRef.child(custModel.getUid()).removeValue();
+                                    }
+                                })
+                                .setNegativeButton("NO", null)
+                                .show();
 
-
+                        return true;
+                    }
+                });
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -245,6 +267,26 @@ public class MoneyFrag extends Fragment {
 
     }
 
+    private void deletetransactionInDB(String uid) {
+
+        Query transactionQuery = customeEntryrRef.orderByChild("cid").equalTo(uid);
+
+        transactionQuery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot appleSnapshot : snapshot.getChildren()) {
+                    appleSnapshot.getRef().removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
 
     private void getAddCutmoerDailog() {
 
@@ -263,7 +305,6 @@ public class MoneyFrag extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        custRecycleradapter.notifyDataSetChanged();
         calculateGotGave();
     }
 

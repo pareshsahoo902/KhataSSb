@@ -2,12 +2,15 @@ package com.ssb.ssbapp.KhataMaster;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,9 +22,12 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.ssb.ssbapp.Home.HomeActivity;
 import com.ssb.ssbapp.Model.KhataModel;
 import com.ssb.ssbapp.Model.TrayMasterModel;
@@ -41,7 +47,7 @@ import static com.ssb.ssbapp.Utils.Constants.SSB_PREF_KID;
 public class KhataManagment extends SSBBaseActivity {
     private EditText khata_text;
     private Button add_btn;
-    private DatabaseReference khataRef;
+    private DatabaseReference khataRef, custref, transaxctionref;
     private RecyclerView khataMasterRecyler;
 
 
@@ -64,6 +70,8 @@ public class KhataManagment extends SSBBaseActivity {
         khataMasterRecyler.hasFixedSize();
 
         khataRef = FirebaseDatabase.getInstance().getReference().child("khata");
+        custref = FirebaseDatabase.getInstance().getReference().child("customers");
+        transaxctionref = FirebaseDatabase.getInstance().getReference().child("customerTransaction");
         khataRef.keepSynced(true);
 
 
@@ -97,10 +105,32 @@ public class KhataManagment extends SSBBaseActivity {
                     @Override
                     public void onClick(View v) {
 
-                        getLocalSession().putString(SSB_PREF_KID,trayMasterModel.getKid());
-                        getLocalSession().putString(SSB_PREF_BRANCH,trayMasterModel.getName());
+                        getLocalSession().putString(SSB_PREF_KID, trayMasterModel.getKid());
+                        getLocalSession().putString(SSB_PREF_BRANCH, trayMasterModel.getName());
                         startActivity(new Intent(KhataManagment.this, SplashActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
 
+                    }
+                });
+
+                trayListViewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+
+                        new AlertDialog.Builder(KhataManagment.this)
+                                .setTitle(Html.fromHtml("<font color='#03503E'>Delete Khata</font>"))
+                                .setMessage("Are you sure you want to delete all data attached to this khata ?")
+                                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // Continue with delete operation
+                                        deletetransactionInDB(trayMasterModel.getKid());
+                                        khataRef.child(trayMasterModel.getKid()).removeValue();
+                                        deleteCustomerInDB(trayMasterModel.getKid());
+                                    }
+                                })
+                                .setNegativeButton("NO", null)
+                                .show();
+
+                        return true;
                     }
                 });
 
@@ -117,6 +147,42 @@ public class KhataManagment extends SSBBaseActivity {
         khataMasterRecyler.setAdapter(khataRecyclerAdapter);
         khataRecyclerAdapter.startListening();
 
+    }
+
+    private void deletetransactionInDB(String kid) {
+        Query transactionQuery = transaxctionref.orderByChild("kid").equalTo(kid);
+
+        transactionQuery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot appleSnapshot : snapshot.getChildren()) {
+                    appleSnapshot.getRef().removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void deleteCustomerInDB(String kid) {
+        Query custQuery = custref.orderByChild("kid").equalTo(kid);
+
+        custQuery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot appleSnapshot : snapshot.getChildren()) {
+                    appleSnapshot.getRef().removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
 

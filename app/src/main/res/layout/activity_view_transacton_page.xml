@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TransactionPage.ViewTransactonPage">
+
+    <include layout="@layout/toolbar"/>
+
+    <FrameLayout
+        android:id="@+id/ttframe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        >
+        <include layout="@layout/transaction_item"
+            android:layout_marginTop="80dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="30dp"
+            />
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/entryImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/backed_up"
+        android:layout_below="@+id/ttframe"
+        android:layout_above="@+id/editEntry"
+        />
+
+
+    <Button
+        android:id="@+id/editEntry"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="Edit Entry"
+        android:elevation="5dp"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:layout_above="@+id/laydel"
+        android:drawableStart="@drawable/ic_baseline_edit_24"
+        android:drawableTint="@color/white"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        />
+
+    <LinearLayout
+        android:id="@+id/laydel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="20dp"
+        android:layout_alignParentBottom="true"
+        android:padding="10dp"
+        android:gravity="center_vertical"
+        android:weightSum="2"
+        >
+        <TextView
+            android:id="@+id/deleteEntry"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="DELETE"
+            android:textColor="@color/primaryRed"
+            android:layout_weight="1"
+            android:textSize="18dp"
+            android:gravity="center"
+            android:drawableRight="@drawable/ic_baseline_delete_24"
+            android:drawableTint="@color/primaryRed"
+            android:background="@drawable/delete_bg"
+            android:layout_marginRight="10dp"
+            />
+
+
+        <TextView
+            android:id="@+id/shareEntry"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/button_bg"
+            android:drawableRight="@drawable/ic_baseline_share_24"
+            android:drawableTint="@color/white"
+            android:gravity="center"
+            android:textSize="18dp"
+            android:layout_weight="1"
+            android:text="SHARE"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/white"
+            />
+    </LinearLayout>
+
+</RelativeLayout>
