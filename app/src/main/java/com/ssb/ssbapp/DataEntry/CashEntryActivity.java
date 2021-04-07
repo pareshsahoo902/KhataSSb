@@ -18,11 +18,20 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 import com.ssb.ssbapp.CashDetails.CashModel;
 import com.ssb.ssbapp.CustomCalculator.CustomCalculator;
 import com.ssb.ssbapp.DialogHelper.ImagePickerDailog;
@@ -34,6 +43,7 @@ import com.ssb.ssbapp.Utils.Constants;
 import com.ssb.ssbapp.Utils.SSBBaseActivity;
 import com.ssb.ssbapp.Utils.UtilsMethod;
 
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.UUID;
@@ -43,18 +53,22 @@ import static com.ssb.ssbapp.Utils.Constants.SSB_PREF_DATE;
 public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDailog.ImagePickerListner {
 
     private boolean isUri;
-    private Bitmap bitmap;
+    private Bitmap bitmap = null;
     private ImageView billIMageMoney;
     private EditText cashType, cashEntryText, discount,description;
     private TextView dateTextBtn, imageTextButton, entriesText;
-    private Uri picUri;
+    private Uri picUri = null;
     private String cutomerName;
     private Button saveEntry;
     private Calendar myCalendar;
-
     private double totalCash, cashAmount;
     private String type;
     private DatabaseReference moneyTransactionRef,custRef,cashRef;
+
+    private StorageTask uploadtask;
+    private StorageReference userStorage;
+    private String picDowloadUrl="";
+    private double balance;
 
 
     @Override
@@ -64,6 +78,7 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
 
         setToolbar(getApplicationContext(), "Cash Entry");
         type=getIntent().getStringExtra(Constants.SSB_TRANSACTION_TYPE);
+        balance= Double.parseDouble(getIntent().getStringExtra(Constants.SSB_BALANCE_INTENT));
 
         billIMageMoney = findViewById(R.id.billIMage);
         dateTextBtn = findViewById(R.id.dateTextBtn);
@@ -80,6 +95,9 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
         cashRef = FirebaseDatabase.getInstance().getReference().child("cashDetails");
         cashRef.keepSynced(true);
         moneyTransactionRef.keepSynced(true);
+
+        userStorage= FirebaseStorage.getInstance().getReference().child("SSB").child("Transaction Image");
+
 
         myCalendar = Calendar.getInstance();
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -173,19 +191,118 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
 
     }
 
+    private double getBalance (double total , double pending){
+
+        pending = Math.abs(pending);
+        if (type.equals("got")){
+           return total+pending;
+
+        }else{
+            return total-pending;
+        }
+
+    }
+
     private void saveEntryToDB() {
         String ceid = UUID.randomUUID().toString();
+        showProgress();
+            if (isUri) {
+                if (picUri!=null){
+                    UploadUserPicUri(ceid);
+                }else {
+                    startAddingToDB("",ceid);
+                }
+            }else {
+                if (bitmap!=null){
+                    UploadUserPicBitmap(ceid);
+                }else{
+                    startAddingToDB("",ceid);
+                }
+            }
+            //TODO load data to cashinOut page
+
+    }
+
+    private void UploadUserPicBitmap(String ceid) {
+
+        if(bitmap!=null){
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] data = baos.toByteArray();
+
+            UploadTask uploadTask = userStorage.child(ceid+".jpg").putBytes(data);
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle unsuccessful uploads
+                    dismissProgress();
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                    userStorage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            dismissProgress();
+                            picDowloadUrl = uri.toString();
+                            startAddingToDB(picDowloadUrl,ceid);
+                        }
+                    });
+
+
+                }
+            });
+
+
+        }else {
+            dismissProgress();
+            showMessageToast("Enter a Image !",false);
+        }
+    }
+
+    private void startAddingToDB(String dowloadUrl, String ceid) {
 
         MoneyTransactionModel model = new MoneyTransactionModel(ceid,getLocalSession().getString(Constants.SSB_PREF_CID),getLocalSession().getString(Constants.SSB_PREF_KID)
-                ,dateTextBtn.getText().toString(),dateTextBtn.getText().toString(),"",description.getText().toString(),entriesText.getText().toString(),type,totalCash);
+                ,dateTextBtn.getText().toString(),dateTextBtn.getText().toString(),dowloadUrl,description.getText().toString(),entriesText.getText().toString(),type,totalCash,getBalance(totalCash,balance));
 
         if (model.getCid()!=null){
             moneyTransactionRef.child(ceid).setValue(model);
-            //TODO load data to cashinOut page
             loadCashDetailsData(ceid);
             startActivity(new Intent(CashEntryActivity.this, SucessActivity.class).putExtra(Constants.SSB_SUCESS_INTENT,"money"));
             finish();
+        }
 
+    }
+
+    private void UploadUserPicUri(String ceid) {
+
+        if(picUri!=null) {
+
+            final StorageReference filepath = userStorage.child(ceid+".jpg");
+            uploadtask = filepath.putFile(picUri);
+
+            uploadtask.continueWithTask(new Continuation() {
+                @Override
+                public Object then(@NonNull Task task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        dismissProgress();
+                        showMessageToast("Error Uploading Pic!", true);
+                    }
+                    return filepath.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener() {
+                @Override
+                public void onComplete(@NonNull Task task) {
+                    if (task.isSuccessful()) {
+                        dismissProgress();
+                        picDowloadUrl = task.getResult().toString();
+                        startAddingToDB(picDowloadUrl,ceid);
+
+                    }
+                }
+            });
         }
     }
 

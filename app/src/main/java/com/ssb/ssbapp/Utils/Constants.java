@@ -24,6 +24,7 @@ public class Constants {
     public static final String SSB_EMPLOYEE_DETAILS= "Employee Details";
     public static final String SSB_TRANSACTION_TYPE= "TYPE";
     public static final String SSB_SUCESS_INTENT= " ssb intent type";
+    public static final String SSB_BALANCE_INTENT= "BALANCE_INTENT";
     public static final String SSB_MONEYTRANSACTION_INTENT= "TRANSACTION_MODEL_INTENT";
 
 }

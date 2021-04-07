@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 import com.ssb.ssbapp.Customer.CustomerModel;
 import com.ssb.ssbapp.DataEntry.MoneyEntryActivity;
 import com.ssb.ssbapp.DialogHelper.EntryPickerDialog;
@@ -96,6 +97,8 @@ public class MoneyTransaction extends SSBBaseActivity {
                 Bundle bundle = new Bundle();
 
                 bundle.putString("transaction_type", "gave");
+                bundle.putDouble("allGave",totalGave );
+                bundle.putDouble("allGot",totalGot );
                 dailog.setArguments(bundle);
                 dailog.show(getSupportFragmentManager(), "Select Entry Type !");
             }
@@ -163,11 +166,28 @@ public class MoneyTransaction extends SSBBaseActivity {
             @Override
             protected void onBindViewHolder(@NonNull MOneyTransactionviewHolder moneyTransactionviewHolder, int i, @NonNull MoneyTransactionModel moneyTransactionModel) {
 
+                if (!moneyTransactionModel.description.equals("")){
+                    moneyTransactionviewHolder.desc.setText(moneyTransactionModel.getDescription());
+                    moneyTransactionviewHolder.desc.setVisibility(View.VISIBLE);
+                }
+
                 moneyTransactionviewHolder.entryText.setText(moneyTransactionModel.getEntriesText());
                 moneyTransactionviewHolder.date.setText(moneyTransactionModel.getDate());
-                moneyTransactionviewHolder.desc.setText(moneyTransactionModel.getDescription());
                 moneyTransactionviewHolder.amountTotal.setText("Amt:" + getCurrencyStr() + String.valueOf(moneyTransactionModel.getTotal()));
-                moneyTransactionviewHolder.balance.setText("Bal:" + getCurrencyStr() + String.valueOf(moneyTransactionModel.getTotal()));
+                if (moneyTransactionModel.getBalance()<0){
+                    moneyTransactionviewHolder.balance.setText("Bal:" + getCurrencyStr() + String.valueOf(moneyTransactionModel.getBalance()));
+                    moneyTransactionviewHolder.balance.setBackgroundColor(getResources().getColor(R.color.liteGreen));
+                }else {
+                    moneyTransactionviewHolder.balance.setText("Bal:" + getCurrencyStr() + String.valueOf(moneyTransactionModel.getBalance()));
+                    moneyTransactionviewHolder.balance.setBackgroundColor(getResources().getColor(R.color.litered));
+
+                }
+
+                if (moneyTransactionModel.getImageurl().length()>0){
+
+                    Picasso.with(getApplicationContext()).load(moneyTransactionModel.getImageurl()).into(moneyTransactionviewHolder.billIMage);
+                    moneyTransactionviewHolder.billIMage.setVisibility(View.VISIBLE);
+                }
 
                 if (moneyTransactionModel.getStatus().equals("got")) {
                     moneyTransactionviewHolder.gaveText.setVisibility(View.INVISIBLE);

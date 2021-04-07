@@ -17,11 +17,14 @@ public class MoneyTransactionModel implements Serializable {
     public String status;
 
     public double total;
+    public double balance;
 
     public MoneyTransactionModel() {
     }
 
-    public MoneyTransactionModel(String ceid, String cid, String kid, String date, String edit_date, String imageurl, String description, String entriesText, String status, double total) {
+    public MoneyTransactionModel(String ceid, String cid, String kid, String date, String edit_date, String imageurl, String description, String entriesText, String status, double total, double balance) {
+
+
         this.ceid = ceid;
         this.cid = cid;
         this.kid = kid;
@@ -32,6 +35,15 @@ public class MoneyTransactionModel implements Serializable {
         this.entriesText = entriesText;
         this.status = status;
         this.total = total;
+        this.balance = balance;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 
     public String getCeid() {

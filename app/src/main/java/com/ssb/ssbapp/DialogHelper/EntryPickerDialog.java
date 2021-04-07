@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,7 +29,7 @@ public class EntryPickerDialog extends BottomSheetDialogFragment {
 
     private EditText discount;
     private TextView gave , got , pending , result1 , gaveBalance , resultTotal;
-    private  double allgave, allGot;
+    private  double allgave, allGot,balance;
 
     @Nullable
     @Override
@@ -56,6 +57,7 @@ public class EntryPickerDialog extends BottomSheetDialogFragment {
        }
 
 
+       balance = allgave-allGot;
         cash = view.findViewById(R.id.cashPick);
         customer = view.findViewById(R.id.custPick);
         party = view.findViewById(R.id.partyPick);
@@ -98,21 +100,24 @@ public class EntryPickerDialog extends BottomSheetDialogFragment {
         cash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getContext(), CashEntryActivity.class).putExtra(Constants.SSB_TRANSACTION_TYPE,type));
+                startActivity(new Intent(getContext(), CashEntryActivity.class).putExtra(Constants.SSB_TRANSACTION_TYPE,type)
+                .putExtra(Constants.SSB_BALANCE_INTENT,String.valueOf(balance)));
                 dismiss();
             }
         });
         customer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getContext(), MoneyEntryActivity.class).putExtra(Constants.SSB_TRANSACTION_TYPE,type));
+                startActivity(new Intent(getContext(), MoneyEntryActivity.class).putExtra(Constants.SSB_TRANSACTION_TYPE,type)
+                        .putExtra(Constants.SSB_BALANCE_INTENT,balance));
                 dismiss();
             }
         });
         party.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getContext(), PartyEntryActivity.class).putExtra(Constants.SSB_TRANSACTION_TYPE,type));
+                startActivity(new Intent(getContext(), PartyEntryActivity.class).putExtra(Constants.SSB_TRANSACTION_TYPE,type)
+                        .putExtra(Constants.SSB_BALANCE_INTENT,balance));
                 dismiss();
             }
         });
