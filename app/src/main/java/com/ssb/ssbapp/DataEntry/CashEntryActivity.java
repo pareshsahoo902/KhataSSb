@@ -55,20 +55,20 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
     private boolean isUri;
     private Bitmap bitmap = null;
     private ImageView billIMageMoney;
-    private EditText cashType, cashEntryText, discount,description;
+    private EditText cashType, cashEntryText, discount, description;
     private TextView dateTextBtn, imageTextButton, entriesText;
     private Uri picUri = null;
     private String cutomerName;
-    private Button saveEntry;
+    private Button saveEntry, clearKhata;
     private Calendar myCalendar;
     private double totalCash, cashAmount;
     private String type;
     String CurrentDate;
-    private DatabaseReference moneyTransactionRef,custRef,cashRef;
+    private DatabaseReference moneyTransactionRef, custRef, cashRef;
 
     private StorageTask uploadtask;
     private StorageReference userStorage;
-    private String picDowloadUrl="";
+    private String picDowloadUrl = "";
     private double balance;
 
 
@@ -78,8 +78,8 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
         setContentView(R.layout.activity_cash_entry);
 
         setToolbar(getApplicationContext(), "Cash Entry");
-        type=getIntent().getStringExtra(Constants.SSB_TRANSACTION_TYPE);
-        balance= Double.parseDouble(getIntent().getStringExtra(Constants.SSB_BALANCE_INTENT));
+        type = getIntent().getStringExtra(Constants.SSB_TRANSACTION_TYPE);
+        balance = Double.parseDouble(getIntent().getStringExtra(Constants.SSB_BALANCE_INTENT));
 
         billIMageMoney = findViewById(R.id.billIMage);
         dateTextBtn = findViewById(R.id.dateTextBtn);
@@ -89,7 +89,9 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
         entriesText = findViewById(R.id.entriescash_text);
         discount = findViewById(R.id.discount);
         saveEntry = findViewById(R.id.savecashEnrty);
+        clearKhata = findViewById(R.id.clearKhata);
         description = findViewById(R.id.entryDescription);
+        cashEntryText.setText("0");
 
         moneyTransactionRef = FirebaseDatabase.getInstance().getReference().child("customerTransaction");
         custRef = FirebaseDatabase.getInstance().getReference().child("customers");
@@ -97,7 +99,7 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
         cashRef.keepSynced(true);
         moneyTransactionRef.keepSynced(true);
 
-        userStorage= FirebaseStorage.getInstance().getReference().child("SSB").child("Transaction Image");
+        userStorage = FirebaseStorage.getInstance().getReference().child("SSB").child("Transaction Image");
 
 
         myCalendar = Calendar.getInstance();
@@ -119,6 +121,24 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
             }
 
         };
+
+        //TODO zero code written here!
+        clearKhata.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                double t = Double.parseDouble(cashEntryText.getText().toString());
+                balance=Math.abs(balance);
+                if (balance>t){
+                    double res = balance - t;
+                    discount.setText(String.format("%.1f", res));
+                    calcDis();
+                }else {
+                    discount.setText("0");
+                    calcDis();
+                }
+
+            }
+        });
 
         saveEntry.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,7 +186,7 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
             }
         });
 
-        CurrentDate=UtilsMethod.getCurrentDate();
+        CurrentDate = UtilsMethod.getCurrentDate();
         dateTextBtn.setText(UtilsMethod.getCurrentDate().substring(0, 10));
 
         imageTextButton.setOnClickListener(new View.OnClickListener() {
@@ -180,7 +200,7 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
         custRef.child(getLocalSession().getString(Constants.SSB_PREF_CID)).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()){
+                if (snapshot.exists()) {
                     cutomerName = snapshot.child("name").getValue().toString();
                 }
             }
@@ -193,14 +213,14 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
 
     }
 
-    private double getBalance (double total , double pending){
+    private double getBalance(double total, double pending) {
 
         pending = Math.abs(pending);
-        if (type.equals("got")){
-           return total+pending;
+        if (type.equals("got")) {
+            return total + pending;
 
-        }else{
-            return total-pending;
+        } else {
+            return total - pending;
         }
 
     }
@@ -208,32 +228,32 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
     private void saveEntryToDB() {
         String ceid = UUID.randomUUID().toString();
         showProgress();
-            if (isUri) {
-                if (picUri!=null){
-                    UploadUserPicUri(ceid);
-                }else {
-                    startAddingToDB("",ceid);
-                }
-            }else {
-                if (bitmap!=null){
-                    UploadUserPicBitmap(ceid);
-                }else{
-                    startAddingToDB("",ceid);
-                }
+        if (isUri) {
+            if (picUri != null) {
+                UploadUserPicUri(ceid);
+            } else {
+                startAddingToDB("", ceid);
             }
-            //TODO load data to cashinOut page
+        } else {
+            if (bitmap != null) {
+                UploadUserPicBitmap(ceid);
+            } else {
+                startAddingToDB("", ceid);
+            }
+        }
+        //TODO load data to cashinOut page
 
     }
 
     private void UploadUserPicBitmap(String ceid) {
 
-        if(bitmap!=null){
+        if (bitmap != null) {
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] data = baos.toByteArray();
 
-            UploadTask uploadTask = userStorage.child(ceid+".jpg").putBytes(data);
+            UploadTask uploadTask = userStorage.child(ceid + ".jpg").putBytes(data);
             uploadTask.addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
@@ -249,7 +269,7 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
                         public void onSuccess(Uri uri) {
                             dismissProgress();
                             picDowloadUrl = uri.toString();
-                            startAddingToDB(picDowloadUrl,ceid);
+                            startAddingToDB(picDowloadUrl, ceid);
                         }
                     });
 
@@ -258,21 +278,21 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
             });
 
 
-        }else {
+        } else {
             dismissProgress();
-            showMessageToast("Enter a Image !",false);
+            showMessageToast("Enter a Image !", false);
         }
     }
 
     private void startAddingToDB(String dowloadUrl, String ceid) {
 
-        MoneyTransactionModel model = new MoneyTransactionModel(ceid,getLocalSession().getString(Constants.SSB_PREF_CID),getLocalSession().getString(Constants.SSB_PREF_KID)
-                ,CurrentDate,CurrentDate,dowloadUrl,description.getText().toString(),entriesText.getText().toString(),type,totalCash,getBalance(totalCash,balance));
+        MoneyTransactionModel model = new MoneyTransactionModel(ceid, getLocalSession().getString(Constants.SSB_PREF_CID), getLocalSession().getString(Constants.SSB_PREF_KID)
+                , CurrentDate, CurrentDate, dowloadUrl, description.getText().toString(), entriesText.getText().toString(), type, totalCash, getBalance(totalCash, balance));
 
-        if (model.getCid()!=null){
+        if (model.getCid() != null) {
             moneyTransactionRef.child(ceid).setValue(model);
             loadCashDetailsData(ceid);
-            startActivity(new Intent(CashEntryActivity.this, SucessActivity.class).putExtra(Constants.SSB_SUCESS_INTENT,"money"));
+            startActivity(new Intent(CashEntryActivity.this, SucessActivity.class).putExtra(Constants.SSB_SUCESS_INTENT, "money"));
             finish();
         }
 
@@ -280,9 +300,9 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
 
     private void UploadUserPicUri(String ceid) {
 
-        if(picUri!=null) {
+        if (picUri != null) {
 
-            final StorageReference filepath = userStorage.child(ceid+".jpg");
+            final StorageReference filepath = userStorage.child(ceid + ".jpg");
             uploadtask = filepath.putFile(picUri);
 
             uploadtask.continueWithTask(new Continuation() {
@@ -300,7 +320,7 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
                     if (task.isSuccessful()) {
                         dismissProgress();
                         picDowloadUrl = task.getResult().toString();
-                        startAddingToDB(picDowloadUrl,ceid);
+                        startAddingToDB(picDowloadUrl, ceid);
 
                     }
                 }
@@ -309,24 +329,24 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
     }
 
     private void loadCashDetailsData(String ceid) {
-        String cdid = UUID.randomUUID().toString().substring(0,14);
+        String cdid = UUID.randomUUID().toString().substring(0, 14);
 
-        CashModel cashModel = new CashModel(cdid,ceid,getLocalSession().getString(Constants.SSB_PREF_CID),getLocalSession().getString(Constants.SSB_PREF_KID),cutomerName
-        ,dateTextBtn.getText().toString(),dateTextBtn.getText().toString(),type,Double.parseDouble(cashEntryText.getText().toString().trim()));
+        CashModel cashModel = new CashModel(cdid, ceid, getLocalSession().getString(Constants.SSB_PREF_CID), getLocalSession().getString(Constants.SSB_PREF_KID), cutomerName
+                , dateTextBtn.getText().toString(), dateTextBtn.getText().toString(), type, Double.parseDouble(cashEntryText.getText().toString().trim()));
 
-        if (cashModel.getCid()!=null){
+        if (cashModel.getCid() != null) {
             cashRef.child(cdid).setValue(cashModel);
         }
     }
 
     private void calcDis() {
-        double disText=0.0;
+        double disText = 0.0;
         if (Double.parseDouble(cashEntryText.getText().toString()) != 0 && Double.parseDouble(discount.getText().toString()) >= 0)
             disText = Double.parseDouble(cashEntryText.getText().toString()) + Double.parseDouble(discount.getText().toString());
 
-        cashAmount= Double.parseDouble(cashEntryText.getText().toString());
+        cashAmount = Double.parseDouble(cashEntryText.getText().toString());
         totalCash = disText;
-        entriesText.setText(cashType.getText().toString() + " : " + cashEntryText.getText().toString() + " + " + discount.getText().toString()+ " = "+String.format("%.2f",disText));
+        entriesText.setText(cashType.getText().toString() + " : " + cashEntryText.getText().toString() + " + " + discount.getText().toString() + " = " + String.format("%.2f", disText));
 
     }
 
