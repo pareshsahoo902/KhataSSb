@@ -34,7 +34,7 @@ public class CashDetailsActivity extends SSBBaseActivity {
     private FirebaseRecyclerOptions<CashModel> entryoptions;
     private FirebaseRecyclerAdapter<CashModel, CashDetailsViewHolder> entryRecycleradapter;
     private double totalGave, totalGot;
-    private TextView totalIn , totalOut , todaysbalance,cashInHand,entryCount;
+    private TextView totalIn , totalOut , todaysbalance,cashInHand,entryCount,curentDate;
 
 
     @Override
@@ -49,6 +49,7 @@ public class CashDetailsActivity extends SSBBaseActivity {
         todaysbalance = findViewById(R.id.todaysbalance);
         cashInHand = findViewById(R.id.cashInHand);
         entryCount = findViewById(R.id.entryCount);
+        curentDate = findViewById(R.id.curentDate);
         cashRecycler = findViewById(R.id.cashDetailsRecycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         layoutManager.setReverseLayout(true);
@@ -60,6 +61,7 @@ public class CashDetailsActivity extends SSBBaseActivity {
         cashRef.keepSynced(true);
 
 
+        curentDate.setText(UtilsMethod.getCurrentDate().substring(0,10));
         loadEntries();
         calculateTotalBalance();
 

@@ -76,10 +76,10 @@ public class HomeActivity extends SSBBaseActivity {
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                String myFormat = "dd/MM/yyyy"; //In which you need put here
+                String myFormat = "dd-MM-yyyy hh:mm:ss a"; //In which you need put here
                 SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
                 String CurrentDate = sdf.format(myCalendar.getTime());
-                datetext.setText("Dt." + CurrentDate);
+                datetext.setText("Dt." + CurrentDate.substring(0, 10));
                 getLocalSession().putString(SSB_PREF_DATE, CurrentDate);
 
             }

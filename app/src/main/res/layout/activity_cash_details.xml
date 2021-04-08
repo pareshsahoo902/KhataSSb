@@ -162,7 +162,8 @@
                 android:layout_weight="0.3"
                 android:paddingLeft="10dp"
                 android:text="ENTRIES"
-                android:textSize="10dp"
+                android:textColor="@color/black"
+                android:textSize="13dp"
                 android:textStyle="bold" />
 
             <TextView

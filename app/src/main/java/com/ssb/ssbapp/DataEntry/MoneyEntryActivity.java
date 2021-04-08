@@ -66,6 +66,7 @@ public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalcula
     private DatabaseReference moneyTransactionRef;
     private double totalAmount=0,balance;
     boolean isUri = true;
+    String CurrentDate;
     boolean doubleBackToExitPressedOnce = false;
 
 
@@ -109,14 +110,16 @@ public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalcula
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                String myFormat = "dd/MM/yyyy"; //In which you need put here
+                String myFormat = "dd-MM-yyyy hh:mm:ss a"; //In which you need put here
                 SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
-                String CurrentDate = sdf.format(myCalendar.getTime());
-                dateTextBtn.setText(CurrentDate);
+                CurrentDate= sdf.format(myCalendar.getTime());
+                dateTextBtn.setText(CurrentDate.substring(0, 10));
 
             }
 
         };
+        CurrentDate=UtilsMethod.getCurrentDate();
+
         dateTextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -292,7 +295,7 @@ public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalcula
     private void startAddingToDB(String picDowloadUrl, String ceid) {
 
         MoneyTransactionModel model = new MoneyTransactionModel(ceid,getLocalSession().getString(Constants.SSB_PREF_CID),getLocalSession().getString(Constants.SSB_PREF_KID)
-                ,UtilsMethod.getCurrentDate(),UtilsMethod.getCurrentDate(),picDowloadUrl,descripition.getText().toString(),itemName.getText().toString()+": "+descText,type,totalAmount,getBalance(totalAmount,balance));
+                ,CurrentDate,CurrentDate,picDowloadUrl,descripition.getText().toString(),itemName.getText().toString()+": "+descText,type,totalAmount,getBalance(totalAmount,balance));
 
         if (model.getCid()!=null){
             moneyTransactionRef.child(ceid).setValue(model);

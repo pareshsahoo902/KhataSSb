@@ -15,7 +15,7 @@ public class UtilsMethod {
     }
 
     public static String getCurrentDate(){
-        SimpleDateFormat currentdate = new SimpleDateFormat("dd/MM/yyyy-hh:mm:ss");
+        SimpleDateFormat currentdate = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a");
         String CurrentDate = currentdate.format(new Date());
 
         return CurrentDate;

@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,13 +23,18 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+import com.ssb.ssbapp.Adapters.MOneyTransactionAdapter;
 import com.ssb.ssbapp.Customer.CustomerModel;
 import com.ssb.ssbapp.DataEntry.MoneyEntryActivity;
 import com.ssb.ssbapp.DialogHelper.EntryPickerDialog;
 import com.ssb.ssbapp.DialogHelper.ImagePickerDailog;
+import com.ssb.ssbapp.Home.HomeActivity;
+import com.ssb.ssbapp.Login.LoginActivity;
 import com.ssb.ssbapp.R;
+import com.ssb.ssbapp.SplashScreen.SplashActivity;
 import com.ssb.ssbapp.TransactionModel.MoneyTransactionModel;
 import com.ssb.ssbapp.Utils.Constants;
 import com.ssb.ssbapp.Utils.SSBBaseActivity;
@@ -35,6 +42,12 @@ import com.ssb.ssbapp.Utils.UtilsMethod;
 import com.ssb.ssbapp.ViewHolder.CustomerListViewHolder;
 import com.ssb.ssbapp.ViewHolder.MOneyTransactionviewHolder;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 
 public class MoneyTransaction extends SSBBaseActivity {
@@ -48,6 +61,8 @@ public class MoneyTransaction extends SSBBaseActivity {
     private FirebaseRecyclerAdapter<MoneyTransactionModel, MOneyTransactionviewHolder> entryRecycleradapter;
     private TextView geta;
     private double totalGave, totalGot;
+    MOneyTransactionAdapter adapter;
+    private ArrayList<MoneyTransactionModel> model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,14 +77,36 @@ public class MoneyTransaction extends SSBBaseActivity {
         geta = findViewById(R.id.geta);
         entryRecyclerView = findViewById(R.id.entryRecycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
-        layoutManager.setReverseLayout(true);
-        layoutManager.setStackFromEnd(true);
         entryRecyclerView.setLayoutManager(layoutManager);
         entryRecyclerView.hasFixedSize();
 
-
         enrtyRef = FirebaseDatabase.getInstance().getReference().child("customerTransaction");
         enrtyRef.keepSynced(true);
+
+
+        Query query = enrtyRef.orderByChild("cid").equalTo(getLocalSession().getString(Constants.SSB_PREF_CID));
+
+        model = new ArrayList<>();
+
+
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                model.clear();
+                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                    model.add(snapshot1.getValue(MoneyTransactionModel.class));
+                }
+                adapter.updateList(model);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+        });
+
 
         getBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,8 +117,8 @@ public class MoneyTransaction extends SSBBaseActivity {
                 Bundle bundle = new Bundle();
 
                 bundle.putString("transaction_type", "got");
-                bundle.putDouble("allGave",totalGave );
-                bundle.putDouble("allGot",totalGot );
+                bundle.putDouble("allGave", totalGave);
+                bundle.putDouble("allGot", totalGot);
                 dailog.setArguments(bundle);
                 dailog.show(getSupportFragmentManager(), "Select Entry Type !");
             }
@@ -97,8 +134,8 @@ public class MoneyTransaction extends SSBBaseActivity {
                 Bundle bundle = new Bundle();
 
                 bundle.putString("transaction_type", "gave");
-                bundle.putDouble("allGave",totalGave );
-                bundle.putDouble("allGot",totalGot );
+                bundle.putDouble("allGave", totalGave);
+                bundle.putDouble("allGot", totalGot);
                 dailog.setArguments(bundle);
                 dailog.show(getSupportFragmentManager(), "Select Entry Type !");
             }
@@ -107,7 +144,16 @@ public class MoneyTransaction extends SSBBaseActivity {
 
         calculateTotalBalance();
 
-        loadEntries();
+        loadEntryInRecycler();
+//        loadEntries();
+    }
+
+    private void loadEntryInRecycler() {
+
+        adapter = new MOneyTransactionAdapter(model, getApplicationContext());
+        entryRecyclerView.setAdapter(adapter);
+
+
     }
 
     private void calculateTotalBalance() {
@@ -166,7 +212,7 @@ public class MoneyTransaction extends SSBBaseActivity {
             @Override
             protected void onBindViewHolder(@NonNull MOneyTransactionviewHolder moneyTransactionviewHolder, int i, @NonNull MoneyTransactionModel moneyTransactionModel) {
 
-                if (!moneyTransactionModel.description.equals("")){
+                if (!moneyTransactionModel.description.equals("")) {
                     moneyTransactionviewHolder.desc.setText(moneyTransactionModel.getDescription());
                     moneyTransactionviewHolder.desc.setVisibility(View.VISIBLE);
                 }
@@ -174,16 +220,16 @@ public class MoneyTransaction extends SSBBaseActivity {
                 moneyTransactionviewHolder.entryText.setText(moneyTransactionModel.getEntriesText());
                 moneyTransactionviewHolder.date.setText(moneyTransactionModel.getDate());
                 moneyTransactionviewHolder.amountTotal.setText("Amt:" + getCurrencyStr() + String.valueOf(moneyTransactionModel.getTotal()));
-                if (moneyTransactionModel.getBalance()<0){
+                if (moneyTransactionModel.getBalance() < 0) {
                     moneyTransactionviewHolder.balance.setText("Bal:" + getCurrencyStr() + String.valueOf(moneyTransactionModel.getBalance()));
                     moneyTransactionviewHolder.balance.setBackgroundColor(getResources().getColor(R.color.liteGreen));
-                }else {
+                } else {
                     moneyTransactionviewHolder.balance.setText("Bal:" + getCurrencyStr() + String.valueOf(moneyTransactionModel.getBalance()));
                     moneyTransactionviewHolder.balance.setBackgroundColor(getResources().getColor(R.color.litered));
 
                 }
 
-                if (moneyTransactionModel.getImageurl().length()>0){
+                if (moneyTransactionModel.getImageurl().length() > 0) {
 
                     Picasso.with(getApplicationContext()).load(moneyTransactionModel.getImageurl()).into(moneyTransactionviewHolder.billIMage);
                     moneyTransactionviewHolder.billIMage.setVisibility(View.VISIBLE);
@@ -203,9 +249,9 @@ public class MoneyTransaction extends SSBBaseActivity {
                     public void onClick(View v) {
 
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable(Constants.SSB_MONEYTRANSACTION_INTENT,moneyTransactionModel);
+                        bundle.putSerializable(Constants.SSB_MONEYTRANSACTION_INTENT, moneyTransactionModel);
 
-                        startActivity(new Intent(MoneyTransaction.this,ViewTransactonPage.class)
+                        startActivity(new Intent(MoneyTransaction.this, ViewTransactonPage.class)
                                 .putExtras(bundle)
                         );
                     }
@@ -224,5 +270,22 @@ public class MoneyTransaction extends SSBBaseActivity {
 
     }
 
+    private void getSortedArray(ArrayList<MoneyTransactionModel> arraylist) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy"); //your own date format
+        Collections.sort(model, new Comparator<MoneyTransactionModel>() {
+            @Override
+            public int compare(MoneyTransactionModel o1, MoneyTransactionModel o2) {
+                try {
+                    return simpleDateFormat.parse(o1.getDate()).compareTo(simpleDateFormat.parse(o2.getDate()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    return 0;
+                }
+
+
+            }
+        });
+
+    }
 
 }

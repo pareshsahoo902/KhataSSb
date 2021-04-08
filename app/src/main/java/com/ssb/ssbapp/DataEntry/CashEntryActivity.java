@@ -63,6 +63,7 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
     private Calendar myCalendar;
     private double totalCash, cashAmount;
     private String type;
+    String CurrentDate;
     private DatabaseReference moneyTransactionRef,custRef,cashRef;
 
     private StorageTask uploadtask;
@@ -110,10 +111,10 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                String myFormat = "dd/MM/yyyy"; //In which you need put here
+                String myFormat = "dd-MM-yyyy hh:mm:ss a"; //In which you need put here
                 SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
-                String CurrentDate = sdf.format(myCalendar.getTime());
-                dateTextBtn.setText(CurrentDate);
+                CurrentDate = sdf.format(myCalendar.getTime());
+                dateTextBtn.setText(CurrentDate.substring(0, 10));
 
             }
 
@@ -165,6 +166,7 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
             }
         });
 
+        CurrentDate=UtilsMethod.getCurrentDate();
         dateTextBtn.setText(UtilsMethod.getCurrentDate().substring(0, 10));
 
         imageTextButton.setOnClickListener(new View.OnClickListener() {
@@ -265,7 +267,7 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
     private void startAddingToDB(String dowloadUrl, String ceid) {
 
         MoneyTransactionModel model = new MoneyTransactionModel(ceid,getLocalSession().getString(Constants.SSB_PREF_CID),getLocalSession().getString(Constants.SSB_PREF_KID)
-                ,dateTextBtn.getText().toString(),dateTextBtn.getText().toString(),dowloadUrl,description.getText().toString(),entriesText.getText().toString(),type,totalCash,getBalance(totalCash,balance));
+                ,CurrentDate,CurrentDate,dowloadUrl,description.getText().toString(),entriesText.getText().toString(),type,totalCash,getBalance(totalCash,balance));
 
         if (model.getCid()!=null){
             moneyTransactionRef.child(ceid).setValue(model);
