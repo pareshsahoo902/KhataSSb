@@ -66,7 +66,7 @@ public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalcula
     private DatabaseReference moneyTransactionRef;
     private double totalAmount=0,balance;
     boolean isUri = true;
-    String CurrentDate;
+        String CurrentDate;
     boolean doubleBackToExitPressedOnce = false;
 
 

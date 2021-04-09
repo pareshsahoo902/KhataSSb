@@ -18,7 +18,6 @@
         android:layout_marginTop="70dp"
         android:layout_marginRight="8dp"
         android:elevation="4dp"
-        android:focusable="false"
         android:gravity="center_vertical"
         android:hint="Enter Description (Vehicle number , party contact)"
         android:paddingLeft="10dp"
@@ -45,11 +44,11 @@
             android:layout_height="50dp"
             android:layout_weight="0.65"
             android:clickable="true"
+            android:cursorVisible="false"
             android:gravity="center_vertical"
             android:hint="Item"
-            android:text="Tomato"
-            android:cursorVisible="false"
             android:paddingLeft="10dp"
+            android:text="Tomato"
             android:textSize="16dp" />
 
         <ImageView
@@ -129,22 +128,26 @@
                 android:weightSum="1">
 
                 <EditText
+                    android:id="@+id/fairText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_column="1"
                     android:layout_weight="0.3"
                     android:gravity="center"
-                    android:hint="fair" />
+                    android:hint="fair"
+                    android:inputType="number" />
 
                 <EditText
+                    android:id="@+id/commisionText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_column="1"
                     android:layout_marginLeft="7dp"
                     android:layout_weight="0.005"
-
                     android:gravity="center"
+
                     android:hint="discount"
+                    android:inputType="number"
                     android:text="8" />
 
                 <EditText
@@ -154,23 +157,28 @@
                     android:layout_marginLeft="7dp"
                     android:layout_weight="0.2"
                     android:gravity="center"
-
-                    android:hint="labour" />
+                    android:hint="labour"
+                    android:id="@+id/labourText"
+                    android:inputType="number" />
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_column="1"
                     android:layout_marginLeft="7dp"
+                    android:id="@+id/extraText"
                     android:layout_weight="0.2"
-                    android:hint="extra" />
+                    android:hint="extra"
+                    android:inputType="number" />
 
                 <EditText
+                    android:id="@+id/totalText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_column="1"
                     android:layout_marginLeft="7dp"
                     android:layout_weight="0.3"
+                    android:focusable="false"
                     android:hint="Total" />
 
 
@@ -218,6 +226,18 @@
                 android:textSize="12dp"
                 android:textStyle="bold" />
 
+            <ImageView
+                android:id="@+id/billIMageMoney"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_below="@+id/imageTextBtn"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:scaleType="centerCrop"
+                android:src="@color/colorAccent" />
+
 
         </RelativeLayout>
 
@@ -248,7 +268,7 @@
             android:id="@+id/custom_calc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/addKBtn" />
+            android:layout_below="@+id/saveEntry" />
     </RelativeLayout>
 
 

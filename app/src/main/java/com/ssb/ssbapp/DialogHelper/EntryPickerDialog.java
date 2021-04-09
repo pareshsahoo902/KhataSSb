@@ -109,7 +109,7 @@ public class EntryPickerDialog extends BottomSheetDialogFragment {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getContext(), MoneyEntryActivity.class).putExtra(Constants.SSB_TRANSACTION_TYPE,type)
-                        .putExtra(Constants.SSB_BALANCE_INTENT,balance));
+                        .putExtra(Constants.SSB_BALANCE_INTENT,String.valueOf(balance)));
                 dismiss();
             }
         });
@@ -117,7 +117,7 @@ public class EntryPickerDialog extends BottomSheetDialogFragment {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getContext(), PartyEntryActivity.class).putExtra(Constants.SSB_TRANSACTION_TYPE,type)
-                        .putExtra(Constants.SSB_BALANCE_INTENT,balance));
+                        .putExtra(Constants.SSB_BALANCE_INTENT,String.valueOf(balance)));
                 dismiss();
             }
         });
