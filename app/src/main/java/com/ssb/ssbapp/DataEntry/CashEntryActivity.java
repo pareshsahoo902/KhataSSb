@@ -93,6 +93,7 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
         description = findViewById(R.id.entryDescription);
         cashEntryText.setText("0");
 
+
         moneyTransactionRef = FirebaseDatabase.getInstance().getReference().child("customerTransaction");
         custRef = FirebaseDatabase.getInstance().getReference().child("customers");
         cashRef = FirebaseDatabase.getInstance().getReference().child("cashDetails");
@@ -143,7 +144,12 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
         saveEntry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveEntryToDB();
+                if (totalCash>=1.0){
+                    saveEntryToDB();
+
+                }else{
+                    showMessageToast("Entry Amount can not be 0",true);
+                }
             }
         });
         cashEntryText.setOnClickListener(new View.OnClickListener() {
@@ -210,6 +216,10 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
 
             }
         });
+
+
+        dateTextBtn.setText(getLocalSession().getString(SSB_PREF_DATE).substring(0,10));
+
 
     }
 

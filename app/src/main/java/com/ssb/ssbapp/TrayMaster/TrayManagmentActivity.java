@@ -128,6 +128,7 @@ public class TrayManagmentActivity extends SSBBaseActivity {
             trayRef.child(tid).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
+                    tray_text.setText("");
                     trayRecyclerAdapter.notifyDataSetChanged();
                 }
             });

@@ -1,5 +1,6 @@
 package com.ssb.ssbapp.Home.HomeFragments;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -22,6 +23,8 @@ import com.ssb.ssbapp.Customer.CustomerModel;
 import com.ssb.ssbapp.DialogHelper.AddCustomerBottomSheet;
 import com.ssb.ssbapp.R;
 import com.ssb.ssbapp.Sessions.LocalSession;
+import com.ssb.ssbapp.TransactionPage.TrayTransactionPage;
+import com.ssb.ssbapp.Utils.Constants;
 import com.ssb.ssbapp.Utils.UtilsMethod;
 import com.ssb.ssbapp.ViewHolder.CustomerListViewHolder;
 
@@ -93,6 +96,9 @@ public class TrayFrag extends Fragment {
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        LocalSession.putString(Constants.SSB_PREF_CID,custModel.getUid());
+                        startActivity(new Intent(getContext(), TrayTransactionPage.class)
+                                .putExtra("name",custModel.getName()));
 
                     }
                 });

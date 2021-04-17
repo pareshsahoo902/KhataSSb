@@ -74,4 +74,8 @@ dependencies {
     //custom bottom Navigation
     implementation 'com.github.armcha:SpaceNavigationView:1.6.0'
 
+
+    implementation 'com.rengwuxian.materialedittext:library:2.1.4'
+
+
 }

@@ -205,6 +205,7 @@ public class KhataManagment extends SSBBaseActivity {
             khataRef.child(kid).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
+                    khata_text.setText("");
                     khataRecyclerAdapter.notifyDataSetChanged();
                 }
             });

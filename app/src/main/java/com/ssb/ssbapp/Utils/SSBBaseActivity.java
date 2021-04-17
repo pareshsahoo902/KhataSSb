@@ -44,6 +44,20 @@ public class SSBBaseActivity extends AppCompatActivity {
         return outputStr;
     }
 
+    public String getGaveArrowStr() {
+
+        String outputStr = "↑";
+
+        return outputStr;
+    }
+
+    public String getGotArrowStr() {
+
+        String outputStr = "↓";
+
+        return outputStr;
+    }
+
     /**
      * Init the Progress bar to use in the whole application
      *

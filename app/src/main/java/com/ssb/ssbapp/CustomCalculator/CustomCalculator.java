@@ -231,7 +231,7 @@ public class CustomCalculator extends LinearLayout implements View.OnClickListen
                 break;
             case R.id.btnMPlus:
                 //TODO
-                calctext="";
+                calctext = "";
                 mListner.onMemoryPlusPressListner("M+", calctext);
                 break;
             case R.id.btnMminus:
@@ -269,11 +269,13 @@ public class CustomCalculator extends LinearLayout implements View.OnClickListen
             case R.id.btnMultiply:
                 //TODO
                 opreand1 = Double.parseDouble(calctext);
-                calctext+="*";
+                calctext += "*";
                 mListner.onMultiplyButtonPressListner("*", calctext);
                 opreator = "*";
                 calctext = "";
                 break;
+
+
             case R.id.btnEquals:
                 //TODO
                 if (opreator == "+") {

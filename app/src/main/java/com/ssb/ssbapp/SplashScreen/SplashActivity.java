@@ -6,18 +6,25 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.ssb.ssbapp.BuildConfig;
 import com.ssb.ssbapp.Home.HomeActivity;
 import com.ssb.ssbapp.Login.LoginActivity;
 import com.ssb.ssbapp.R;
+import com.ssb.ssbapp.Utils.SSBBaseActivity;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends SSBBaseActivity {
 
     FirebaseAuth mAuth;
+    TextView versionID;
+    ImageView img1 , img2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +32,20 @@ public class SplashActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
         mAuth=FirebaseAuth.getInstance();
+        versionID = findViewById(R.id.versionID);
+        img1 = findViewById(R.id.img1);
+        img2 = findViewById(R.id.img2);
+        versionID.setText("v"+BuildConfig.VERSION_NAME);
+
+        img1.setAlpha((float) 0.7);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                img2.setVisibility(View.VISIBLE);
+                img1.setVisibility(View.VISIBLE);
+
+            }
+        },500);
 
         new Handler().postDelayed(new Runnable() {
             @Override

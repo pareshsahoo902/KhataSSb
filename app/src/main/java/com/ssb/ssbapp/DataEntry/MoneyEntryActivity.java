@@ -49,6 +49,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
+import static com.ssb.ssbapp.Utils.Constants.SSB_PREF_DATE;
+
 public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalculator.CalculatorListner ,ImagePickerDailog.ImagePickerListner{
 
     private CustomCalculator customCalculator;
@@ -62,6 +64,7 @@ public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalcula
     private Uri picUri;
     private String image_url;
     private List<Double> itemBalanceList;
+    private List<String> entries;
     private ImageView billIMageMoney;
     private DatabaseReference moneyTransactionRef;
     private double totalAmount=0,balance;
@@ -84,7 +87,7 @@ public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalcula
         balance= Double.parseDouble(getIntent().getStringExtra(Constants.SSB_BALANCE_INTENT));
 
 
-        setToolbar(getApplicationContext(), "You got " + getCurrencyStr() + " 0 ");
+        setToolbar(getApplicationContext(), "You "+type+" " + getCurrencyStr() + totalAmount);
         customCalculator = findViewById(R.id.custom_calc);
         entryText = findViewById(R.id.calcEntry);
         itemName = findViewById(R.id.itemName);
@@ -95,7 +98,7 @@ public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalcula
         billIMageMoney = findViewById(R.id.billIMageMoney);
         dateTextBtn = findViewById(R.id.dateTextBtn);
         imageTextBtn = findViewById(R.id.imageTextBtn);
-
+    customCalculator.setVisibility(View.GONE);
         itemBalanceList = new ArrayList<>();
         userStorage= FirebaseStorage.getInstance().getReference().child("SSB").child("Transaction Image");
 
@@ -118,7 +121,21 @@ public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalcula
             }
 
         };
+        entries=new ArrayList<>();
         CurrentDate=UtilsMethod.getCurrentDate();
+        entryText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus){
+                    entryText.setShowSoftInputOnFocus(false);
+
+                    customCalculator.setVisibility(View.VISIBLE);
+                }
+                else {
+                    customCalculator.setVisibility(View.GONE);
+                }
+            }
+        });
 
         dateTextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,13 +146,6 @@ public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalcula
             }
         });
 
-        entryText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                customCalculator.setVisibility(View.VISIBLE);
-
-            }
-        });
 
 
 
@@ -155,10 +165,16 @@ public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalcula
             public void onClick(View v) {
                 final  boolean save = (boolean) saveEntry.getTag();
                 if (save){
-                    saveEntryToDB();
+                    if (totalAmount>=1.0){
+                        saveEntryToDB();
+
+                    }else{
+                        showMessageToast("Entry Amount can not be 0",true);
+                    }
                 }
                 else {
                     entryText.setText((String.valueOf(totalAmount)));
+                    setToolbar(getApplicationContext(), "You "+type+" " + getCurrencyStr() + totalAmount);
                     saveEntry.setTag(true);
                     saveEntry.setText("Save");
                 }
@@ -195,12 +211,9 @@ public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalcula
             }
         });
 
-        itemName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                customCalculator.setVisibility(View.GONE);
-            }
-        });
+
+        dateTextBtn.setText(getLocalSession().getString(SSB_PREF_DATE).substring(0,10));
+
     }
 
     private void saveEntryToDB() {
@@ -332,8 +345,15 @@ public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalcula
 
     }
 
+
+
     private void updateLabel(String chrSequence) {
-        entries_text.setText(itemName.getText().toString() + ": " + descText);
+        if (descText.length()<=1){
+            descText = itemName.getText().toString() + ": "+descText;
+            entries_text.setText(descText);
+        }else {
+            entries_text.setText( descText);
+        }
 
     }
 
@@ -432,7 +452,7 @@ public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalcula
     @Override
     public void onMemoryPlusPressListner(String btn, String chrSequence) {
         if (chrSequence != null){
-            descText =descText+"("+btn+")\n";
+            descText =descText+"("+btn+")\n"+itemName.getText().toString()+": ";
             entryText.setText(chrSequence+"0");
             updateLabel(chrSequence);
 
@@ -459,6 +479,7 @@ public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalcula
 
     @Override
     public void onDeletePressListner(String btn, String chrSequence) {
+        descText = descText.substring(0,descText.length()-1);
         updateLabel(chrSequence);
     }
 

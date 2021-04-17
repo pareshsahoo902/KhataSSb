@@ -4,27 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splash_gradient"
+    android:background="@color/colorPrimaryDark"
+    android:animateLayoutChanges="true"
     tools:context=".SplashScreen.SplashActivity">
 
     <ImageView
+        android:id="@+id/img1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ssb_logo"
+        android:layout_height="400dp"
+        android:src="@drawable/app_icon"
         android:padding="5dp"
-        android:visibility="visible"
+        android:layout_marginTop="30dp"
+        android:scaleType="centerInside"
+        android:visibility="invisible"
+        android:alpha="0.7"
         android:elevation="11dp"
-        app:tint="@color/colorPrimaryDark"
         />
     <ImageView
+        android:id="@+id/img2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitXY"
-        android:src="@drawable/veggiewbg"
-        android:alpha="0.4"
-        app:tint="#CCCBCB"/>
+        android:layout_below="@+id/img1"
+        android:layout_marginLeft="-30dp"
+        android:layout_marginRight="-60dp"
+        android:visibility="invisible"
+        android:layout_above="@+id/versionID"
+        android:src="@drawable/name"
+        />
+
+
 
     <TextView
+        android:id="@+id/versionID"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"

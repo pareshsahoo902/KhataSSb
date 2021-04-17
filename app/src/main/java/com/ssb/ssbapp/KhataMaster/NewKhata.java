@@ -73,6 +73,7 @@ public class NewKhata extends SSBBaseActivity {
             khataRef.child(kid).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
+                    khata_text.setText("");
                     getLocalSession().putString(SSB_PREF_BRANCH,khata_text.getText().toString());
                     getLocalSession().putString(SSB_PREF_KID,kid);
                     dismissProgress();

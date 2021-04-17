@@ -44,7 +44,6 @@
                     android:gravity="center_vertical"
                     android:hint="Item"
                     android:paddingLeft="10dp"
-                    android:text="Tomato"
                     android:textSize="16dp" />
 
                 <ImageView
@@ -64,7 +63,6 @@
                     android:drawableStart="@drawable/rupee"
                     android:drawablePadding="8dp"
                     android:drawableTint="@color/colorPrimary"
-                    android:focusable="false"
                     android:gravity="center_vertical"
                     android:hint="Enter Amount"
                     android:paddingLeft="10dp"
@@ -98,7 +96,7 @@
                 android:orientation="vertical"
                 android:paddingTop="5dp"
                 android:paddingBottom="10dp"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <EditText
                     android:id="@+id/entryDescription"

@@ -48,7 +48,6 @@
             android:gravity="center_vertical"
             android:hint="Item"
             android:paddingLeft="10dp"
-            android:text="Tomato"
             android:textSize="16dp" />
 
         <ImageView
@@ -66,8 +65,9 @@
             android:clickable="true"
             android:drawableStart="@drawable/rupee"
             android:drawablePadding="8dp"
+            android:cursorVisible="false"
+            android:focusableInTouchMode="true"
             android:drawableTint="@color/colorPrimary"
-            android:focusable="false"
             android:gravity="center_vertical"
             android:hint="Enter Amount"
             android:paddingLeft="10dp"
@@ -114,6 +114,8 @@
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/edittext_background"
+            android:elevation="5dp"
             android:orientation="horizontal">
 
             <TableRow
@@ -123,66 +125,104 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginBottom="10dp"
-                android:background="@drawable/edittext_background"
-                android:elevation="5dp"
                 android:weightSum="1">
 
-                <EditText
+                <com.rengwuxian.materialedittext.MaterialEditText
                     android:id="@+id/fairText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_column="1"
                     android:layout_weight="0.3"
-                    android:gravity="center"
+                    android:gravity="start"
                     android:hint="fair"
+                    android:singleLine="true"
+                    app:met_floatingLabel="highlight"
                     android:inputType="number" />
 
-                <EditText
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_marginLeft="12dp"
+                    android:layout_weight="0.35"
+                    android:hint="labour"
+                    android:gravity="start"
+                    android:singleLine="true"
+                    app:met_floatingLabel="highlight"
+                    android:id="@+id/labourText"
+                    android:inputType="number" />
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_marginLeft="12dp"
+                    android:id="@+id/extraText"
+                    android:singleLine="true"
+                    android:gravity="start"
+                    app:met_floatingLabel="highlight"
+                    android:layout_weight="0.35"
+                    android:hint="extra"
+                    android:inputType="number" />
+
+
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="10dp"
+                android:weightSum="1">
+
+                <com.rengwuxian.materialedittext.MaterialEditText
                     android:id="@+id/commisionText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_column="1"
-                    android:layout_marginLeft="7dp"
-                    android:layout_weight="0.005"
-                    android:gravity="center"
-
-                    android:hint="discount"
+                    android:gravity="end"
+                    android:singleLine="true"
+                    app:met_floatingLabel="highlight"
+                    android:layout_weight="0.1"
+                    android:hint="Commsision"
                     android:inputType="number"
-                    android:text="8" />
+                    android:text="0" />
 
-                <EditText
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/commisionTotal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_column="1"
-                    android:layout_marginLeft="7dp"
-                    android:layout_weight="0.2"
-                    android:gravity="center"
-                    android:hint="labour"
-                    android:id="@+id/labourText"
-                    android:inputType="number" />
+                    android:singleLine="true"
+                    android:gravity="start"
+                    android:layout_weight="0.3"
+                    android:textSize="17dp"
+                    app:met_floatingLabel="highlight"
+                    android:hint="0.0"
+                    />
 
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_column="1"
-                    android:layout_marginLeft="7dp"
-                    android:id="@+id/extraText"
-                    android:layout_weight="0.2"
-                    android:hint="extra"
-                    android:inputType="number" />
 
-                <EditText
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/totalText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_column="1"
                     android:layout_marginLeft="7dp"
-                    android:layout_weight="0.3"
+                    android:layout_weight="0.6"
+                    app:met_floatingLabel="highlight"
+                    android:gravity="start"
                     android:focusable="false"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimaryDark"
                     android:hint="Total" />
 
-
             </TableRow>
+
         </TableLayout>
 
         <RelativeLayout

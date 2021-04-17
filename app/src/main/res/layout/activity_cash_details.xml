@@ -58,7 +58,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Cash in Hand"
+                            android:text="Yesterday's Balance"
                             android:textColor="@color/colorAccent"
                             android:textSize="15sp" />
 
@@ -166,16 +166,7 @@
                 android:textSize="13dp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="0.35"
-                android:gravity="center"
-                android:paddingLeft="20dp"
-                android:text="OUT"
-                android:textSize="10dp"
-                android:textStyle="bold" />
+
 
             <TextView
                 android:layout_width="match_parent"
@@ -185,6 +176,16 @@
                 android:gravity="center"
                 android:paddingRight="10dp"
                 android:text="IN"
+                android:textSize="10dp"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.35"
+                android:gravity="center"
+                android:paddingLeft="20dp"
+                android:text="OUT"
                 android:textSize="10dp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -209,18 +210,7 @@
                 android:textSize="13dp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/totalOut"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="0.35"
-                android:gravity="center"
-                android:paddingLeft="20dp"
-                android:text=""
-                android:textColor="@color/primaryRed"
-                android:textSize="16dp"
-                android:textStyle="bold" />
+
 
             <TextView
                 android:id="@+id/totalIn"
@@ -232,6 +222,19 @@
                 android:textColor="@color/primaryGreen"
                 android:paddingRight="10dp"
                 android:text=""
+                android:textSize="16dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/totalOut"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.35"
+                android:gravity="center"
+                android:paddingLeft="20dp"
+                android:text=""
+                android:textColor="@color/primaryRed"
                 android:textSize="16dp"
                 android:textStyle="bold" />
         </LinearLayout>

@@ -49,35 +49,41 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
+import static com.ssb.ssbapp.Utils.Constants.SSB_PREF_DATE;
+
 public class PartyEntryActivity extends SSBBaseActivity implements CustomCalculator.CalculatorListner, ImagePickerDailog.ImagePickerListner {
-    private EditText entryText,itemName,entryDescription,partDescription;
-    private EditText commisionText , fairText, labourText,extraText, totalText;
-    private TextView entries_text,dateTextBtn,imageTextBtn;
-    private String descText="";
+    private EditText entryText, itemName, entryDescription, partDescription;
+    private TextView commisionTotal, totalText;
+    private EditText commisionText, fairText, labourText, extraText;
+    private TextView entries_text, dateTextBtn, imageTextBtn;
+    private String descText = "";
     private CustomCalculator customCalculator;
-    private double fair= 0.0, commision =0.0,labour = 0.0 , extra =0.0,t=0.0;
+    private double fair = 0.0, commision = 0.0, labour = 0.0, extra = 0.0, t = 0.0;
     private Button saveEntry;
     private LinearLayout entryLayout;
     private List<Double> itemBalanceList;
-    private double totalAmount=0;
+    private double totalAmount = 0;
     private Bitmap bitmap;
     private ImageView billIMageMoney;
     private Uri picUri;
     boolean isUri = true;
-    String CurrentDate,type;
+    double cm;
+    String CurrentDate, type, commTextDesc = "";
     private DatabaseReference moneyTransactionRef;
-//TODO commison fair calculation
+    //TODO commison fair calculation
     private double balance;
     boolean doubleBackToExitPressedOnce = false;
 
     private StorageTask uploadtask;
     private StorageReference userStorage;
-    private String picDowloadUrl="";
+    private String picDowloadUrl = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_party_entry);
+        setToolbar(getApplicationContext(), "Party Entry");
+
 
         type = getIntent().getStringExtra(Constants.SSB_TRANSACTION_TYPE);
         balance = Double.parseDouble(getIntent().getStringExtra(Constants.SSB_BALANCE_INTENT));
@@ -99,33 +105,25 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
         extraText = findViewById(R.id.extraText);
         labourText = findViewById(R.id.labourText);
         totalText = findViewById(R.id.totalText);
-
+        commisionTotal = findViewById(R.id.commisionTotal);
+        customCalculator.setVisibility(View.GONE);
         itemBalanceList = new ArrayList<>();
         moneyTransactionRef = FirebaseDatabase.getInstance().getReference().child("customerTransaction");
         moneyTransactionRef.keepSynced(true);
 
-
-        fairText.setOnClickListener(new View.OnClickListener() {
+        entryText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onClick(View v) {
-                customCalculator.setVisibility(View.GONE);
-            }
-        });commisionText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                customCalculator.setVisibility(View.GONE);
-            }
-        });extraText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                customCalculator.setVisibility(View.GONE);
-            }
-        });labourText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                customCalculator.setVisibility(View.GONE);
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    entryText.setShowSoftInputOnFocus(false);
+                    customCalculator.setVisibility(View.VISIBLE);
+                } else {
+                    customCalculator.setVisibility(View.GONE);
+                }
             }
         });
+
+
         myCalendar = Calendar.getInstance();
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
@@ -139,13 +137,112 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
 
                 String myFormat = "dd-MM-yyyy hh:mm:ss a"; //In which you need put here
                 SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
-                CurrentDate= sdf.format(myCalendar.getTime());
+                CurrentDate = sdf.format(myCalendar.getTime());
                 dateTextBtn.setText(CurrentDate.substring(0, 10));
 
             }
 
         };
 
+        commisionText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                try {
+                    cm = Double.parseDouble(commisionText.getText().toString().trim());
+
+                } catch (NumberFormatException e) {
+                    commisionText.setText("0");
+                    commisionText.hasFocus();
+                    commisionText.selectAll();
+                    cm = 0.0;
+
+                }
+
+                if (!fairText.getText().toString().trim().equals("") && fairText.getText().toString().trim() != null) {
+                    fair = Double.parseDouble(fairText.getText().toString().trim());
+                }
+                if (!labourText.getText().toString().trim().equals("") && labourText.getText().toString().trim() != null) {
+                    labour = Double.parseDouble(labourText.getText().toString().trim());
+                }
+                if (!extraText.getText().toString().trim().equals("") && extraText.getText().toString().trim() != null) {
+                    extra = Double.parseDouble(extraText.getText().toString().trim());
+                }
+                commision = totalAmount * ((cm) / 100);
+                commisionTotal.setText("=   " + getCurrencyStr() + String.valueOf(commision));
+
+                t = fair + commision + labour + extra;
+                totalText.setText(getCurrencyStr() + String.format("%.1f", t));
+
+                saveEntry.setText("GRAND TOTAL = " + getCurrencyStr() + String.format("%.1f", totalAmount - t));
+
+                commTextDesc = "\nFair(" + String.valueOf(fair) + ")+ Labour(" + String.valueOf(labour) + ")+ Extra(" + String.valueOf(labour) + ")+ Commission("
+                        + String.valueOf(cm) + "% =" + String.valueOf(commision) + ")\nTotal:" + String.valueOf(totalAmount) + "-" + String.valueOf(t) +
+                        " = " + getCurrencyStr() + String.valueOf(totalAmount - t);
+            }
+        });
+
+        fairText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                commisionText.setText("0");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                try {
+                    fair = Double.parseDouble(fairText.getText().toString().trim());
+                } catch (NumberFormatException e) {
+//                    textTOATAL = textTOATAL - ex;
+                    fairText.setText("0");
+                    fairText.hasFocus();
+                    fairText.selectAll();
+                    fair = 0.0;
+
+                }
+            }
+        });
+        labourText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                commisionText.setText("0");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                try {
+                    labour = Double.parseDouble(labourText.getText().toString().trim());
+                } catch (NumberFormatException e) {
+//                    textTOATAL = textTOATAL - ex;
+                    labourText.setText("0");
+                    labourText.hasFocus();
+                    labourText.selectAll();
+                    labour = 0.0;
+
+                }
+            }
+        });
 
         //TODO commsion calc
         extraText.addTextChangedListener(new TextWatcher() {
@@ -156,6 +253,8 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                commisionText.setText("0");
 
             }
 
@@ -172,21 +271,6 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
                     extra = 0.0;
 
                 }
-                if (!fairText.getText().toString().trim().equals("") && fairText.getText().toString().trim()!=null){
-                    fair = Double.parseDouble(fairText.getText().toString().trim());
-                }
-                if (!labourText.getText().toString().trim().equals("") && labourText.getText().toString().trim()!=null){
-                    labour = Double.parseDouble(labourText.getText().toString().trim());
-                }
-                if (!commisionText.getText().toString().trim().equals("") && commisionText.getText().toString().trim()!=null){
-                    double cm = Double.parseDouble(commisionText.getText().toString().trim());
-                    commision = totalAmount*((cm)/100);
-                }
-
-               t = fair+commision+labour+extra;
-                totalText.setText(getCurrencyStr()+String.format("%.1f",t));
-
-                saveEntry.setText("MRC= "+getCurrencyStr()+String.format("%.1f",totalAmount+t));
 
             }
 
@@ -194,10 +278,7 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
         });
 
 
-
-
-
-        CurrentDate= UtilsMethod.getCurrentDate();
+        CurrentDate = UtilsMethod.getCurrentDate();
         dateTextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -206,7 +287,7 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
-        userStorage= FirebaseStorage.getInstance().getReference().child("SSB").child("Transaction Image");
+        userStorage = FirebaseStorage.getInstance().getReference().child("SSB").child("Transaction Image");
 
         imageTextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -257,50 +338,54 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
         saveEntry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final  boolean save = (boolean) saveEntry.getTag();
-                if (save){
-                    saveEntryToDB();
-                }
-                else {
+                final boolean save = (boolean) saveEntry.getTag();
+                if (save) {
+                    if (totalAmount >= 1.0) {
+                        saveEntryToDB();
+
+                    } else {
+                        showMessageToast("Entry Amount can not be 0", true);
+                    }
+                } else {
                     entryText.setText((String.valueOf(totalAmount)));
-                    totalAmount+=t;
+                    totalAmount -= t;
                     saveEntry.setTag(true);
                     saveEntry.setText("Save");
                 }
             }
         });
-        setToolbar(getApplicationContext(),"Party Entry");
+        dateTextBtn.setText(getLocalSession().getString(SSB_PREF_DATE).substring(0, 10));
     }
 
     private void saveEntryToDB() {
         showProgress();
         String ceid = UUID.randomUUID().toString();
 
-        if (isUri){
-            if (picUri!=null){
+        if (isUri) {
+            if (picUri != null) {
                 uploadImageUri(ceid);
 
-            }else{
-                startAddingToDB("",ceid);
+            } else {
+                startAddingToDB("", ceid);
             }
-        }else{
-            if (bitmap!=null){
+        } else {
+            if (bitmap != null) {
                 uploadBitmapImage(ceid);
 
-            }else{
-                startAddingToDB("",ceid);
+            } else {
+                startAddingToDB("", ceid);
             }
         }
     }
 
     private void startAddingToDB(String picDowloadUrl, String ceid) {
 
-        MoneyTransactionModel model = new MoneyTransactionModel(ceid,getLocalSession().getString(Constants.SSB_PREF_CID),getLocalSession().getString(Constants.SSB_PREF_KID)
-                ,CurrentDate,CurrentDate,picDowloadUrl,partDescription.getText().toString()+"\n"+entryDescription.getText().toString(),itemName.getText().toString()+": "+descText,type,totalAmount,getBalance(totalAmount,balance));
+        MoneyTransactionModel model = new MoneyTransactionModel(ceid, getLocalSession().getString(Constants.SSB_PREF_CID), getLocalSession().getString(Constants.SSB_PREF_KID)
+                , CurrentDate, CurrentDate, picDowloadUrl, partDescription.getText().toString() + "\n" + entryDescription.getText().toString(), itemName.getText().toString() + ": " + descText + commTextDesc, type, totalAmount, getBalance(totalAmount, balance));
 
-        if (model.getCid()!=null){
+        if (model.getCid() != null) {
             moneyTransactionRef.child(ceid).setValue(model);
-            startActivity(new Intent(PartyEntryActivity.this, SucessActivity.class).putExtra(Constants.SSB_SUCESS_INTENT,"money"));
+            startActivity(new Intent(PartyEntryActivity.this, SucessActivity.class).putExtra(Constants.SSB_SUCESS_INTENT, "money"));
             finish();
 
         }
@@ -308,21 +393,21 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
 
     }
 
-    private double getBalance (double total , double pending){
+    private double getBalance(double total, double pending) {
 
         pending = Math.abs(pending);
-        if (type.equals("got")){
-            return total+pending;
+        if (type.equals("got")) {
+            return total + pending;
 
-        }else{
-            return total-pending;
+        } else {
+            return total - pending;
         }
 
     }
 
 
     private void uploadImageUri(String ceid) {
-        if(picUri!=null) {
+        if (picUri != null) {
 
             final StorageReference filepath = userStorage;
             uploadtask = filepath.putFile(picUri);
@@ -341,7 +426,7 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
                 public void onComplete(@NonNull Task task) {
                     if (task.isSuccessful()) {
                         picDowloadUrl = task.getResult().toString();
-                        startAddingToDB(picDowloadUrl,ceid);
+                        startAddingToDB(picDowloadUrl, ceid);
                     }
                 }
             });
@@ -351,7 +436,7 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
 
     private void uploadBitmapImage(String ceid) {
 
-        if(bitmap!=null){
+        if (bitmap != null) {
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -372,7 +457,7 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
                         @Override
                         public void onSuccess(Uri uri) {
                             picDowloadUrl = uri.toString();
-                            startAddingToDB(picDowloadUrl,ceid);
+                            startAddingToDB(picDowloadUrl, ceid);
                         }
                     });
 
@@ -381,9 +466,9 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
             });
 
 
-        }else {
+        } else {
             dismissProgress();
-            showMessageToast("Enter a Image !",false);
+            showMessageToast("Enter a Image !", false);
         }
     }
 
@@ -494,9 +579,9 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
 
     @Override
     public void onMemoryPlusPressListner(String btn, String chrSequence) {
-        if (chrSequence != null){
-            descText =descText+"("+btn+")\n";
-            entryText.setText(chrSequence+"0");
+        if (chrSequence != null) {
+            descText = descText + "(" + btn + ")\n"+itemName.getText().toString()+": ";
+            entryText.setText(chrSequence + "0");
             updateLabel(chrSequence);
 
 
@@ -514,7 +599,7 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
 
     @Override
     public void onAllClearPressListner(String btn, String chrSequence) {
-        descText="";
+        descText = "";
         entryText.setText("");
         updateLabel(chrSequence);
 
@@ -527,10 +612,10 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
 
     @Override
     public void onEqualsPressListner(String btn, String chrSequence) {
-        if (chrSequence != null){
-            descText+=btn;
+        if (chrSequence != null) {
+            descText += btn;
             entryText.setText(chrSequence);
-            descText+=chrSequence;
+            descText += chrSequence;
             updateLabel(chrSequence);
             itemBalanceList.add(Double.parseDouble(chrSequence));
             calulateTotal();
@@ -612,19 +697,23 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
 
     private void updateLabel(String chrSequence) {
         entries_text.setVisibility(View.VISIBLE);
-        entries_text.setText(itemName.getText().toString() + ": " + descText);
-
+        if (descText.length()<=1){
+            descText = itemName.getText().toString()+": "+descText;
+            entries_text.setText(descText);
+        }else{
+            entries_text.setText(descText);
+        }
     }
 
     private void calulateTotal() {
 
         double res = 0;
-        if (itemBalanceList.size()>0){
-            for (int i =0 ;i<itemBalanceList.size();i++){
-                res+=itemBalanceList.get(i);
+        if (itemBalanceList.size() > 0) {
+            for (int i = 0; i < itemBalanceList.size(); i++) {
+                res += itemBalanceList.get(i);
             }
             totalAmount = res;
-            saveEntry.setText("MRC= "+getCurrencyStr()+String.format("%.1f",res));
+            saveEntry.setText("GRAND TOTAL = " + getCurrencyStr() + String.format("%.1f", res));
             saveEntry.setTag(false);
         }
 
@@ -649,9 +738,8 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
             float x = ev.getRawX() + v.getLeft() - scrcoords[0];
             float y = ev.getRawY() + v.getTop() - scrcoords[1];
 
-            if (x < v.getLeft() || x > v.getRight() || y < v.getTop() || y > v.getBottom()){
+            if (x < v.getLeft() || x > v.getRight() || y < v.getTop() || y > v.getBottom()) {
                 UtilsMethod.hideKeyboard(this);
-                customCalculator.setVisibility(View.VISIBLE);
             }
         }
         return super.dispatchTouchEvent(ev);
@@ -663,8 +751,7 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
         if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
             return;
-        }
-        else {
+        } else {
             this.doubleBackToExitPressedOnce = true;
             customCalculator.setVisibility(View.GONE);
         }
@@ -673,10 +760,9 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
 
             @Override
             public void run() {
-                doubleBackToExitPressedOnce=false;
+                doubleBackToExitPressedOnce = false;
             }
         }, 2000);
-
 
 
     }
