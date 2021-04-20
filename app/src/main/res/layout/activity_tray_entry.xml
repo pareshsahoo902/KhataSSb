@@ -19,44 +19,44 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.rengwuxian.materialedittext.MaterialEditText
-                android:id="@+id/vehicleno"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:background="@drawable/edittext_background"
-                android:hint="vehicle no."
-                app:met_floatingLabel="highlight"
-                android:elevation="3dp"
-                android:textSize="15dp"
-                android:textStyle="bold" />
+<!--            <com.rengwuxian.materialedittext.MaterialEditText-->
+<!--                android:id="@+id/vehicleno"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="60dp"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:layout_marginBottom="5dp"-->
+<!--                android:layout_marginLeft="20dp"-->
+<!--                android:layout_marginRight="20dp"-->
+<!--                android:background="@drawable/edittext_background"-->
+<!--                android:hint="vehicle no."-->
+<!--                app:met_floatingLabel="highlight"-->
+<!--                android:elevation="3dp"-->
+<!--                android:textSize="15dp"-->
+<!--                android:textStyle="bold" />-->
 
 
 
-            <com.rengwuxian.materialedittext.MaterialEditText
-                android:id="@+id/phonenumber"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:inputType="phone"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="20dp"
-                android:background="@drawable/edittext_background"
-                android:hint="phone no."
-                app:met_floatingLabel="highlight"
-                android:elevation="3dp"
-                android:textSize="15dp"
-                android:textStyle="bold" />
+<!--            <com.rengwuxian.materialedittext.MaterialEditText-->
+<!--                android:id="@+id/phonenumber"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="60dp"-->
+<!--                android:inputType="phone"-->
+<!--                android:layout_marginLeft="20dp"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:layout_marginRight="20dp"-->
+<!--                android:background="@drawable/edittext_background"-->
+<!--                android:hint="phone no."-->
+<!--                app:met_floatingLabel="highlight"-->
+<!--                android:elevation="3dp"-->
+<!--                android:textSize="15dp"-->
+<!--                android:textStyle="bold" />-->
 
 
 
             <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/desctray"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:background="@drawable/edittext_background"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
@@ -73,7 +73,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/availableTrayRecycler"
                 android:layout_width="match_parent"
-                android:layout_height="220dp"
+                android:layout_height="370dp"
                 android:text="New Entries"
                 android:layout_marginRight="10dp"
                 tools:listitem="@layout/tray_detail_item"
@@ -142,15 +142,51 @@
             </RelativeLayout>
 
 
+            <LinearLayout
+                android:id="@+id/trayinout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:layout_below="@+id/childentryrecycler"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+
+                <Button
+                    android:id="@+id/trayoutbtn"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:backgroundTint="@color/primaryRed"
+                    android:text="↑ Tray OUT"
+                    android:textColor="@color/colorPrimaryDark" />
+
+                <Button
+                    android:id="@+id/trayinbtn"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="40dp"
+                    android:layout_weight="1"
+                    android:text="↓ Tray IN"
+                    android:textStyle="bold"
+                    android:backgroundTint="@color/primaryGreen"
+                    android:textColor="@color/colorPrimaryDark" />
+
+            </LinearLayout>
+
+
             <Button
                 android:id="@+id/savetrayentry"
                 style="@style/appButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
+                android:layout_marginLeft="20dp"
                 android:elevation="7dp"
                 android:textSize="18dp"
-                android:layout_marginRight="30dp"
+                android:layout_marginRight="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
                 android:text="Save"
