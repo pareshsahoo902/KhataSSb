@@ -269,8 +269,8 @@ public class CustomCalculator extends LinearLayout implements View.OnClickListen
             case R.id.btnMultiply:
                 //TODO
                 opreand1 = Double.parseDouble(calctext);
-                calctext += "*";
-                mListner.onMultiplyButtonPressListner("*", calctext);
+                calctext += "x";
+                mListner.onMultiplyButtonPressListner("x", calctext);
                 opreator = "*";
                 calctext = "";
                 break;

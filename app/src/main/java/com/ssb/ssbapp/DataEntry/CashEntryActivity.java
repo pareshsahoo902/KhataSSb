@@ -103,6 +103,7 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
         userStorage = FirebaseStorage.getInstance().getReference().child("SSB").child("Transaction Image");
 
 
+
         myCalendar = Calendar.getInstance();
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
@@ -338,7 +339,7 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
         }
     }
 
-    private void loadCashDetailsData(String ceid) {
+    private void    loadCashDetailsData(String ceid) {
         String cdid = UUID.randomUUID().toString().substring(0, 14);
 
         CashModel cashModel = new CashModel(cdid, ceid, getLocalSession().getString(Constants.SSB_PREF_CID), getLocalSession().getString(Constants.SSB_PREF_KID), cutomerName

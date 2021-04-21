@@ -51,7 +51,7 @@ public class MOneyTransactionAdapter extends RecyclerView.Adapter<MOneyTransacti
         }
 
         moneyTransactionviewHolder.entryText.setText(moneyTransactionModel.getEntriesText());
-        moneyTransactionviewHolder.date.setText(moneyTransactionModel.getDate());
+        moneyTransactionviewHolder.date.setText(moneyTransactionModel.getDate().substring(0,10));
         moneyTransactionviewHolder.amountTotal.setText("Amt:" + getCurrencyStr() + String.valueOf(moneyTransactionModel.getTotal()));
         if (moneyTransactionModel.getBalance() < 0) {
             moneyTransactionviewHolder.balance.setText("Bal:" + getCurrencyStr() + String.valueOf(moneyTransactionModel.getBalance()));
@@ -107,10 +107,7 @@ public class MOneyTransactionAdapter extends RecyclerView.Adapter<MOneyTransacti
                 }
             }
         });
-        for (MoneyTransactionModel model:this.modelArrayList){
-            Log.v("paresh",model.getDate());
 
-        }
         notifyDataSetChanged();
     }
 

@@ -130,6 +130,7 @@
                     android:id="@+id/billIMageMoney"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    android:visibility="gone"
                     android:layout_below="@+id/imageTextBtn"
                     android:layout_alignParentRight="true"
                     android:layout_marginLeft="20dp"

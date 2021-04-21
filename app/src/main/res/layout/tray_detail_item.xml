@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:background="@drawable/edittext_background"
+    android:elevation="4dp"
+    android:orientation="horizontal"
+    android:padding="5dp"
+    android:weightSum="4">
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/availableText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_weight="1"
+        android:background="@null"
+        android:gravity="center"
+        android:hint="Available"
+        android:focusable="false"
+        android:text="0"
+        android:textSize="14dp"
+        app:met_floatingLabel="highlight" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/traynametext"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:hint="Tray Name"
+        android:textSize="16dp"
+        app:met_floatingLabel="highlight"
+        />
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/enterTrayText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_weight="1"
+        android:background="@null"
+        android:gravity="center"
+        android:hint="Enter Trays"
+        android:textSize="14dp"
+        app:met_floatingLabel="highlight" />
+
+    <ImageButton
+        android:id="@+id/addTrayImagBtn"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        style="@style/appButtonStyle"
+        android:src="@drawable/ic_baseline_add_circle_outline_24"
+        android:layout_weight="1"
+        android:layout_marginLeft="30dp"
+        />
+
+
+</LinearLayout>
