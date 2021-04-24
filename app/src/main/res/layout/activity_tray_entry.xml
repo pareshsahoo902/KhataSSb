@@ -19,39 +19,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-<!--            <com.rengwuxian.materialedittext.MaterialEditText-->
-<!--                android:id="@+id/vehicleno"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="60dp"-->
-<!--                android:layout_marginTop="5dp"-->
-<!--                android:layout_marginBottom="5dp"-->
-<!--                android:layout_marginLeft="20dp"-->
-<!--                android:layout_marginRight="20dp"-->
-<!--                android:background="@drawable/edittext_background"-->
-<!--                android:hint="vehicle no."-->
-<!--                app:met_floatingLabel="highlight"-->
-<!--                android:elevation="3dp"-->
-<!--                android:textSize="15dp"-->
-<!--                android:textStyle="bold" />-->
-
-
-
-<!--            <com.rengwuxian.materialedittext.MaterialEditText-->
-<!--                android:id="@+id/phonenumber"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="60dp"-->
-<!--                android:inputType="phone"-->
-<!--                android:layout_marginLeft="20dp"-->
-<!--                android:layout_marginTop="5dp"-->
-<!--                android:layout_marginRight="20dp"-->
-<!--                android:background="@drawable/edittext_background"-->
-<!--                android:hint="phone no."-->
-<!--                app:met_floatingLabel="highlight"-->
-<!--                android:elevation="3dp"-->
-<!--                android:textSize="15dp"-->
-<!--                android:textStyle="bold" />-->
-
-
 
             <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/desctray"
@@ -144,7 +111,7 @@
 
 
             <LinearLayout
-                android:id="@+id/trayinout"
+                android:id="@+id/trayinoutLay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -178,6 +145,18 @@
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/trayInText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/colorPrimary"
+                android:gravity="center"
+                android:textSize="16dp"
+                android:visibility="gone"
+                android:textStyle="bold"
+                android:text="Entry Saved to the TrayBook !\nClick Button below to Proceed."
+                />
 
             <Button
                 android:id="@+id/savetrayentry"

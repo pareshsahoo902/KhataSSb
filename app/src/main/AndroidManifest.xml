@@ -25,7 +25,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/MyMaterialTheme">
-        <activity android:name=".TransactionPage.ViewTrayTransactionPage"></activity>
+        <activity android:name=".CashDetails.SalesAndExpenseActivity"></activity>
+        <activity android:name=".TransactionPage.ViewTrayTransactionPage" />
         <activity android:name=".DataEntry.TrayEntryActivity" />
         <activity android:name=".TransactionPage.TrayTransactionPage" />
         <activity android:name=".CashDetails.CashDetailsActivity" />
@@ -33,7 +34,7 @@
         <activity android:name=".DataEntry.PartyEntryActivity" />
         <activity android:name=".DataEntry.CashEntryActivity" />
         <activity android:name=".TransactionPage.StaffTransactionPage" />
-        <activity android:name=".Tray.TrayDetails" />
+        <activity android:name=".TrayDetails.TrayDetails" />
         <activity android:name=".Money.MoneyDetails" />
         <activity android:name=".DataEntry.MoneyEntryActivity" />
         <activity android:name=".TransactionPage.MoneyTransaction" />

@@ -1,19 +1,14 @@
-package com.ssb.ssbapp.CashDetails;
+package com.ssb.ssbapp.TrayDetails;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -22,31 +17,29 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.ssb.ssbapp.CashDetails.CashModel;
 import com.ssb.ssbapp.R;
-import com.ssb.ssbapp.TransactionModel.MoneyTransactionModel;
-import com.ssb.ssbapp.Utils.Constants;
 import com.ssb.ssbapp.Utils.SSBBaseActivity;
 import com.ssb.ssbapp.Utils.UtilsMethod;
 import com.ssb.ssbapp.ViewHolder.CashDetailsViewHolder;
-import com.ssb.ssbapp.ViewHolder.MOneyTransactionviewHolder;
 
-public class CashDetailsActivity extends SSBBaseActivity {
+public class TrayDetails extends SSBBaseActivity {
 
     private RecyclerView cashRecycler;
     private DatabaseReference cashRef;
-    private LinearLayout expenseReport;
-    private FirebaseRecyclerOptions<CashModel> entryoptions;
-    private FirebaseRecyclerAdapter<CashModel, CashDetailsViewHolder> entryRecycleradapter;
-    private double totalGave, totalGot;
+    private FirebaseRecyclerOptions<TrayDetailModel> entryoptions;
+    private FirebaseRecyclerAdapter<TrayDetailModel, CashDetailsViewHolder> entryRecycleradapter;
+    private int totalGave, totalGot;
     private TextView totalIn , totalOut , todaysbalance,cashInHand,entryCount,curentDate;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cash_details);
+        setContentView(R.layout.activity_tray_details);
 
-        setToolbar(getApplicationContext(), "CashBook");
+        setToolbar(getApplicationContext(), "Tray Details");
+
+
 
         totalIn = findViewById(R.id.totalIn);
         totalOut = findViewById(R.id.totalOut);
@@ -54,28 +47,20 @@ public class CashDetailsActivity extends SSBBaseActivity {
         cashInHand = findViewById(R.id.cashInHand);
         entryCount = findViewById(R.id.entryCount);
         curentDate = findViewById(R.id.curentDate);
-        expenseReport = findViewById(R.id.expenseReport);
-        cashRecycler = findViewById(R.id.cashDetailsRecycler);
+        cashRecycler = findViewById(R.id.trayDetailsRecycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         layoutManager.setReverseLayout(true);
         layoutManager.setStackFromEnd(true);
         cashRecycler.setLayoutManager(layoutManager);
         cashRecycler.hasFixedSize();
 
-        cashRef = FirebaseDatabase.getInstance().getReference().child("cashDetails");
+        cashRef = FirebaseDatabase.getInstance().getReference().child("trayDetails");
         cashRef.keepSynced(true);
 
-        expenseReport.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(CashDetailsActivity.this,SalesAndExpenseActivity.class));
-            }
-        });
 
         curentDate.setText(UtilsMethod.getCurrentDate().substring(0,10));
         loadEntries();
         calculateTotalBalance();
-
 
     }
 
@@ -109,33 +94,33 @@ public class CashDetailsActivity extends SSBBaseActivity {
     }
 
     private void calcText() {
-        totalIn.setText(getCurrencyStr()+String.valueOf(totalGot));
-        totalOut.setText(getCurrencyStr()+String.valueOf(totalGave));
+        totalIn.setText(String.valueOf(totalGot));
+        totalOut.setText(String.valueOf(totalGave));
 
         if (totalGave - totalGot < 0) {
-            todaysbalance.setText(getCurrencyStr()+ String.valueOf(Math.abs(totalGave - totalGot)));
-            cashInHand.setText(getCurrencyStr()+ String.valueOf(Math.abs(totalGave - totalGot)));
+            todaysbalance.setText(String.valueOf(Math.abs(totalGave - totalGot)));
+            cashInHand.setText(String.valueOf(Math.abs(totalGave - totalGot)));
         } else {
             int num = (int) Math.abs(totalGave - totalGot);
-            todaysbalance.setText(getCurrencyStr()+ String.valueOf(num));
-            cashInHand.setText(getCurrencyStr()+ String.valueOf(num));
+            todaysbalance.setText(String.valueOf(num));
+            cashInHand.setText(String.valueOf(num));
 
         }
     }
 
     private void loadEntries() {
-        entryoptions = new FirebaseRecyclerOptions.Builder<CashModel>()
-                .setQuery(cashRef, CashModel.class).build();
+        entryoptions = new FirebaseRecyclerOptions.Builder<TrayDetailModel>()
+                .setQuery(cashRef, TrayDetailModel.class).build();
 
-        entryRecycleradapter = new FirebaseRecyclerAdapter<CashModel, CashDetailsViewHolder>(entryoptions) {
+        entryRecycleradapter = new FirebaseRecyclerAdapter<TrayDetailModel, CashDetailsViewHolder>(entryoptions) {
             @Override
-            protected void onBindViewHolder(@NonNull CashDetailsViewHolder cashDetailsViewHolder, int i, @NonNull CashModel cashModel) {
+            protected void onBindViewHolder(@NonNull CashDetailsViewHolder cashDetailsViewHolder, int i, @NonNull TrayDetailModel cashModel) {
 
                 cashDetailsViewHolder.dateName.setText(UtilsMethod.capitalize(cashModel.getCustomerName()) + "\n" + cashModel.getDate());
                 if (cashModel.getStatus().equalsIgnoreCase("got")) {
-                    cashDetailsViewHolder.inCash.setText(getCurrencyStr() + cashModel.getTotal());
+                    cashDetailsViewHolder.inCash.setText(String.valueOf(cashModel.getTotal()));
                 } else {
-                    cashDetailsViewHolder.outCash.setText(getCurrencyStr() + cashModel.getTotal());
+                    cashDetailsViewHolder.outCash.setText( String.valueOf(cashModel.getTotal()));
 
                 }
 
@@ -151,6 +136,5 @@ public class CashDetailsActivity extends SSBBaseActivity {
         entryRecycleradapter.startListening();
         cashRecycler.setAdapter(entryRecycleradapter);
     }
-
 
 }

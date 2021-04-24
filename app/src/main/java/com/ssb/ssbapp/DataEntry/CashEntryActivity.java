@@ -70,6 +70,7 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
     private StorageReference userStorage;
     private String picDowloadUrl = "";
     private double balance;
+    private double cash , discountText;
 
 
     @Override
@@ -91,7 +92,7 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
         saveEntry = findViewById(R.id.savecashEnrty);
         clearKhata = findViewById(R.id.clearKhata);
         description = findViewById(R.id.entryDescription);
-        cashEntryText.setText("0");
+        cashEntryText.setText("");
 
 
         moneyTransactionRef = FirebaseDatabase.getInstance().getReference().child("customerTransaction");
@@ -101,7 +102,6 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
         moneyTransactionRef.keepSynced(true);
 
         userStorage = FirebaseStorage.getInstance().getReference().child("SSB").child("Transaction Image");
-
 
 
         myCalendar = Calendar.getInstance();
@@ -119,10 +119,9 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
                 SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
                 CurrentDate = sdf.format(myCalendar.getTime());
                 dateTextBtn.setText(CurrentDate.substring(0, 10));
-
             }
-
         };
+
 
         //TODO zero code written here!
         clearKhata.setOnClickListener(new View.OnClickListener() {
@@ -138,9 +137,9 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
                     discount.setText("0");
                     calcDis();
                 }
-
             }
         });
+
 
         saveEntry.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,7 +155,8 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
         cashEntryText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cashEntryText.selectAll();
+
+
             }
         });
 
@@ -181,15 +181,36 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
                     calcDis();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    cashEntryText.setText("0");
-                    cashEntryText.selectAll();
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
 
+                entriesText.setText(cashType.getText().toString() + " : " + cashEntryText.getText().toString());
                 entriesText.setVisibility(View.VISIBLE);
+            }
+        });
+
+        discount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try {
+                    calcDis();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
 
@@ -352,7 +373,7 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
 
     private void calcDis() {
         double disText = 0.0;
-        if (Double.parseDouble(cashEntryText.getText().toString()) != 0 && Double.parseDouble(discount.getText().toString()) >= 0)
+        if (Double.parseDouble(cashEntryText.getText().toString()) >= 0 )
             disText = Double.parseDouble(cashEntryText.getText().toString()) + Double.parseDouble(discount.getText().toString());
 
         cashAmount = Double.parseDouble(cashEntryText.getText().toString());

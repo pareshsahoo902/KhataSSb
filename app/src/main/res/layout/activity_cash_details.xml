@@ -104,6 +104,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/expenseReport"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/give_get"

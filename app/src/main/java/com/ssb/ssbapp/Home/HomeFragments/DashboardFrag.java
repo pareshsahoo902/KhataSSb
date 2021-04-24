@@ -28,6 +28,8 @@ import com.ssb.ssbapp.Sessions.LocalSession;
 import com.ssb.ssbapp.SplashScreen.SplashActivity;
 import com.ssb.ssbapp.Staff.StaffManagmentActivity;
 import com.ssb.ssbapp.TransactionPage.ViewTransactonPage;
+import com.ssb.ssbapp.TrayDetails.TrayDetailModel;
+import com.ssb.ssbapp.TrayDetails.TrayDetails;
 import com.ssb.ssbapp.TrayMaster.TrayManagmentActivity;
 import com.ssb.ssbapp.Utils.Constants;
 import com.ssb.ssbapp.Utils.FirebaseHelper;
@@ -76,6 +78,8 @@ public class DashboardFrag extends Fragment {
         trayDetaisl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startActivity(new Intent(getContext(), TrayDetails.class));
+
             }
         });
 
