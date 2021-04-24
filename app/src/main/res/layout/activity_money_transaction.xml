@@ -29,6 +29,15 @@
             android:textStyle="bold" />
 
         <ImageView
+            android:id="@+id/deleteTransacton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginRight="75dp"
+            android:src="@drawable/ic_baseline_delete_24"
+            android:tint="@color/colorPrimary" />
+
+        <ImageView
             android:id="@+id/getPdf"
             android:layout_width="35dp"
             android:layout_height="35dp"

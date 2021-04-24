@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TransactionPage.ViewTransactonPage">
+    tools:context=".TransactionPage.ViewTrayTransactionPage">
 
     <include layout="@layout/toolbar"/>
 
@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         >
-        <include layout="@layout/transaction_item"
+        <include layout="@layout/tray_transaction_item"
             android:layout_marginTop="80dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

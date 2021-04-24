@@ -1,6 +1,8 @@
 package com.ssb.ssbapp.TrayModels;
 
-public class TrayModelItem {
+import java.io.Serializable;
+
+public class TrayModelItem implements Serializable {
 
     private String id;
     private String name;

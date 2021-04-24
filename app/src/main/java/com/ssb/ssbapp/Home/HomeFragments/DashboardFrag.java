@@ -1,11 +1,14 @@
 package com.ssb.ssbapp.Home.HomeFragments;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +27,7 @@ import com.ssb.ssbapp.R;
 import com.ssb.ssbapp.Sessions.LocalSession;
 import com.ssb.ssbapp.SplashScreen.SplashActivity;
 import com.ssb.ssbapp.Staff.StaffManagmentActivity;
+import com.ssb.ssbapp.TransactionPage.ViewTransactonPage;
 import com.ssb.ssbapp.TrayMaster.TrayManagmentActivity;
 import com.ssb.ssbapp.Utils.Constants;
 import com.ssb.ssbapp.Utils.FirebaseHelper;
@@ -31,7 +35,7 @@ import com.ssb.ssbapp.Utils.FirebaseHelper;
 
 public class DashboardFrag extends Fragment {
 
-    private CardView logout, khataCard, trayCard, staffCard,moneyDetails;
+    private CardView logout,trayDetaisl, khataCard, trayCard, staffCard,moneyDetails;
     private TextView profile_name,versionName;
     private ImageView profile_pic;
     private FrameLayout edit_btn;
@@ -53,6 +57,7 @@ public class DashboardFrag extends Fragment {
         profile_pic = v.findViewById(R.id.profile_pic);
         moneyDetails = v.findViewById(R.id.moneyDetails);
         edit_btn = v.findViewById(R.id.edit_btn);
+        trayDetaisl = v.findViewById(R.id.TRAYinfo);
         versionName = v.findViewById(R.id.versionID);
 
         versionName.setText("v"+ BuildConfig.VERSION_NAME);
@@ -67,6 +72,12 @@ public class DashboardFrag extends Fragment {
             }
         });
 
+
+        trayDetaisl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
 
         trayCard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,11 +108,25 @@ public class DashboardFrag extends Fragment {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                FirebaseHelper.getInstance().clearApplicationData();
-                LocalSession.clear();
-                startActivity(new Intent(getContext(), LoginActivity.class)
-                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+
+                new AlertDialog.Builder(getContext())
+                        .setTitle(Html.fromHtml("<font color='#03503E'>Logout </font>"))
+                        .setMessage("Are you sure you want to Logout?")
+                        .setPositiveButton("LOGOUT", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Continue with delete operation
+                                FirebaseAuth.getInstance().signOut();
+                                FirebaseHelper.getInstance().clearApplicationData();
+                                LocalSession.clear();
+                                startActivity(new Intent(getContext(), LoginActivity.class)
+                                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+                            }
+                        })
+                        .setNegativeButton("CANCEL", null)
+                        .show();
+
+
+
             }
         });
         return v;

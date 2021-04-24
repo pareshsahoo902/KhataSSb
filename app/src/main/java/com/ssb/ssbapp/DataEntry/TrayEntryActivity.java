@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -38,6 +39,12 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 import com.ssb.ssbapp.DialogHelper.ImagePickerDailog;
 import com.ssb.ssbapp.Model.KhataModel;
 import com.ssb.ssbapp.Model.TrayMasterModel;
@@ -110,8 +117,9 @@ public class TrayEntryActivity extends SSBBaseActivity implements ImagePickerDai
         trayRef.keepSynced(true);
         trayTransactionRef.keepSynced(true);
 
-        dateTextBtn.setText(CurrentDate.substring(0,10));
         CurrentDate = getLocalSession().getString(Constants.SSB_PREF_DATE);
+        dateTextBtn.setText(CurrentDate.substring(0,10));
+
 
         myCalendar = Calendar.getInstance();
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -157,8 +165,29 @@ public class TrayEntryActivity extends SSBBaseActivity implements ImagePickerDai
         imageTextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImagePickerDailog dailog = new ImagePickerDailog();
-                dailog.show(getSupportFragmentManager(), "Pick Image");
+
+                Dexter.withContext(getApplicationContext())
+                        .withPermission(Manifest.permission.CAMERA)
+                        .withListener(new PermissionListener() {
+                            @Override
+                            public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
+
+                                ImagePickerDailog dailog = new ImagePickerDailog();
+                                dailog.show(getSupportFragmentManager(), "Pick Image");
+                            }
+
+                            @Override
+                            public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
+
+                                showMessageToast("Please Allow camera permission to add photo",true);
+                            }
+
+                            @Override
+                            public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken) {
+
+                            }
+                        }).check();
+
             }
         });
 

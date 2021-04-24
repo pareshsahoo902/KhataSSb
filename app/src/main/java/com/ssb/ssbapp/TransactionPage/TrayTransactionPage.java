@@ -1,15 +1,19 @@
 package com.ssb.ssbapp.TransactionPage;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -42,6 +46,7 @@ public class TrayTransactionPage extends SSBBaseActivity {
     private RecyclerView trayRecycler;
     private DatabaseReference enrtyRef;
 
+    private ImageView pdf , deleteTrayTransacton;
     private TrayTransactionAdapter adapter;
 
     private TextView geta;
@@ -59,6 +64,7 @@ public class TrayTransactionPage extends SSBBaseActivity {
         gaveBtn = findViewById(R.id.gavebtn);
         trayRecycler = findViewById(R.id.trayEntryRecycler);
         geta = findViewById(R.id.geta);
+        deleteTrayTransacton = findViewById(R.id.deleteTrayTransacton);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         trayRecycler.setLayoutManager(layoutManager);
@@ -81,6 +87,22 @@ public class TrayTransactionPage extends SSBBaseActivity {
             }
         });
 
+        deleteTrayTransacton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(TrayTransactionPage.this)
+                        .setTitle(Html.fromHtml("<font color='#03503E'>Delete Transactions ?</font>"))
+                        .setMessage("Are you sure you want to delete all tray transaction of this customer ?")
+                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Continue with delete operation
+                                deleteTranINdb(getLocalSession().getString(Constants.SSB_PREF_CID));
+                            }
+                        })
+                        .setNegativeButton("NO", null)
+                        .show();
+            }
+        });
 
         enrtyRef = FirebaseDatabase.getInstance().getReference().child("trayTransaction");
         enrtyRef.keepSynced(true);
@@ -114,6 +136,26 @@ public class TrayTransactionPage extends SSBBaseActivity {
 
 
 
+
+    }
+
+    private void deleteTranINdb(String uid) {
+
+        Query transactionQuery = enrtyRef.orderByChild("cid").equalTo(uid);
+
+        transactionQuery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot appleSnapshot : snapshot.getChildren()) {
+                    appleSnapshot.getRef().removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
     }
 

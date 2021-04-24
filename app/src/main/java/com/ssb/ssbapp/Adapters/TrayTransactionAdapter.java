@@ -1,6 +1,8 @@
 package com.ssb.ssbapp.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import com.ssb.ssbapp.R;
 import com.ssb.ssbapp.TransactionModel.MoneyTransactionModel;
+import com.ssb.ssbapp.TransactionPage.ViewTransactonPage;
+import com.ssb.ssbapp.TransactionPage.ViewTrayTransactionPage;
 import com.ssb.ssbapp.TrayModels.TrayModelItem;
 import com.ssb.ssbapp.TrayModels.TrayTransactionModel;
+import com.ssb.ssbapp.Utils.Constants;
 import com.ssb.ssbapp.ViewHolder.TrayTransactionViewHolder;
 
 import java.text.ParseException;
@@ -75,6 +80,18 @@ public class TrayTransactionAdapter extends RecyclerView.Adapter<TrayTransaction
             holder.gaveText.setText( String.valueOf(model.getTotal()));
         }
 
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(Constants.SSB_TRAYTRANSACTION_INTENT, model);
+
+                holder.itemView.getContext().startActivity(new Intent(mContext, ViewTrayTransactionPage.class)
+                        .putExtras(bundle)
+                );
+            }
+        });
 
 
     }

@@ -49,7 +49,7 @@ public class MoneyFrag extends Fragment {
 
     private FloatingActionButton moneyFab;
     private RecyclerView custRecycler;
-    private DatabaseReference custRef,entryRef , customeEntryrRef;
+    private DatabaseReference custRef,entryRef , customeEntryrRef,trayTranRef;
     private EditText searchBar;
     private double totalGave, totalGot;
     private String searchText;
@@ -98,6 +98,7 @@ public class MoneyFrag extends Fragment {
         });
 
         entryRef = FirebaseDatabase.getInstance().getReference().child("customerTransaction");
+        trayTranRef = FirebaseDatabase.getInstance().getReference().child("trayTransaction");
         entryRef.keepSynced(true);
 
         moneyFab.setOnClickListener(new View.OnClickListener() {
@@ -270,8 +271,23 @@ public class MoneyFrag extends Fragment {
     private void deletetransactionInDB(String uid) {
 
         Query transactionQuery = customeEntryrRef.orderByChild("cid").equalTo(uid);
+        Query ttrayQuery = trayTranRef.orderByChild("cid").equalTo(uid);
 
         transactionQuery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot appleSnapshot : snapshot.getChildren()) {
+                    appleSnapshot.getRef().removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        ttrayQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot appleSnapshot : snapshot.getChildren()) {

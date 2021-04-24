@@ -26,5 +26,6 @@ public class Constants {
     public static final String SSB_SUCESS_INTENT= " ssb intent type";
     public static final String SSB_BALANCE_INTENT= "BALANCE_INTENT";
     public static final String SSB_MONEYTRANSACTION_INTENT= "TRANSACTION_MODEL_INTENT";
+    public static final String SSB_TRAYTRANSACTION_INTENT= "TRANSACTION_TRAY_MODEL_INTENT";
 
 }

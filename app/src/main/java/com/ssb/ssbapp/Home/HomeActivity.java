@@ -2,9 +2,14 @@ package com.ssb.ssbapp.Home;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,8 +19,17 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.karumi.dexter.listener.single.PermissionListener;
 import com.luseen.spacenavigation.SpaceItem;
 import com.luseen.spacenavigation.SpaceNavigationView;
+import com.ssb.ssbapp.DialogHelper.ImagePickerDailog;
 import com.ssb.ssbapp.Home.HomeFragments.DashboardFrag;
 import com.ssb.ssbapp.Home.HomeFragments.MoneyFrag;
 import com.ssb.ssbapp.Home.HomeFragments.StaffFrag;
@@ -29,9 +43,11 @@ import com.ssb.ssbapp.Utils.UtilsMethod;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import static com.ssb.ssbapp.Utils.Constants.SSB_PREF_BRANCH;
 import static com.ssb.ssbapp.Utils.Constants.SSB_PREF_DATE;
+import static java.security.AccessController.getContext;
 
 public class HomeActivity extends SSBBaseActivity {
 
@@ -47,6 +63,21 @@ public class HomeActivity extends SSBBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        Dexter.withContext(getApplicationContext())
+                .withPermissions(Manifest.permission.CAMERA,
+                        Manifest.permission.SEND_SMS)
+                .withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
+
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) {
+
+                    }
+                }).check();
 
         isAdmin = getLocalSession().getBoolean(Constants.SSB_PREF_ADMIN);
         type = getLocalSession().getLong(Constants.SSB_PREF_TYPE);
