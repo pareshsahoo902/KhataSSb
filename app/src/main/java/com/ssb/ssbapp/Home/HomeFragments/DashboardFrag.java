@@ -31,13 +31,14 @@ import com.ssb.ssbapp.TransactionPage.ViewTransactonPage;
 import com.ssb.ssbapp.TrayDetails.TrayDetailModel;
 import com.ssb.ssbapp.TrayDetails.TrayDetails;
 import com.ssb.ssbapp.TrayMaster.TrayManagmentActivity;
+import com.ssb.ssbapp.TrayMaster.TrayStock;
 import com.ssb.ssbapp.Utils.Constants;
 import com.ssb.ssbapp.Utils.FirebaseHelper;
 
 
 public class DashboardFrag extends Fragment {
 
-    private CardView logout,trayDetaisl, khataCard, trayCard, staffCard,moneyDetails;
+    private CardView logout,trayDetaisl,trayStock, khataCard, trayCard, staffCard,moneyDetails;
     private TextView profile_name,versionName;
     private ImageView profile_pic;
     private FrameLayout edit_btn;
@@ -61,6 +62,7 @@ public class DashboardFrag extends Fragment {
         edit_btn = v.findViewById(R.id.edit_btn);
         trayDetaisl = v.findViewById(R.id.TRAYinfo);
         versionName = v.findViewById(R.id.versionID);
+        trayStock = v.findViewById(R.id.trayStock);
 
         versionName.setText("v"+ BuildConfig.VERSION_NAME);
 
@@ -99,6 +101,14 @@ public class DashboardFrag extends Fragment {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getContext(), StaffManagmentActivity.class));
+            }
+        });
+
+        trayStock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), TrayStock.class));
+
             }
         });
 

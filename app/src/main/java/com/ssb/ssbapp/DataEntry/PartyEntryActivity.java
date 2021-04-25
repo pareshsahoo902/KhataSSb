@@ -185,7 +185,7 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
 
                 saveEntry.setText("GRAND TOTAL = " + getCurrencyStr() + String.format("%.1f", totalAmount - t));
 
-                commTextDesc = "\nFair(" + String.valueOf(fair) + ")+ Labour(" + String.valueOf(labour) + ")+ Extra(" + String.valueOf(labour) + ")+ Commission("
+                commTextDesc = "\nFair(" + String.valueOf(fair) + ")+ Labour(" + String.valueOf(labour) + ")+ Extra(" + String.valueOf(extra) + ")+ Commission("
                         + String.valueOf(cm) + "% =" + String.valueOf(commision) + ")\nTotal:" + String.valueOf(totalAmount) + "-" + String.valueOf(t) +
                         " = " + getCurrencyStr() + String.valueOf(totalAmount - t);
             }

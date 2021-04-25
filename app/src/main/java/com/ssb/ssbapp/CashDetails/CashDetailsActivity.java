@@ -21,6 +21,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.ssb.ssbapp.R;
 import com.ssb.ssbapp.TransactionModel.MoneyTransactionModel;
@@ -39,6 +40,7 @@ public class CashDetailsActivity extends SSBBaseActivity {
     private FirebaseRecyclerAdapter<CashModel, CashDetailsViewHolder> entryRecycleradapter;
     private double totalGave, totalGot;
     private TextView totalIn , totalOut , todaysbalance,cashInHand,entryCount,curentDate;
+    private Query query;
 
 
     @Override
@@ -71,6 +73,7 @@ public class CashDetailsActivity extends SSBBaseActivity {
                 startActivity(new Intent(CashDetailsActivity.this,SalesAndExpenseActivity.class));
             }
         });
+        query = cashRef.orderByChild("kid").equalTo(getLocalSession().getString(Constants.SSB_PREF_KID));
 
         curentDate.setText(UtilsMethod.getCurrentDate().substring(0,10));
         loadEntries();
@@ -80,7 +83,7 @@ public class CashDetailsActivity extends SSBBaseActivity {
     }
 
     private void calculateTotalBalance() {
-        cashRef.addValueEventListener(new ValueEventListener() {
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 entryCount.setText(String.valueOf(snapshot.getChildrenCount())+" Entry");
@@ -125,7 +128,7 @@ public class CashDetailsActivity extends SSBBaseActivity {
 
     private void loadEntries() {
         entryoptions = new FirebaseRecyclerOptions.Builder<CashModel>()
-                .setQuery(cashRef, CashModel.class).build();
+                .setQuery(cashRef.orderByChild("kid").equalTo(getLocalSession().getString(Constants.SSB_PREF_KID)), CashModel.class).build();
 
         entryRecycleradapter = new FirebaseRecyclerAdapter<CashModel, CashDetailsViewHolder>(entryoptions) {
             @Override

@@ -1,316 +1,335 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginBottom="15dp"
     tools:context=".Home.HomeFragments.DashboardFrag">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardElevation="6dp"
-        app:cardBackgroundColor="@android:color/white"
-        >
-        <ImageView
-            android:id="@+id/profile_pic"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:src="@drawable/ic_baseline_account_box_24"
-            android:layout_margin="10dp"
-            android:background="@color/colorPrimary"
-            />
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardElevation="6dp">
 
-        <TextView
-            android:id="@+id/profile_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|top"
-            android:layout_marginLeft="100dp"
-            android:layout_marginTop="20dp"
-            android:text="SSB name"
-            android:textStyle="bold"
-            android:textColor="#161616"
-            android:textSize="20sp" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="your profile"
-            android:textSize="15sp"
-            android:textColor="#191919"
-            android:layout_gravity="center_vertical"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="100dp"
-            />
-        <FrameLayout
-            android:id="@+id/edit_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|end"
-            android:background="@drawable/curved_border"
-            android:layout_marginRight="10dp"
-            >
+            <ImageView
+                android:id="@+id/profile_pic"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_margin="10dp"
+                android:background="@color/colorPrimary"
+                android:src="@drawable/ic_baseline_account_box_24" />
+
             <TextView
-                android:layout_width="90dp"
-                android:layout_height="40dp"
-                android:text="EDIT"
-                android:gravity="center"
-                android:textSize="15sp"
-                android:textColor="#191919"
-                android:textStyle="bold"
+                android:id="@+id/profile_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|top"
+                android:layout_marginLeft="100dp"
+                android:layout_marginTop="20dp"
+                android:text="SSB name"
+                android:textColor="#161616"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                />
-        </FrameLayout>
+                android:layout_marginLeft="100dp"
+                android:layout_marginTop="10dp"
+                android:text="your profile"
+                android:textColor="#191919"
+                android:textSize="15sp" />
 
-        <ImageView
+            <FrameLayout
+                android:id="@+id/edit_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/curved_border">
+
+                <TextView
+                    android:layout_width="90dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:text="EDIT"
+                    android:textColor="#191919"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:background="#ddd" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/traymanagement"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#ddd"
-            android:layout_gravity="bottom"
-            />
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/traymanagement"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardElevation="6dp"
-        android:background="?attr/selectableItemBackground"
-        android:layout_marginTop="15dp"
-        app:cardBackgroundColor="@android:color/white"
-        >
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/add_tray"
-            android:tint="@color/colorPrimary"
-            android:layout_margin="10dp"
-            />
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tray Management"
-            android:gravity="center"
-            android:textSize="20sp"
-            android:textColor="#191919"
-            android:layout_marginLeft="60dp"
-            android:layout_gravity="center_vertical"
-            />
+            android:layout_marginTop="15dp"
+            android:background="?attr/selectableItemBackground"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardElevation="6dp">
 
-        <ImageView
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:src="@drawable/add_tray"
+                android:tint="@color/colorPrimary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="60dp"
+                android:gravity="center"
+                android:text="Tray Management"
+                android:textColor="#191919"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:background="#ddd" />
+
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/khatamanage"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#ddd"
-            android:layout_gravity="bottom"
-            />
-
-    </androidx.cardview.widget.CardView>
-
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/khatamanage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardElevation="6dp"
-        android:background="?attr/selectableItemBackground"
-        app:cardBackgroundColor="@android:color/white"
-        >
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_baseline_menu_khata_24"
-            android:tint="@color/colorPrimary"
-            android:layout_margin="10dp"
-            />
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Khata Management"
-            android:gravity="center"
-            android:textSize="20sp"
-            android:textColor="#191919"
-            android:layout_marginLeft="60dp"
-            android:layout_gravity="center_vertical"
-            />
+            android:background="?attr/selectableItemBackground"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardElevation="6dp">
 
-        <ImageView
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:src="@drawable/ic_baseline_menu_khata_24"
+                android:tint="@color/colorPrimary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="60dp"
+                android:gravity="center"
+                android:text="Khata Management"
+                android:textColor="#191919"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:background="#ddd" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/staffmanage"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#ddd"
-            android:layout_gravity="bottom"
-            />
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/staffmanage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardElevation="6dp"
-        android:background="?attr/selectableItemBackground"
-        app:cardBackgroundColor="@android:color/white"
-        >
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_staff"
-            android:tint="@color/colorPrimary"
-            android:layout_margin="10dp"
-            />
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Staff Managment"
-            android:gravity="center"
-            android:textSize="20sp"
-            android:textColor="#191919"
-            android:layout_marginLeft="60dp"
-            android:layout_gravity="center_vertical"
-            />
+            android:background="?attr/selectableItemBackground"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardElevation="6dp">
 
-        <ImageView
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:src="@drawable/ic_staff"
+                android:tint="@color/colorPrimary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="60dp"
+                android:gravity="center"
+                android:text="Staff Managment"
+                android:textColor="#191919"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:background="#ddd" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/moneyDetails"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#ddd"
-            android:layout_gravity="bottom"
-            />
-
-    </androidx.cardview.widget.CardView>
-    <androidx.cardview.widget.CardView
-        android:id="@+id/moneyDetails"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardElevation="6dp"
-        android:background="?attr/selectableItemBackground"
-        app:cardBackgroundColor="@android:color/white"
-        >
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_baseline_attach_money_24"
-            android:tint="@color/colorPrimary"
-            android:layout_margin="10dp"
-            />
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="CashBook"
-            android:gravity="center"
-            android:textSize="20sp"
-            android:textColor="#191919"
-            android:layout_marginLeft="60dp"
-            android:layout_gravity="center_vertical"
-            />
+            android:background="?attr/selectableItemBackground"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardElevation="6dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:src="@drawable/ic_baseline_attach_money_24"
+                android:tint="@color/colorPrimary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="60dp"
+                android:gravity="center"
+                android:text="CashBook"
+                android:textColor="#191919"
+                android:textSize="20sp" />
 
 
-        <ImageView
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:background="#ddd" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/TRAYinfo"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#ddd"
-            android:layout_gravity="bottom"
-            />
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/TRAYinfo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardElevation="6dp"
-        android:background="?attr/selectableItemBackground"
-        app:cardBackgroundColor="@android:color/white"
-        >
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_tray"
-            android:tint="@color/colorPrimary"
-            android:layout_margin="10dp"
-            />
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tray Details"
-            android:gravity="center"
-            android:textSize="20sp"
-            android:textColor="#191919"
-            android:layout_marginLeft="60dp"
-            android:layout_gravity="center_vertical"
-            />
+            android:background="?attr/selectableItemBackground"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardElevation="6dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:src="@drawable/ic_tray"
+                android:tint="@color/colorPrimary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="60dp"
+                android:gravity="center"
+                android:text="Tray Details"
+                android:textColor="#191919"
+                android:textSize="20sp" />
 
 
-        <ImageView
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:background="#ddd" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/trayStock"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#ddd"
-            android:layout_gravity="bottom"
-            />
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/logout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardElevation="6dp"
-        android:background="?attr/selectableItemBackground"
-        app:cardBackgroundColor="@android:color/white"
-        >
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_baseline_logout_24"
-            android:tint="@color/colorPrimary"
-            android:layout_margin="10dp"
-            />
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Logout"
-            android:gravity="center"
-            android:textSize="20sp"
-            android:textColor="#191919"
-            android:layout_marginLeft="60dp"
-            android:layout_gravity="center_vertical"
-            />
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#ddd"
-            android:layout_gravity="bottom"
-            />
+            android:background="?attr/selectableItemBackground"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardElevation="6dp">
 
-    </androidx.cardview.widget.CardView>
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:src="@drawable/add_tray"
+                android:tint="@color/colorPrimary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="60dp"
+                android:gravity="center"
+                android:text="Tray Stock"
+                android:textColor="#191919"
+                android:textSize="20sp" />
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:background="#ddd" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardElevation="6dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:src="@drawable/ic_baseline_logout_24"
+                android:tint="@color/colorPrimary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="60dp"
+                android:gravity="center"
+                android:text="Logout"
+                android:textColor="#191919"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:background="#ddd" />
+
+        </androidx.cardview.widget.CardView>
 
     </LinearLayout>
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:src="@drawable/name"
+        android:layout_above="@+id/versionID"
         android:layout_marginLeft="80dp"
         android:layout_marginRight="80dp"
-        android:tint="@color/colorPrimaryDark"
-        android:layout_above="@+id/versionID"
         android:scaleType="fitXY"
-        />
+        android:src="@drawable/name"
+        android:tint="@color/colorPrimaryDark" />
 
     <TextView
         android:id="@+id/versionID"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="14dp"
-        android:textColor="@color/colorPrimaryDark"
         android:layout_alignParentBottom="true"
-        />
+        android:gravity="center"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="14dp" />
 </RelativeLayout>

@@ -152,13 +152,6 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
                 }
             }
         });
-        cashEntryText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-            }
-        });
 
         dateTextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,6 +172,7 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
                     calcDis();
+                    totalCash = Double.parseDouble(cashEntryText.getText().toString());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -186,6 +180,8 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
 
             @Override
             public void afterTextChanged(Editable s) {
+
+                totalCash = Double.parseDouble(cashEntryText.getText().toString());
 
                 entriesText.setText(cashType.getText().toString() + " : " + cashEntryText.getText().toString());
                 entriesText.setVisibility(View.VISIBLE);

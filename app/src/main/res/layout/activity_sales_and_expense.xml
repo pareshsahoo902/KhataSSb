@@ -103,8 +103,6 @@
                     android:textSize="13dp"
                     android:textStyle="bold" />
 
-
-
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -127,8 +125,6 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/reviewOrderRecyclerView"
                 android:layout_width="match_parent"
@@ -138,7 +134,6 @@
                 android:layout_marginRight="10dp"
                 tools:listitem="@layout/date_item_layout"
                 android:scrollbars="vertical" />
-
 
         </LinearLayout>
     </RelativeLayout>
