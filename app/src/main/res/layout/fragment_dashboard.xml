@@ -7,6 +7,11 @@
     android:layout_marginBottom="15dp"
     tools:context=".Home.HomeFragments.DashboardFrag">
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -312,24 +317,30 @@
 
         </androidx.cardview.widget.CardView>
 
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="80dp"
+                android:layout_marginRight="80dp"
+                android:scaleType="fitXY"
+                android:layout_marginTop="70dp"
+                android:src="@drawable/name"
+                android:tint="@color/colorPrimaryDark" />
+
+            <TextView
+                android:id="@+id/versionID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="14dp" />
+
+
+
     </LinearLayout>
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_above="@+id/versionID"
-        android:layout_marginLeft="80dp"
-        android:layout_marginRight="80dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/name"
-        android:tint="@color/colorPrimaryDark" />
+    </androidx.core.widget.NestedScrollView>
 
-    <TextView
-        android:id="@+id/versionID"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:gravity="center"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="14dp" />
 </RelativeLayout>

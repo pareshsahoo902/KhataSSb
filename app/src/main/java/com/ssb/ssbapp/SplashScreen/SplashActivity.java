@@ -37,7 +37,7 @@ public class SplashActivity extends SSBBaseActivity {
         img2 = findViewById(R.id.img2);
         versionID.setText("v"+BuildConfig.VERSION_NAME);
 
-        img1.setAlpha((float) 0.7);
+        img1.setAlpha((float) 0.9);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

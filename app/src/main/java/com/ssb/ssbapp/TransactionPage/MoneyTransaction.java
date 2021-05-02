@@ -175,14 +175,20 @@ public class MoneyTransaction extends SSBBaseActivity {
 
     private void deleteTranINdb(String uid) {
 
+
         Query transactionQuery = enrtyRef.orderByChild("cid").equalTo(uid);
 
-        transactionQuery.addValueEventListener(new ValueEventListener() {
+        transactionQuery.addValueEventListener(
+
+        new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot appleSnapshot : snapshot.getChildren()) {
                     appleSnapshot.getRef().removeValue();
+
                 }
+                transactionQuery.removeEventListener(this);
+
             }
 
             @Override
@@ -190,6 +196,7 @@ public class MoneyTransaction extends SSBBaseActivity {
 
             }
         });
+
 
     }
 

@@ -44,6 +44,15 @@ public class MOneyTransactionAdapter extends RecyclerView.Adapter<MOneyTransacti
     public void onBindViewHolder(@NonNull MOneyTransactionviewHolder moneyTransactionviewHolder, int position) {
         MoneyTransactionModel moneyTransactionModel = (MoneyTransactionModel)modelArrayList.get(position);
 
+        if (moneyTransactionModel.getStatus().equals("got")) {
+            moneyTransactionviewHolder.gotText.setText(getCurrencyStr() + String.valueOf(moneyTransactionModel.getTotal()));
+            moneyTransactionviewHolder.gotText.setVisibility(View.VISIBLE);
+        }else {
+            moneyTransactionviewHolder.gotText.setVisibility(View.GONE);
+            moneyTransactionviewHolder.gaveText.setText(getCurrencyStr() + String.valueOf(moneyTransactionModel.getTotal()));
+            moneyTransactionviewHolder.gaveText.setVisibility(View.VISIBLE);
+        }
+
 
         if (!moneyTransactionModel.description.equals("")) {
             moneyTransactionviewHolder.desc.setText(moneyTransactionModel.getDescription());
@@ -53,14 +62,18 @@ public class MOneyTransactionAdapter extends RecyclerView.Adapter<MOneyTransacti
         moneyTransactionviewHolder.entryText.setText(moneyTransactionModel.getEntriesText());
         moneyTransactionviewHolder.date.setText(moneyTransactionModel.getDate().substring(0,10));
         moneyTransactionviewHolder.amountTotal.setText("Amt:" + getCurrencyStr() + String.valueOf(moneyTransactionModel.getTotal()));
-        if (moneyTransactionModel.getBalance() < 0) {
-            moneyTransactionviewHolder.balance.setText("Bal:" + getCurrencyStr() + String.valueOf(moneyTransactionModel.getBalance()));
+
+        double balance = calcBalance(position);
+        if (balance < 0) {
+            moneyTransactionviewHolder.balance.setText("Bal:" + getCurrencyStr() + String.valueOf(balance));
             moneyTransactionviewHolder.balance.setBackgroundColor(mCOntext.getResources().getColor(R.color.liteGreen));
         } else {
-            moneyTransactionviewHolder.balance.setText("Bal:" + getCurrencyStr() + String.valueOf(moneyTransactionModel.getBalance()));
+            moneyTransactionviewHolder.balance.setText("Bal:" + getCurrencyStr() + String.valueOf(balance));
             moneyTransactionviewHolder.balance.setBackgroundColor(mCOntext.getResources().getColor(R.color.litered));
 
         }
+
+        moneyTransactionviewHolder.balance.setText(getCurrencyStr()+String.valueOf(calcBalance(position)));
 
         if (moneyTransactionModel.getImageurl().length() > 0) {
 
@@ -68,14 +81,6 @@ public class MOneyTransactionAdapter extends RecyclerView.Adapter<MOneyTransacti
             moneyTransactionviewHolder.billIMage.setVisibility(View.VISIBLE);
         }
 
-        if (moneyTransactionModel.getStatus().equals("got")) {
-            moneyTransactionviewHolder.gaveText.setVisibility(View.INVISIBLE);
-            moneyTransactionviewHolder.gotText.setText(getCurrencyStr() + String.valueOf(moneyTransactionModel.getTotal()));
-        } else {
-            moneyTransactionviewHolder.gotLayout.setVisibility(View.INVISIBLE);
-            moneyTransactionviewHolder.gaveText.setVisibility(View.VISIBLE);
-            moneyTransactionviewHolder.gaveText.setText(getCurrencyStr() + String.valueOf(moneyTransactionModel.getTotal()));
-        }
 
         moneyTransactionviewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,6 +115,27 @@ public class MOneyTransactionAdapter extends RecyclerView.Adapter<MOneyTransacti
 
         notifyDataSetChanged();
     }
+
+
+    private double calcBalance(int position){
+        double balance =0.0;
+
+        if (position==0){
+            balance = modelArrayList.get(position).getTotal();
+            return balance;
+        }else {
+            for (int i =0 ;i<=position;i++){
+                if (modelArrayList.get(i).getStatus().equals("got")){
+                    balance+=modelArrayList.get(i).getTotal();
+                }else {
+                    balance-=modelArrayList.get(i).getTotal();
+                }
+                Log.v("paresh",String.valueOf(balance));
+            }
+        }
+        return balance;
+    }
+
 
     @Override
     public int getItemCount() {

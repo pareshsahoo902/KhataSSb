@@ -71,10 +71,12 @@
                 />
             <EditText
                 android:id="@+id/disText"
-                android:layout_width="60dp"
+                android:layout_width="40dp"
                 android:layout_height="wrap_content"
                 android:text="3"
+                android:textSize="19dp"
                 android:inputType="number"
+                android:textStyle="bold"
                 android:gravity="center"
                 />
             <TextView

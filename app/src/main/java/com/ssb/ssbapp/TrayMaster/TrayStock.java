@@ -21,6 +21,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.ssb.ssbapp.Model.TrayMasterModel;
 import com.ssb.ssbapp.R;
+import com.ssb.ssbapp.TrayDetails.TrayDetailModel;
 import com.ssb.ssbapp.TrayModels.TrayModelItem;
 import com.ssb.ssbapp.TrayModels.TrayTransactionModel;
 import com.ssb.ssbapp.Utils.Constants;
@@ -38,7 +39,7 @@ public class TrayStock extends SSBBaseActivity {
     private DatabaseReference trayRef;
     private FirebaseRecyclerOptions<TrayMasterModel> trayOption;
     private FirebaseRecyclerAdapter<TrayMasterModel, TrayStockViewHolder> trayRecyclerAdapter;
-    private List<TrayTransactionModel> modelItemList;
+    private List<TrayDetailModel> modelItemList;
     //TODO if frommtraydetails change to tray details
     private DatabaseReference trayTransactionRef;
 
@@ -58,7 +59,7 @@ public class TrayStock extends SSBBaseActivity {
 
 
         //TODO if frommtraydetails change to tray details
-        trayTransactionRef = FirebaseDatabase.getInstance().getReference().child("trayTransaction");
+        trayTransactionRef = FirebaseDatabase.getInstance().getReference().child("trayDetails");
         trayTransactionRef.keepSynced(true);
 
         Query query = trayTransactionRef.orderByChild("kid").equalTo(getLocalSession().getString(Constants.SSB_PREF_KID));
@@ -71,7 +72,7 @@ public class TrayStock extends SSBBaseActivity {
 
                 modelItemList.clear();
                 for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-                    modelItemList.add(snapshot1.getValue(TrayTransactionModel.class));
+                    modelItemList.add(snapshot1.getValue(TrayDetailModel.class));
                 }
 
             }
@@ -97,7 +98,7 @@ public class TrayStock extends SSBBaseActivity {
         int gave=0;
         int available = 0;
 
-        for (TrayTransactionModel model:modelItemList){
+        for (TrayDetailModel model:modelItemList){
 
             if (model.getStatus().equals("gave")){
                 for (TrayModelItem item:model.getModelItemArrayList()){
@@ -119,7 +120,7 @@ public class TrayStock extends SSBBaseActivity {
 
         trays.add(got);
         trays.add(gave);
-        trays.add(gave-got);
+        trays.add(got-gave);
 
         return trays;
     }

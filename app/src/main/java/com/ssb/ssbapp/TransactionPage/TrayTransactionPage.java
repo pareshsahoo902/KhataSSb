@@ -149,6 +149,7 @@ public class TrayTransactionPage extends SSBBaseActivity {
                 for (DataSnapshot appleSnapshot : snapshot.getChildren()) {
                     appleSnapshot.getRef().removeValue();
                 }
+                transactionQuery.removeEventListener(this);
             }
 
             @Override

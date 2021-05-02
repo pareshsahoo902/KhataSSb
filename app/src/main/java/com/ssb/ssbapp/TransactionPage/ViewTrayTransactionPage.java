@@ -160,7 +160,7 @@ public class ViewTrayTransactionPage extends SSBBaseActivity implements Shareabl
                 Intent smsIntent = new Intent(Intent.ACTION_VIEW);
                 smsIntent.setData(Uri.parse("smsto:"));
                 smsIntent.setType("vnd.android-dir/mms-sms");
-                smsIntent.putExtra("address", new String("7008071464"));
+                smsIntent.putExtra("address", new String("8917351934"));
                 smsIntent.putExtra("sms_body", shareableText);
 
                 try {

@@ -12,6 +12,7 @@
         android:layout_height="match_parent"
         app:lottie_fileName="successpage.json"
         app:lottie_autoPlay="true"
+        app:lottie_speed="2"
         />
 
 </RelativeLayout>

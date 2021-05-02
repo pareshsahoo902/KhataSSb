@@ -279,7 +279,7 @@ public class TrayEntryActivity extends SSBBaseActivity implements ImagePickerDai
         if (trayLists.size() > 0) {
 
             TrayDetailModel model = new TrayDetailModel((ArrayList<TrayModelItem>) trayLists, uid, teid, getLocalSession().getString(Constants.SSB_PREF_CID),
-                    getLocalSession().getString(Constants.SSB_PREF_KID), cutomerName, dateTextBtn.getText().toString(), type, getTotalTray());
+                    getLocalSession().getString(Constants.SSB_PREF_KID), cutomerName, CurrentDate, type, getTotalTray());
             if (model.getCid() != null) {
                 trayDetailRef.child(uid).setValue(model);
 

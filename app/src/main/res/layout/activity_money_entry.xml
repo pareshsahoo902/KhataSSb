@@ -40,7 +40,6 @@
                     android:layout_height="50dp"
                     android:layout_weight="0.65"
                     android:clickable="true"
-                    android:cursorVisible="false"
                     android:gravity="center_vertical"
                     android:hint="Item"
                     android:paddingLeft="10dp"

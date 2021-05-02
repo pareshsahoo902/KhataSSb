@@ -76,6 +76,7 @@ public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalcula
     private StorageTask uploadtask;
     private StorageReference userStorage;
     private String picDowloadUrl="";
+    private boolean isEqual=false;
 
 
     @Override
@@ -98,7 +99,7 @@ public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalcula
         billIMageMoney = findViewById(R.id.billIMageMoney);
         dateTextBtn = findViewById(R.id.dateTextBtn);
         imageTextBtn = findViewById(R.id.imageTextBtn);
-    customCalculator.setVisibility(View.GONE);
+        customCalculator.setVisibility(View.GONE);
         itemBalanceList = new ArrayList<>();
         userStorage= FirebaseStorage.getInstance().getReference().child("SSB").child("Transaction Image");
 
@@ -122,7 +123,7 @@ public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalcula
 
         };
         entries=new ArrayList<>();
-        CurrentDate=UtilsMethod.getCurrentDate();
+        CurrentDate=getLocalSession().getString(SSB_PREF_DATE);
         entryText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -146,7 +147,8 @@ public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalcula
             }
         });
 
-
+        entryLayout.setVisibility(View.VISIBLE);
+        entries_text.setVisibility(View.VISIBLE);
 
 
         imageTextBtn.setOnClickListener(new View.OnClickListener() {
@@ -182,35 +184,6 @@ public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalcula
         });
 
         dateTextBtn.setText(UtilsMethod.getCurrentDate().substring(0,10));
-
-        entryText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-//                descText = itemName.getText().toString()+":" +entryText.getText().toString();
-//                entries_text.setText(descText);
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (!entryText.getText().toString().equals("")) {
-                    entryLayout.setVisibility(View.VISIBLE);
-                    entries_text.setVisibility(View.VISIBLE);
-                } else {
-                    entryLayout.setVisibility(View.GONE);
-                    entries_text.setVisibility(View.GONE);
-
-                }
-
-            }
-        });
-
 
         dateTextBtn.setText(getLocalSession().getString(SSB_PREF_DATE).substring(0,10));
 
@@ -351,6 +324,12 @@ public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalcula
         if (descText.length()<=1){
             descText = itemName.getText().toString() + ": "+descText;
             entries_text.setText(descText);
+            return;
+        }else if (isEqual){
+            isEqual=false;
+            descText=entries_text.getText().toString() +"(M+)\n"+itemName.getText().toString()+ " :"+chrSequence;
+            entries_text.setText( descText);
+            return;
         }else {
             entries_text.setText( descText);
         }
@@ -474,6 +453,8 @@ public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalcula
         descText="";
         entryText.setText("");
         updateLabel(chrSequence);
+        itemBalanceList.clear();
+        calulateTotal();
 
     }
 
@@ -494,6 +475,9 @@ public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalcula
             calulateTotal();
 
         }
+        isEqual=true;
+        itemName.setText("");
+        entryText.setText("");
 
     }
 

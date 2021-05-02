@@ -53,7 +53,7 @@ public class MoneyFrag extends Fragment {
     private EditText searchBar;
     private double totalGave, totalGot;
     private String searchText;
-    private TextView gavemoney , getmoney;
+    private TextView gavemoney , getmoney ,countMoney;
     private FirebaseRecyclerOptions<CustomerModel> custoptions;
     private FirebaseRecyclerAdapter<CustomerModel, CustomerListViewHolder> custRecycleradapter;
 
@@ -75,6 +75,7 @@ public class MoneyFrag extends Fragment {
         searchBar = view.findViewById(R.id.searchhome);
         gavemoney = view.findViewById(R.id.gavemoney);
         getmoney = view.findViewById(R.id.getmoney);
+        countMoney = view.findViewById(R.id.countText);
         custRef = FirebaseDatabase.getInstance().getReference().child("customers");
         custRef.keepSynced(true);
 
@@ -170,6 +171,8 @@ public class MoneyFrag extends Fragment {
         custRecycleradapter = new FirebaseRecyclerAdapter<CustomerModel, CustomerListViewHolder>(custoptions) {
             @Override
             protected void onBindViewHolder(@NonNull CustomerListViewHolder viewHolder, int i, @NonNull CustomerModel custModel) {
+                countMoney.setText(String.valueOf(custRecycleradapter.getItemCount())+" Customers");
+
                 viewHolder.nameCust.setText(UtilsMethod.capitalize(custModel.getName()));
 //                viewHolder.amount.setText("Salary : "+"₹"+String.valueOf(custModel.get())+"/Month");
 
@@ -196,6 +199,8 @@ public class MoneyFrag extends Fragment {
                                         // Continue with delete operation
                                         deletetransactionInDB(custModel.getUid());
                                         custRef.child(custModel.getUid()).removeValue();
+                                        countMoney.setText(String.valueOf(custRecycleradapter.getItemCount()-1)+" Customers");
+
                                     }
                                 })
                                 .setNegativeButton("NO", null)

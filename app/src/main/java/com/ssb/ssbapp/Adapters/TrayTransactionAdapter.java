@@ -62,20 +62,22 @@ public class TrayTransactionAdapter extends RecyclerView.Adapter<TrayTransaction
             holder.billImage.setVisibility(View.VISIBLE);
         }
 
-//        if (model.getBalance() < 0) {
-//            holder.balance.setText("Bal:" + String.valueOf(model.getBalance()));
-//            holder.balance.setBackgroundColor(mContext.getResources().getColor(R.color.liteGreen));
-//        } else {
-//            holder.balance.setText("Bal:" + String.valueOf(model.getBalance()));
-//            holder.balance.setBackgroundColor(mContext.getResources().getColor(R.color.litered));
-//
-//        }
+        int balance = calcBalance(position);
+
+        if (balance < 0) {
+            holder.balance.setText("Bal:  " + String.valueOf(balance));
+            holder.balance.setBackgroundColor(mContext.getResources().getColor(R.color.liteGreen));
+        } else {
+            holder.balance.setText("Bal:  " + String.valueOf(balance));
+            holder.balance.setBackgroundColor(mContext.getResources().getColor(R.color.litered));
+
+        }
 
         if (model.getStatus().equals("got")) {
-            holder.gaveText.setVisibility(View.INVISIBLE);
+            holder.gaveText.setVisibility(View.GONE);
             holder.gotText.setText(String.valueOf(model.getTotal()));
         } else {
-            holder.gotLayout.setVisibility(View.INVISIBLE);
+            holder.gotLayout.setVisibility(View.GONE);
             holder.gaveText.setVisibility(View.VISIBLE);
             holder.gaveText.setText( String.valueOf(model.getTotal()));
         }
@@ -109,6 +111,24 @@ public class TrayTransactionAdapter extends RecyclerView.Adapter<TrayTransaction
         }
 
         return detailStr;
+    }
+
+
+    private int calcBalance(int position){
+        double balance =0.0;
+
+        if (position==0){
+            balance = modelArrayList.get(position).getTotal();
+        }else {
+            for (int i =0 ;i<=position;i++){
+                if (modelArrayList.get(i).getStatus().equals("gave")){
+                    balance-=modelArrayList.get(i).getTotal();
+                }else {
+                    balance+=modelArrayList.get(i).getTotal();
+                }
+            }
+        }
+        return (int) balance;
     }
 
 

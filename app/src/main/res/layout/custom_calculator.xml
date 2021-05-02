@@ -93,7 +93,7 @@
 
         <Button
             android:id="@+id/btnMPlus"
-
+            android:visibility="invisible"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -174,7 +174,7 @@
             android:layout_weight="1"
             android:backgroundTint="@color/colorPrimary"
             android:elevation="7dp"
-
+            android:visibility="invisible"
             android:fontFamily="@font/fontmedium"
             android:text="M-"
             android:textColor="@color/white"

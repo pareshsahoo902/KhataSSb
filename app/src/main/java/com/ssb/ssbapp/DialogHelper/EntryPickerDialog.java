@@ -126,7 +126,7 @@ public class EntryPickerDialog extends BottomSheetDialogFragment {
 
     private void calcDiscount() {
         double dis = allgave * (Double.parseDouble(discount.getText().toString().trim())/100);
-        result1.setText("= "+String.valueOf(allgave)+" - "+String.format("%.1f",dis));
-        resultTotal.setText("= ₹"+String.format("%.2f",allgave - (allgave * (Double.parseDouble(discount.getText().toString().trim())/100))));
+        result1.setText(String.format("%.0f",dis));
+        resultTotal.setText("= ₹"+String.format("%.1f",allgave - (allgave * (Double.parseDouble(discount.getText().toString().trim())/100))));
     }
 }

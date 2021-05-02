@@ -40,7 +40,7 @@ public class TrayFrag extends Fragment {
     private RecyclerView custRecycler;
     private DatabaseReference custRef,customeEntryrRef;
     private int totalGave, totalGot;
-    private TextView gavemoney , getmoney;
+    private TextView gavemoney , getmoney,countTray;
 
     private FirebaseRecyclerOptions<CustomerModel> custoptions;
     private FirebaseRecyclerAdapter<CustomerModel, CustomerListViewHolder> custRecycleradapter;
@@ -59,6 +59,7 @@ public class TrayFrag extends Fragment {
 
         gavemoney = view.findViewById(R.id.gavetray);
         getmoney = view.findViewById(R.id.gottray);
+        countTray = view.findViewById(R.id.counttrayText);
         custRecycler = view.findViewById(R.id.trayfragrecycler);
         custRecycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         custRecycler.hasFixedSize();
@@ -94,6 +95,8 @@ public class TrayFrag extends Fragment {
         custRecycleradapter = new FirebaseRecyclerAdapter<CustomerModel, CustomerListViewHolder>(custoptions) {
             @Override
             protected void onBindViewHolder(@NonNull CustomerListViewHolder viewHolder, int i, @NonNull CustomerModel custModel) {
+                countTray.setText(String.valueOf(custRecycleradapter.getItemCount())+" Customers");
+
                 viewHolder.nameCust.setText(UtilsMethod.capitalize(custModel.getName()));
 //                viewHolder.amount.setText("Salary : "+"₹"+String.valueOf(custModel.get())+"/Month");
 

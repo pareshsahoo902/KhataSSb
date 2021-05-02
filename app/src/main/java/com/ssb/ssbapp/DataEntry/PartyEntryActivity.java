@@ -77,6 +77,7 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
     private StorageTask uploadtask;
     private StorageReference userStorage;
     private String picDowloadUrl = "";
+    private boolean isEqual=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +112,7 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
         moneyTransactionRef = FirebaseDatabase.getInstance().getReference().child("customerTransaction");
         moneyTransactionRef.keepSynced(true);
 
+        commisionText.setText("8");
         entryText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -123,7 +125,8 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
             }
         });
 
-
+        entryLayout.setVisibility(View.VISIBLE);
+        entries_text.setVisibility(View.VISIBLE);
         myCalendar = Calendar.getInstance();
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
@@ -199,8 +202,8 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                commisionText.setText(commisionText.getText().toString());
 
-                commisionText.setText("0");
             }
 
             @Override
@@ -225,8 +228,8 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                commisionText.setText(commisionText.getText().toString());
 
-                commisionText.setText("0");
             }
 
             @Override
@@ -254,8 +257,8 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                commisionText.setText("0");
 
+                commisionText.setText(commisionText.getText().toString());
             }
 
             @Override
@@ -278,7 +281,7 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
         });
 
 
-        CurrentDate = UtilsMethod.getCurrentDate();
+        CurrentDate=getLocalSession().getString(SSB_PREF_DATE);
         dateTextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -310,30 +313,6 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
             }
         });
 
-        entryText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (!entryText.getText().toString().equals("")) {
-                    entryLayout.setVisibility(View.VISIBLE);
-                    entries_text.setVisibility(View.VISIBLE);
-                } else {
-                    entryLayout.setVisibility(View.GONE);
-                    entries_text.setVisibility(View.GONE);
-
-                }
-
-            }
-        });
 
         saveEntry.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -602,6 +581,8 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
         descText = "";
         entryText.setText("");
         updateLabel(chrSequence);
+        itemBalanceList.clear();
+        calulateTotal();
 
     }
 
@@ -621,6 +602,10 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
             calulateTotal();
 
         }
+        isEqual=true;
+        itemName.setText("");
+        entryText.setText("");
+
 
     }
 
@@ -700,6 +685,12 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
         if (descText.length()<=1){
             descText = itemName.getText().toString()+": "+descText;
             entries_text.setText(descText);
+        }
+        else if (isEqual){
+            isEqual=false;
+            descText=entries_text.getText().toString() +"(M+)\n"+itemName.getText().toString()+ " :"+chrSequence;
+            entries_text.setText( descText);
+            return;
         }else{
             entries_text.setText(descText);
         }
@@ -715,7 +706,11 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
             totalAmount = res;
             saveEntry.setText("GRAND TOTAL = " + getCurrencyStr() + String.format("%.1f", res));
             saveEntry.setTag(false);
+            double tcom =( Double.parseDouble(commisionText.getText().toString().trim()) *res)/100;
+            commisionTotal.setText(String.valueOf(tcom));
+
         }
+
 
     }
 

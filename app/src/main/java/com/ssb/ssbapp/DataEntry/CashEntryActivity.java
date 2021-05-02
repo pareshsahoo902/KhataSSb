@@ -210,7 +210,7 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
             }
         });
 
-        CurrentDate = UtilsMethod.getCurrentDate();
+        CurrentDate=getLocalSession().getString(SSB_PREF_DATE);
         dateTextBtn.setText(UtilsMethod.getCurrentDate().substring(0, 10));
 
         imageTextButton.setOnClickListener(new View.OnClickListener() {

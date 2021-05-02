@@ -93,7 +93,7 @@ public class HomeActivity extends SSBBaseActivity {
             khataname.setText(UtilsMethod.capitalize(getLocalSession().getString(SSB_PREF_BRANCH)));
 
         datetext.setText("Dt." + UtilsMethod.getCurrentDate().substring(0, 10));
-        getLocalSession().putString(SSB_PREF_DATE, UtilsMethod.getCurrentDate().substring(0, 10));
+        getLocalSession().putString(SSB_PREF_DATE, UtilsMethod.getCurrentDate());
 
 
         myCalendar = Calendar.getInstance();

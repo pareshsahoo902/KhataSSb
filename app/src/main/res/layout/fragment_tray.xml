@@ -216,12 +216,26 @@
                 android:tint="@android:color/tertiary_text_dark" />
         </LinearLayout>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="13dp"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginBottom="5dp"
+            android:layout_below="@+id/seaarchbar"
+            android:id="@+id/counttrayText"
+            />
+
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/trayfragrecycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_below="@+id/seaarchbar" />
+            android:layout_below="@+id/counttrayText" />
 
 
 

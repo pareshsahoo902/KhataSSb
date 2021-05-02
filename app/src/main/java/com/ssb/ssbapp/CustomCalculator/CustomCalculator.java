@@ -288,6 +288,10 @@ public class CustomCalculator extends LinearLayout implements View.OnClickListen
                     calctext = String.valueOf(opreand1 * Double.parseDouble(calctext));
                 }
                 mListner.onEqualsPressListner("=", calctext);
+                calctext="";
+                opreand1=0.0;
+                opreand2=0.0;
+                opreator="";
                 break;
 
         }
