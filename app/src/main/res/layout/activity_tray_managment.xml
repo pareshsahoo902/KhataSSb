@@ -52,17 +52,33 @@
         android:textColor="@color/white"
         android:textSize="18dp" />
 
-    <ImageView
+    <View
+        android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="#ddd"
         android:layout_below="@id/addTrayBtn"
         />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="13dp"
+        android:textStyle="bold"
+        android:layout_marginLeft="10dp"
+        android:textAllCaps="true"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/colorPrimary"
+        android:layout_marginBottom="5dp"
+        android:layout_below="@+id/divider"
+        android:id="@+id/countText"
+        />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/traymasterrecyler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/addTrayBtn"
+        android:layout_below="@id/countText"
         android:layout_marginTop="5dp"
         android:padding="5dp"
         android:orientation="vertical"

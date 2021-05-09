@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
@@ -31,6 +32,7 @@ import com.ssb.ssbapp.TransactionPage.TrayTransactionPage;
 import com.ssb.ssbapp.Utils.Constants;
 import com.ssb.ssbapp.Utils.UtilsMethod;
 import com.ssb.ssbapp.ViewHolder.CustomerListViewHolder;
+import com.ssb.ssbapp.report.TrayReport;
 
 import static com.ssb.ssbapp.Utils.Constants.SSB_PREF_KID;
 
@@ -41,7 +43,7 @@ public class TrayFrag extends Fragment {
     private DatabaseReference custRef,customeEntryrRef;
     private int totalGave, totalGot;
     private TextView gavemoney , getmoney,countTray;
-
+    private LinearLayout reportView;
     private FirebaseRecyclerOptions<CustomerModel> custoptions;
     private FirebaseRecyclerAdapter<CustomerModel, CustomerListViewHolder> custRecycleradapter;
 
@@ -59,6 +61,7 @@ public class TrayFrag extends Fragment {
 
         gavemoney = view.findViewById(R.id.gavetray);
         getmoney = view.findViewById(R.id.gottray);
+        reportView = view.findViewById(R.id.t);
         countTray = view.findViewById(R.id.counttrayText);
         custRecycler = view.findViewById(R.id.trayfragrecycler);
         custRecycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
@@ -67,6 +70,12 @@ public class TrayFrag extends Fragment {
         custRef = FirebaseDatabase.getInstance().getReference().child("customers");
 
         trayFab = view.findViewById(R.id.floatingActionButtontray);
+        reportView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), TrayReport.class));
+            }
+        });
 
         trayFab.setOnClickListener(new View.OnClickListener() {
             @Override

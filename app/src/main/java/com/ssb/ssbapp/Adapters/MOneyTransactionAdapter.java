@@ -65,16 +65,13 @@ public class MOneyTransactionAdapter extends RecyclerView.Adapter<MOneyTransacti
 
         double balance = calcBalance(position);
         if (balance < 0) {
-            moneyTransactionviewHolder.balance.setText("Bal:" + getCurrencyStr() + String.valueOf(balance));
+            moneyTransactionviewHolder.balance.setText("Bal:" + getCurrencyStr() + String.valueOf(Math.abs(balance)));
             moneyTransactionviewHolder.balance.setBackgroundColor(mCOntext.getResources().getColor(R.color.liteGreen));
         } else {
             moneyTransactionviewHolder.balance.setText("Bal:" + getCurrencyStr() + String.valueOf(balance));
             moneyTransactionviewHolder.balance.setBackgroundColor(mCOntext.getResources().getColor(R.color.litered));
 
         }
-
-        moneyTransactionviewHolder.balance.setText(getCurrencyStr()+String.valueOf(calcBalance(position)));
-
         if (moneyTransactionModel.getImageurl().length() > 0) {
 
             Picasso.with(mCOntext).load(moneyTransactionModel.getImageurl()).into(moneyTransactionviewHolder.billIMage);
@@ -121,14 +118,14 @@ public class MOneyTransactionAdapter extends RecyclerView.Adapter<MOneyTransacti
         double balance =0.0;
 
         if (position==0){
-            balance = modelArrayList.get(position).getTotal();
+            balance = Double.parseDouble(modelArrayList.get(position).getTotal());
             return balance;
         }else {
             for (int i =0 ;i<=position;i++){
                 if (modelArrayList.get(i).getStatus().equals("got")){
-                    balance+=modelArrayList.get(i).getTotal();
+                    balance+=Double.parseDouble(modelArrayList.get(i).getTotal());
                 }else {
-                    balance-=modelArrayList.get(i).getTotal();
+                    balance-=Double.parseDouble(modelArrayList.get(i).getTotal());
                 }
                 Log.v("paresh",String.valueOf(balance));
             }

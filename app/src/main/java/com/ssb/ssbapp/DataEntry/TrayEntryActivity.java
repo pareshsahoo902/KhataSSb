@@ -15,6 +15,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,7 +83,7 @@ public class TrayEntryActivity extends SSBBaseActivity implements ImagePickerDai
     private EditText desctray;
     private LinearLayout trayINOUTLay;
     private Button saveEntry, trayIn, trayOut;
-    private TextView dateTextBtn, trayDetailText, imageTextButton;
+    private TextView dateTextBtn,availableCount, trayDetailText, imageTextButton;
     private StorageTask uploadtask;
     private StorageReference userStorage;
     private boolean isUri;
@@ -114,6 +115,7 @@ public class TrayEntryActivity extends SSBBaseActivity implements ImagePickerDai
         billIMageMoney = findViewById(R.id.billIMageMoney);
         trayINOUTLay = findViewById(R.id.trayinoutLay);
         trayDetailText = findViewById(R.id.trayInText);
+        availableCount = findViewById(R.id.availableCount);
 
 
         availableRecycler = findViewById(R.id.availableTrayRecycler);
@@ -231,6 +233,7 @@ public class TrayEntryActivity extends SSBBaseActivity implements ImagePickerDai
                 for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                     modelItemList.add(snapshot1.getValue(TrayTransactionModel.class));
                 }
+                availableCount.setText("Available : "+String.valueOf(getTotalAvailble(modelItemList)));
 
             }
 
@@ -279,7 +282,7 @@ public class TrayEntryActivity extends SSBBaseActivity implements ImagePickerDai
         if (trayLists.size() > 0) {
 
             TrayDetailModel model = new TrayDetailModel((ArrayList<TrayModelItem>) trayLists, uid, teid, getLocalSession().getString(Constants.SSB_PREF_CID),
-                    getLocalSession().getString(Constants.SSB_PREF_KID), cutomerName, CurrentDate, type, getTotalTray());
+                    getLocalSession().getString(Constants.SSB_PREF_KID), cutomerName, CurrentDate, type,desctray.getText().toString(), getTotalTray());
             if (model.getCid() != null) {
                 trayDetailRef.child(uid).setValue(model);
 
@@ -398,6 +401,19 @@ public class TrayEntryActivity extends SSBBaseActivity implements ImagePickerDai
 
     }
 
+    private int getTotalAvailble(List<TrayTransactionModel> models){
+        int total = 0;
+        for (TrayTransactionModel model: models){
+            if (model.getStatus().equals("gave")){
+                total+=model.getTotal();
+            }else{
+                total-=model.getTotal();
+            }
+
+        }
+        return total;
+    }
+
     private String getAvailableTrayType(String trayID) {
         int trays = 0;
         int got=0;
@@ -427,6 +443,7 @@ public class TrayEntryActivity extends SSBBaseActivity implements ImagePickerDai
     }
 
     private void loadAvailanleTrays() {
+
 
         trayFirebaseRecyclerOptions = new FirebaseRecyclerOptions.Builder<TrayMasterModel>().setQuery(trayRef, TrayMasterModel.class).build();
         trayFirebaseRecyclerAdapter = new FirebaseRecyclerAdapter<TrayMasterModel, TrayDetailViewHolder>(trayFirebaseRecyclerOptions) {

@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -49,6 +50,7 @@ public class KhataManagment extends SSBBaseActivity {
     private Button add_btn;
     private DatabaseReference khataRef, custref, transaxctionref;
     private RecyclerView khataMasterRecyler;
+    private TextView countKhata ;
 
 
     private FirebaseRecyclerOptions<KhataModel> khataOption;
@@ -64,6 +66,7 @@ public class KhataManagment extends SSBBaseActivity {
 
         khata_text = findViewById(R.id.khata_nametext);
         add_btn = findViewById(R.id.addKhataBtn);
+        countKhata = findViewById(R.id.countText);
         khataMasterRecyler = findViewById(R.id.khataMasterRecycler);
 
         khataMasterRecyler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -93,6 +96,8 @@ public class KhataManagment extends SSBBaseActivity {
         khataRecyclerAdapter = new FirebaseRecyclerAdapter<KhataModel, KhataListViewHolder>(khataOption) {
             @Override
             protected void onBindViewHolder(@NonNull KhataListViewHolder trayListViewHolder, int i, @NonNull KhataModel trayMasterModel) {
+
+                countKhata.setText("Total :"+String.valueOf(khataRecyclerAdapter.getItemCount()));
 
                 trayListViewHolder.khataName.setText(UtilsMethod.capitalize(trayMasterModel.getName()));
                 if (trayMasterModel.getKid().equals(getLocalSession().getString(SSB_PREF_KID))) {

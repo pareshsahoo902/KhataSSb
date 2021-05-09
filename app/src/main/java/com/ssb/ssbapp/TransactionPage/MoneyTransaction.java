@@ -68,6 +68,8 @@ public class MoneyTransaction extends SSBBaseActivity {
     private double totalGave, totalGot;
     MOneyTransactionAdapter adapter;
     private ArrayList<MoneyTransactionModel> model;
+    private double subGrandTotal;
+    private double subTotal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +146,8 @@ public class MoneyTransaction extends SSBBaseActivity {
                 bundle.putString("transaction_type", "got");
                 bundle.putDouble("allGave", totalGave);
                 bundle.putDouble("allGot", totalGot);
+                bundle.putDouble("allTotal", subTotal);
+                bundle.putDouble("allGrandTotal", subGrandTotal);
                 dailog.setArguments(bundle);
                 dailog.show(getSupportFragmentManager(), "Select Entry Type !");
             }
@@ -215,18 +219,32 @@ public class MoneyTransaction extends SSBBaseActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
+                subTotal =0;
+                subGrandTotal = 0.0;
+
                 totalGot = 0;
                 totalGave = 0;
                 for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-                    if (snapshot1.child("cid").getValue().equals(getLocalSession().getString(Constants.SSB_PREF_CID))) {
+                    if (snapshot1.child("cid").getValue().equals(getLocalSession().getString(Constants.SSB_PREF_CID)) && !(boolean)snapshot1.child("cleared").getValue()) {
                         if (snapshot1.child("status").getValue().equals("got")) {
-                            long t = (long) snapshot1.child("total").getValue();
+                            double t = Double.parseDouble((String) snapshot1.child("total").getValue());
                             totalGot += t;
                         } else {
-                            long tg = (long) snapshot1.child("total").getValue();
+                            double tg = Double.parseDouble((String) snapshot1.child("total").getValue());
                             totalGave += tg;
                         }
+
+
+                        if ((boolean)snapshot1.child("party").getValue()) {
+                            double gb = Double.parseDouble((String) snapshot1.child("total").getValue());
+                            double b = Double.parseDouble((String) snapshot1.child("balance").getValue());
+                            subTotal += b;
+                            subGrandTotal += gb;
+                        }
                     }
+
+
+
 
                 }
                 calcText();
@@ -249,7 +267,7 @@ public class MoneyTransaction extends SSBBaseActivity {
             geta.setText("You will give : ₹" + String.valueOf(Math.abs(totalGave - totalGot)));
         } else {
             geta.setTextColor(Color.parseColor("#FF669900"));
-            int num = (int) Math.abs(totalGave - totalGot);
+            double num = Math.abs(totalGave - totalGot);
             geta.setText("You will get : ₹" + String.valueOf(num));
 
         }
@@ -272,7 +290,7 @@ public class MoneyTransaction extends SSBBaseActivity {
                 moneyTransactionviewHolder.entryText.setText(moneyTransactionModel.getEntriesText());
                 moneyTransactionviewHolder.date.setText(moneyTransactionModel.getDate());
                 moneyTransactionviewHolder.amountTotal.setText("Amt:" + getCurrencyStr() + String.valueOf(moneyTransactionModel.getTotal()));
-                if (moneyTransactionModel.getBalance() < 0) {
+                if (Double.parseDouble(moneyTransactionModel.getBalance()) < 0) {
                     moneyTransactionviewHolder.balance.setText("Bal:" + getCurrencyStr() + String.valueOf(moneyTransactionModel.getBalance()));
                     moneyTransactionviewHolder.balance.setBackgroundColor(getResources().getColor(R.color.liteGreen));
                 } else {
@@ -322,22 +340,22 @@ public class MoneyTransaction extends SSBBaseActivity {
 
     }
 
-    private void getSortedArray(ArrayList<MoneyTransactionModel> arraylist) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy"); //your own date format
-        Collections.sort(model, new Comparator<MoneyTransactionModel>() {
-            @Override
-            public int compare(MoneyTransactionModel o1, MoneyTransactionModel o2) {
-                try {
-                    return simpleDateFormat.parse(o1.getDate()).compareTo(simpleDateFormat.parse(o2.getDate()));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                    return 0;
-                }
-
-
-            }
-        });
-
-    }
+//    private void getSortedArray(ArrayList<MoneyTransactionModel> arraylist) {
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy"); //your own date format
+//        Collections.sort(model, new Comparator<MoneyTransactionModel>() {
+//            @Override
+//            public int compare(MoneyTransactionModel o1, MoneyTransactionModel o2) {
+//                try {
+//                    return simpleDateFormat.parse(o1.getDate()).compareTo(simpleDateFormat.parse(o2.getDate()));
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                    return 0;
+//                }
+//
+//
+//            }
+//        });
+//
+//    }
 
 }

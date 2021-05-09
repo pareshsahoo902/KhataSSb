@@ -11,6 +11,7 @@ public class TrayDetailModel implements Serializable {
     private String id;
     private String teid;
 
+    private String descripton;
     public String cid;
     public String kid;
     public String customerName;
@@ -25,7 +26,7 @@ public class TrayDetailModel implements Serializable {
     public TrayDetailModel() {
     }
 
-    public TrayDetailModel(ArrayList<TrayModelItem> modelItemArrayList, String id, String teid, String cid, String kid, String customerName, String date, String status, int total) {
+    public TrayDetailModel(ArrayList<TrayModelItem> modelItemArrayList, String id, String teid, String cid, String kid, String customerName, String date, String status,String description, int total) {
         this.modelItemArrayList = modelItemArrayList;
         this.id = id;
         this.teid = teid;
@@ -35,6 +36,7 @@ public class TrayDetailModel implements Serializable {
         this.date = date;
         this.status = status;
         this.total = total;
+        this.descripton = description;
     }
 
     public ArrayList<TrayModelItem> getModelItemArrayList() {
@@ -107,5 +109,14 @@ public class TrayDetailModel implements Serializable {
 
     public void setTotal(int total) {
         this.total = total;
+    }
+
+
+    public String getDescripton() {
+        return descripton;
+    }
+
+    public void setDescripton(String descripton) {
+        this.descripton = descripton;
     }
 }

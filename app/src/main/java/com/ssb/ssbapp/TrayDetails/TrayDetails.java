@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.ssb.ssbapp.Adapters.TrayDetailAdapter;
 import com.ssb.ssbapp.CashDetails.CashModel;
 import com.ssb.ssbapp.R;
 import com.ssb.ssbapp.TrayModels.TrayModelItem;
@@ -27,7 +28,10 @@ import com.ssb.ssbapp.Utils.SSBBaseActivity;
 import com.ssb.ssbapp.Utils.UtilsMethod;
 import com.ssb.ssbapp.ViewHolder.CashDetailsViewHolder;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class TrayDetails extends SSBBaseActivity {
 
@@ -35,9 +39,12 @@ public class TrayDetails extends SSBBaseActivity {
     private DatabaseReference cashRef;
     private FirebaseRecyclerOptions<TrayDetailModel> entryoptions;
     private FirebaseRecyclerAdapter<TrayDetailModel, CashDetailsViewHolder> entryRecycleradapter;
-    private int totalGave, totalGot;
+    private long totalGave, totalGot ,yesgot, yesgave;
     private Query query;
+    private ArrayList<TrayDetailModel> modelArrayList;
     private TextView totalIn , totalOut , todaysbalance,cashInHand,entryCount,curentDate;
+    private String yesterdayDate;
+    private TrayDetailAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +52,6 @@ public class TrayDetails extends SSBBaseActivity {
         setContentView(R.layout.activity_tray_details);
 
         setToolbar(getApplicationContext(), "Tray Details");
-
 
 
         totalIn = findViewById(R.id.totalIn);
@@ -61,15 +67,31 @@ public class TrayDetails extends SSBBaseActivity {
         cashRecycler.setLayoutManager(layoutManager);
         cashRecycler.hasFixedSize();
 
+        modelArrayList = new ArrayList<>();
         cashRef = FirebaseDatabase.getInstance().getReference().child("trayDetails");
         cashRef.keepSynced(true);
+        adapter = new TrayDetailAdapter(modelArrayList);
 
+        getYesterdayDate();
 
         curentDate.setText(UtilsMethod.getCurrentDate().substring(0,10));
 
         query = cashRef.orderByChild("kid").equalTo(getLocalSession().getString(Constants.SSB_PREF_KID));
         loadEntries();
         calculateTotalBalance();
+
+        cashRecycler.setAdapter(adapter);
+
+
+    }
+
+
+    private void getYesterdayDate() {
+        Calendar cal = Calendar.getInstance();
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
+        cal.add(Calendar.DATE, -1);
+        yesterdayDate= dateFormat.format(cal.getTime());
 
     }
 
@@ -79,20 +101,40 @@ public class TrayDetails extends SSBBaseActivity {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                entryCount.setText(String.valueOf(snapshot.getChildrenCount())+" Entry");
                 totalGot = 0;
                 totalGave = 0;
                 for (DataSnapshot snapshot1 : snapshot.getChildren()) {
 
-                    if (snapshot1.child("status").getValue().equals("got")) {
-                        long t = (long) snapshot1.child("total").getValue();
-                        totalGot += t;
-                    } else {
-                        long tg = (long) snapshot1.child("total").getValue();
-                        totalGave += tg;
+                    String date = (String)snapshot1.child("date").getValue();
+
+                    if (date.substring(0,10).equals(UtilsMethod.getCurrentDate().substring(0,10))){
+                        if (snapshot1.child("status").getValue().equals("got")) {
+                            long t =   (long)snapshot1.child("total").getValue();
+                            totalGot += t;
+                        } else {
+                            long tg =  (long)snapshot1.child("total").getValue();
+                            totalGave += tg;
+                        }
+
+                        modelArrayList.add(snapshot1.getValue(TrayDetailModel.class));
+
+                    }
+
+
+                    if (date.substring(0,10).equals(yesterdayDate)){
+                        if (snapshot1.child("status").getValue().equals("got")) {
+                            long t =   (long)snapshot1.child("total").getValue();
+                            yesgot += t;
+                        } else {
+                            long tg =  (long)snapshot1.child("total").getValue();
+                            yesgave += tg;
+                        }
                     }
 
                 }
+                entryCount.setText(String.valueOf(modelArrayList.size())+" Entry");
+
+                adapter.updateList(modelArrayList);
                 calcText();
 
             }
@@ -109,56 +151,31 @@ public class TrayDetails extends SSBBaseActivity {
         totalOut.setText(String.valueOf(totalGave));
 
         if (totalGave - totalGot < 0) {
-            todaysbalance.setText(String.valueOf(Math.abs(totalGave - totalGot)));
-            cashInHand.setText(String.valueOf(Math.abs(totalGave - totalGot)));
+            todaysbalance.setText(getCurrencyStr()+ String.valueOf(Math.abs(totalGave - totalGot)));
         } else {
-            int num = (int) Math.abs(totalGave - totalGot);
-            todaysbalance.setText(String.valueOf(num));
-            cashInHand.setText(String.valueOf(num));
+            long num =  Math.abs(totalGave - totalGot);
+            todaysbalance.setText(getCurrencyStr()+"-"+ String.valueOf(num));
 
         }
 
-    }
 
-    public String getDetailText(ArrayList<TrayModelItem> trayModelItems){
-        String detailStr = "";
+        if (yesgave - yesgot < 0) {
+            cashInHand.setText(getCurrencyStr()+ String.valueOf(Math.abs(yesgave - yesgot)));
+        } else {
+            long num =  Math.abs(yesgave - yesgot);
+            cashInHand.setText(getCurrencyStr()+"-"+ String.valueOf(num));
 
-        for (TrayModelItem item:trayModelItems){
-            detailStr+=item.getName()+": "+item.getTotalCount()+"\n";
         }
 
-        return detailStr;
+
+
+
     }
+
+
 
     private void loadEntries() {
-        entryoptions = new FirebaseRecyclerOptions.Builder<TrayDetailModel>()
-                .setQuery(cashRef.orderByChild("kid").equalTo(getLocalSession().getString(Constants.SSB_PREF_KID)), TrayDetailModel.class).build();
 
-        entryRecycleradapter = new FirebaseRecyclerAdapter<TrayDetailModel, CashDetailsViewHolder>(entryoptions) {
-            @Override
-            protected void onBindViewHolder(@NonNull CashDetailsViewHolder cashDetailsViewHolder, int i, @NonNull TrayDetailModel cashModel) {
-
-                cashDetailsViewHolder.traydet.setText(getDetailText(cashModel.getModelItemArrayList()));
-                cashDetailsViewHolder.traydet.setVisibility(View.VISIBLE);
-                cashDetailsViewHolder.dateName.setText(UtilsMethod.capitalize(cashModel.getCustomerName()) + "\n" + cashModel.getDate());
-                if (cashModel.getStatus().equalsIgnoreCase("got")) {
-                    cashDetailsViewHolder.inCash.setText(String.valueOf(cashModel.getTotal()));
-                } else {
-                    cashDetailsViewHolder.outCash.setText( String.valueOf(cashModel.getTotal()));
-
-                }
-
-            }
-
-            @NonNull
-            @Override
-            public CashDetailsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                return new CashDetailsViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.cash_detail_item, parent, false));
-            }
-        };
-
-        entryRecycleradapter.startListening();
-        cashRecycler.setAdapter(entryRecycleradapter);
     }
 
 }

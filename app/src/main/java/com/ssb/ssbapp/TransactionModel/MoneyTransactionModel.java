@@ -15,14 +15,15 @@ public class MoneyTransactionModel implements Serializable {
     public String description;
     public String entriesText;
     public String status;
-
-    public double total;
-    public double balance;
+    public boolean isCleared;
+    public boolean isParty;
+    public String total;
+    public String balance;
 
     public MoneyTransactionModel() {
     }
 
-    public MoneyTransactionModel(String ceid, String cid, String kid, String date, String edit_date, String imageurl, String description, String entriesText, String status, double total, double balance) {
+    public MoneyTransactionModel(String ceid, String cid, String kid, String date, String edit_date, String imageurl, String description, String entriesText, String status, String total, String balance ,boolean isCleared, boolean isParty) {
 
 
         this.ceid = ceid;
@@ -36,13 +37,15 @@ public class MoneyTransactionModel implements Serializable {
         this.status = status;
         this.total = total;
         this.balance = balance;
+        this.isCleared = isCleared;
+        this.isParty = isParty;
     }
 
-    public double getBalance() {
+    public String getBalance() {
         return balance;
     }
 
-    public void setBalance(double balance) {
+    public void setBalance(String balance) {
         this.balance = balance;
     }
 
@@ -118,11 +121,28 @@ public class MoneyTransactionModel implements Serializable {
         this.status = status;
     }
 
-    public double getTotal() {
+    public String getTotal() {
         return total;
     }
 
-    public void setTotal(double total) {
+    public void setTotal(String total) {
         this.total = total;
+    }
+
+
+    public boolean isCleared() {
+        return isCleared;
+    }
+
+    public void setCleared(boolean cleared) {
+        isCleared = cleared;
+    }
+
+    public boolean isParty() {
+        return isParty;
+    }
+
+    public void setParty(boolean party) {
+        isParty = party;
     }
 }

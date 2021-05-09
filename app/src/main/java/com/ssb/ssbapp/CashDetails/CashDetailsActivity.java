@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.ssb.ssbapp.Adapters.CashDetailsAdapter;
 import com.ssb.ssbapp.R;
 import com.ssb.ssbapp.TransactionModel.MoneyTransactionModel;
 import com.ssb.ssbapp.Utils.Constants;
@@ -31,16 +32,22 @@ import com.ssb.ssbapp.Utils.UtilsMethod;
 import com.ssb.ssbapp.ViewHolder.CashDetailsViewHolder;
 import com.ssb.ssbapp.ViewHolder.MOneyTransactionviewHolder;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+
 public class CashDetailsActivity extends SSBBaseActivity {
 
     private RecyclerView cashRecycler;
     private DatabaseReference cashRef;
     private LinearLayout expenseReport;
-    private FirebaseRecyclerOptions<CashModel> entryoptions;
-    private FirebaseRecyclerAdapter<CashModel, CashDetailsViewHolder> entryRecycleradapter;
-    private double totalGave, totalGot;
+    private double totalGave, totalGot,yesgot , yesgave;
+    private ArrayList<CashModel> modelArrayList;
     private TextView totalIn , totalOut , todaysbalance,cashInHand,entryCount,curentDate;
     private Query query;
+    private CashDetailsAdapter adapter;
+    private String yesterdayDate;
 
 
     @Override
@@ -64,6 +71,7 @@ public class CashDetailsActivity extends SSBBaseActivity {
         cashRecycler.setLayoutManager(layoutManager);
         cashRecycler.hasFixedSize();
 
+        modelArrayList = new ArrayList<>();
         cashRef = FirebaseDatabase.getInstance().getReference().child("cashDetails");
         cashRef.keepSynced(true);
 
@@ -76,9 +84,22 @@ public class CashDetailsActivity extends SSBBaseActivity {
         query = cashRef.orderByChild("kid").equalTo(getLocalSession().getString(Constants.SSB_PREF_KID));
 
         curentDate.setText(UtilsMethod.getCurrentDate().substring(0,10));
-        loadEntries();
+
+        getYesterdayDate();
+
+        adapter = new CashDetailsAdapter(modelArrayList);
         calculateTotalBalance();
 
+        cashRecycler.setAdapter(adapter);
+
+    }
+
+    private void getYesterdayDate() {
+        Calendar cal = Calendar.getInstance();
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
+        cal.add(Calendar.DATE, -1);
+        yesterdayDate= dateFormat.format(cal.getTime());
 
     }
 
@@ -86,20 +107,39 @@ public class CashDetailsActivity extends SSBBaseActivity {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                entryCount.setText(String.valueOf(snapshot.getChildrenCount())+" Entry");
+                modelArrayList.clear();
                 totalGot = 0;
                 totalGave = 0;
+                yesgave = 0;
+                yesgot = 0;
                 for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                    if (snapshot1.child("date").getValue().equals(UtilsMethod.getCurrentDate().substring(0,10))){
+                        if (snapshot1.child("status").getValue().equals("got")) {
+                            double t =  Double.parseDouble((String) snapshot1.child("total").getValue());
+                            totalGot += t;
+                        } else {
+                            double tg = Double.parseDouble((String) snapshot1.child("total").getValue());
+                            totalGave += tg;
+                        }
 
-                    if (snapshot1.child("status").getValue().equals("got")) {
-                        long t = (long) snapshot1.child("total").getValue();
-                        totalGot += t;
-                    } else {
-                        long tg = (long) snapshot1.child("total").getValue();
-                        totalGave += tg;
+                        modelArrayList.add(snapshot1.getValue(CashModel.class));
+
                     }
 
+                    if (snapshot1.child("date").getValue().equals(yesterdayDate)){
+                        if (snapshot1.child("status").getValue().equals("got")) {
+                            double t =  Double.parseDouble((String) snapshot1.child("total").getValue());
+                            yesgot += t;
+                        } else {
+                            double tg = Double.parseDouble((String) snapshot1.child("total").getValue());
+                            yesgave += tg;
+                        }
+                    }
+
+
                 }
+                entryCount.setText(String.valueOf(modelArrayList.size())+" Entry");
+                adapter.updateList(modelArrayList);
                 calcText();
 
             }
@@ -117,43 +157,25 @@ public class CashDetailsActivity extends SSBBaseActivity {
 
         if (totalGave - totalGot < 0) {
             todaysbalance.setText(getCurrencyStr()+ String.valueOf(Math.abs(totalGave - totalGot)));
-            cashInHand.setText(getCurrencyStr()+ String.valueOf(Math.abs(totalGave - totalGot)));
         } else {
-            int num = (int) Math.abs(totalGave - totalGot);
-            todaysbalance.setText(getCurrencyStr()+ String.valueOf(num));
-            cashInHand.setText(getCurrencyStr()+ String.valueOf(num));
+            double num =  Math.abs(totalGave - totalGot);
+            todaysbalance.setText(getCurrencyStr()+"-"+ String.valueOf(num));
 
         }
+
+
+        if (yesgave - yesgot < 0) {
+            cashInHand.setText(getCurrencyStr()+ String.valueOf(Math.abs(yesgave - yesgot)));
+        } else {
+            double num =  Math.abs(yesgave - yesgot);
+            cashInHand.setText(getCurrencyStr()+"-"+ String.valueOf(num));
+
+        }
+
+
+
     }
 
-    private void loadEntries() {
-        entryoptions = new FirebaseRecyclerOptions.Builder<CashModel>()
-                .setQuery(cashRef.orderByChild("kid").equalTo(getLocalSession().getString(Constants.SSB_PREF_KID)), CashModel.class).build();
-
-        entryRecycleradapter = new FirebaseRecyclerAdapter<CashModel, CashDetailsViewHolder>(entryoptions) {
-            @Override
-            protected void onBindViewHolder(@NonNull CashDetailsViewHolder cashDetailsViewHolder, int i, @NonNull CashModel cashModel) {
-
-                cashDetailsViewHolder.dateName.setText(UtilsMethod.capitalize(cashModel.getCustomerName()) + "\n" + cashModel.getDate());
-                if (cashModel.getStatus().equalsIgnoreCase("got")) {
-                    cashDetailsViewHolder.inCash.setText(getCurrencyStr() + cashModel.getTotal());
-                } else {
-                    cashDetailsViewHolder.outCash.setText(getCurrencyStr() + cashModel.getTotal());
-
-                }
-
-            }
-
-            @NonNull
-            @Override
-            public CashDetailsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                return new CashDetailsViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.cash_detail_item, parent, false));
-            }
-        };
-
-        entryRecycleradapter.startListening();
-        cashRecycler.setAdapter(entryRecycleradapter);
-    }
 
 
 }

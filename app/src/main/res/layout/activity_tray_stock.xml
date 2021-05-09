@@ -70,14 +70,31 @@
             android:textStyle="bold" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/availableCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:layout_below="@+id/table"
+        android:background="@color/disabledColor"
+        android:text=""
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:textSize="14dp"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        android:layout_marginBottom="10dp"
+        />
+
+
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/traystockRecycelr"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="15dp"
+        android:paddingTop="5dp"
         android:orientation="vertical"
         tools:listitem="@layout/tray_stock_item"
-        android:layout_below="@+id/table"
+        android:layout_below="@+id/availableCount"
         />
 
 </RelativeLayout>

@@ -24,9 +24,9 @@
                 android:orientation="horizontal"
                 android:weightSum="3">
 
-                <TextView
+                <Button
                     android:id="@+id/fromDate"
-                    style="@style/appEditTextStyle"
+                    style="@style/appButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
@@ -35,7 +35,6 @@
                     android:layout_weight="0.9"
                     android:gravity="center"
                     android:paddingStart="15dp"
-                    android:background="@drawable/curved_border"
                     android:backgroundTint="@color/colorPrimary"
                     android:elevation="6dp"
                     android:paddingEnd="15dp"
@@ -56,9 +55,9 @@
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="18dp" />
 
-                <TextView
+                <Button
                     android:id="@+id/toDate"
-                    style="@style/appEditTextStyle"
+                    style="@style/appButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -126,13 +125,13 @@
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/reviewOrderRecyclerView"
+                android:id="@+id/dateSaleRecyler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
-                tools:listitem="@layout/date_item_layout"
+                tools:listitem="@layout/cash_detail_item"
                 android:scrollbars="vertical" />
 
         </LinearLayout>

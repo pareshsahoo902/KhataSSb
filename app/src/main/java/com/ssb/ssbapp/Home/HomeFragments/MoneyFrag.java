@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +43,7 @@ import com.ssb.ssbapp.Utils.Constants;
 import com.ssb.ssbapp.Utils.UtilsMethod;
 import com.ssb.ssbapp.ViewHolder.CustomerListViewHolder;
 import com.ssb.ssbapp.ViewHolder.StaffListItem;
+import com.ssb.ssbapp.report.ReportActivity;
 
 import static com.ssb.ssbapp.Utils.Constants.SSB_PREF_KID;
 
@@ -53,6 +55,7 @@ public class MoneyFrag extends Fragment {
     private EditText searchBar;
     private double totalGave, totalGot;
     private String searchText;
+    private LinearLayout reportView;
     private TextView gavemoney , getmoney ,countMoney;
     private FirebaseRecyclerOptions<CustomerModel> custoptions;
     private FirebaseRecyclerAdapter<CustomerModel, CustomerListViewHolder> custRecycleradapter;
@@ -75,6 +78,7 @@ public class MoneyFrag extends Fragment {
         searchBar = view.findViewById(R.id.searchhome);
         gavemoney = view.findViewById(R.id.gavemoney);
         getmoney = view.findViewById(R.id.getmoney);
+        reportView = view.findViewById(R.id.reportView);
         countMoney = view.findViewById(R.id.countText);
         custRef = FirebaseDatabase.getInstance().getReference().child("customers");
         custRef.keepSynced(true);
@@ -98,6 +102,13 @@ public class MoneyFrag extends Fragment {
             }
         });
 
+
+        reportView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), ReportActivity.class));
+            }
+        });
         entryRef = FirebaseDatabase.getInstance().getReference().child("customerTransaction");
         trayTranRef = FirebaseDatabase.getInstance().getReference().child("trayTransaction");
         entryRef.keepSynced(true);
@@ -124,10 +135,10 @@ public class MoneyFrag extends Fragment {
                 for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                     if (snapshot1.child("kid").getValue().equals(LocalSession.getString(SSB_PREF_KID))) {
                         if (snapshot1.child("status").getValue().equals("got")) {
-                            long t = (long) snapshot1.child("total").getValue();
+                            double t = Double.parseDouble((String) snapshot1.child("total").getValue());
                             totalGot += t;
                         } else {
-                            long tg = (long) snapshot1.child("total").getValue();
+                            double tg = Double.parseDouble((String) snapshot1.child("total").getValue());
                             totalGave += tg;
                         }
                     }
@@ -152,7 +163,7 @@ public class MoneyFrag extends Fragment {
         if (totalGave - totalGot < 0) {
             gavemoney.setText("₹" + String.valueOf(Math.abs(totalGave - totalGot)));
         } else {
-            int num = (int) Math.abs(totalGave - totalGot);
+            double num = (double) Math.abs(totalGave - totalGot);
             getmoney.setText("₹" + String.valueOf(num));
 
         }
@@ -227,10 +238,10 @@ public class MoneyFrag extends Fragment {
                         for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                             if (snapshot1.child("cid").getValue().equals(custModel.getUid())) {
                                 if (snapshot1.child("status").getValue().equals("got")) {
-                                    long t = (long) snapshot1.child("total").getValue();
+                                    double t = Double.parseDouble((String) snapshot1.child("total").getValue());
                                     tGO += t;
                                 } else {
-                                    long tg = (long) snapshot1.child("total").getValue();
+                                    double tg = Double.parseDouble((String) snapshot1.child("total").getValue());
                                     tGV += tg;
                                 }
                             }

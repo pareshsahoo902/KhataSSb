@@ -10,7 +10,7 @@ import com.ssb.ssbapp.R;
 
 public class CashDetailsViewHolder extends RecyclerView.ViewHolder {
 
-    public TextView dateName , inCash , outCash,traydet;
+    public TextView dateName , inCash , outCash,traydet,descText;
 
     public CashDetailsViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -18,7 +18,9 @@ public class CashDetailsViewHolder extends RecyclerView.ViewHolder {
         inCash = itemView.findViewById(R.id.inText);
         outCash = itemView.findViewById(R.id.outText);
         traydet = itemView.findViewById(R.id.traydet);
+        descText = itemView.findViewById(R.id.descText);
         traydet.setVisibility(View.GONE);
+        descText.setVisibility(View.GONE);
 
     }
 }

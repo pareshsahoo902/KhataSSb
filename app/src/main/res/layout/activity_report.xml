@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".report.ReportActivity">
+
+
+    <include layout="@layout/toolbar"/>
+
+    <LinearLayout
+        android:id="@+id/dateBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:weightSum="3">
+
+        <TextView
+            android:id="@+id/fromDate"
+            style="@style/appEditTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_weight="0.9"
+            android:gravity="center"
+            android:paddingStart="15dp"
+            android:background="@drawable/curved_border"
+            android:backgroundTint="@color/colorPrimary"
+            android:elevation="6dp"
+            android:paddingEnd="15dp"
+            android:text="12-08-2021"
+            android:textColor="@color/white"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_weight="1.2"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="TO"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/toDate"
+            style="@style/appEditTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_weight="0.9"
+            android:background="@drawable/curved_border"
+            android:backgroundTint="@color/colorPrimary"
+            android:elevation="6dp"
+            android:gravity="center"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:text="12-09-2021"
+            android:textColor="@color/white"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15dp"
+        android:text="BALANCE"
+        android:textColor="#202020"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@+id/dateBar"
+        android:layout_marginTop="10dp"
+
+        />
+    <TextView
+        android:id="@+id/netBalance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18dp"
+        android:text="0.00"
+        android:textColor="@color/primaryGreen"
+        android:layout_marginRight="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/dateBar"
+        android:layout_marginTop="10dp"
+        />
+
+    <RelativeLayout
+        android:id="@+id/tab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/netBalance"
+        android:background="@color/disabledColor"
+        android:layout_marginTop="10dp"
+        >
+        <LinearLayout
+            android:id="@+id/table"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:orientation="horizontal"
+            android:weightSum="1"
+
+            >
+
+            <TextView
+                android:id="@+id/curentDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_weight="0.3"
+                android:paddingLeft="10dp"
+                android:text="ENTRIES"
+                android:textColor="@color/black"
+                android:textSize="13dp"
+                android:textStyle="bold" />
+
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.35"
+                android:gravity="center"
+                android:paddingRight="10dp"
+                android:text="GOT"
+                android:textSize="10dp"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.35"
+                android:gravity="center"
+                android:paddingLeft="20dp"
+                android:text="GAVE"
+                android:textSize="10dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_below="@+id/table"
+            android:orientation="horizontal"
+            android:weightSum="1"
+
+            >
+
+            <TextView
+                android:id="@+id/entryCount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_weight="0.3"
+                android:paddingLeft="10dp"
+                android:text=""
+                android:textSize="13dp"
+                android:textStyle="bold" />
+
+
+
+            <TextView
+                android:id="@+id/totalIn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.35"
+                android:gravity="center"
+                android:textColor="@color/primaryGreen"
+                android:paddingRight="10dp"
+                android:text=""
+                android:textSize="16dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/totalOut"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.35"
+                android:gravity="center"
+                android:paddingLeft="20dp"
+                android:text=""
+                android:textColor="@color/primaryRed"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/reportMoneyRecycelr"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tab"
+        android:layout_above="@+id/laydel"
+        android:padding="5dp"
+        android:layout_marginBottom="10dp"
+        />
+
+
+    <LinearLayout
+        android:id="@+id/laydel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:paddingBottom="20dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:gravity="center_vertical"
+        android:weightSum="2"
+        >
+        <TextView
+            android:id="@+id/deleteEntry"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="DOWNLOAD"
+            android:textColor="@color/white"
+            android:layout_weight="1"
+            android:textSize="18dp"
+            android:gravity="center"
+            android:drawableRight="@drawable/pdf"
+            android:drawableTint="@color/white"
+            android:drawablePadding="10dp"
+            android:background="@drawable/button_bg"
+            android:layout_marginRight="10dp"
+            />
+
+
+        <TextView
+            android:id="@+id/shareEntry"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/button_bg"
+            android:drawableRight="@drawable/ic_baseline_share_24"
+            android:drawableTint="@color/white"
+            android:gravity="center"
+            android:textSize="18dp"
+            android:layout_weight="1"
+            android:text="SHARE"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/white"
+            />
+    </LinearLayout>
+
+
+</RelativeLayout>

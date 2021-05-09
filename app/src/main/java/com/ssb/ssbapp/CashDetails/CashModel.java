@@ -15,12 +15,13 @@ public class CashModel implements Serializable {
 
     public String status;
 
-    public double total;
+    public String total;
+
 
     public CashModel() {
     }
 
-    public CashModel(String id, String ceid, String cid, String kid, String customerName, String date, String edit_date, String status, double total) {
+    public CashModel(String id, String ceid, String cid, String kid, String customerName, String date, String edit_date, String status, String total) {
         this.id = id;
         this.ceid = ceid;
         this.cid = cid;
@@ -96,11 +97,11 @@ public class CashModel implements Serializable {
         this.status = status;
     }
 
-    public double getTotal() {
+    public String getTotal() {
         return total;
     }
 
-    public void setTotal(double total) {
+    public void setTotal(String total) {
         this.total = total;
     }
 }

@@ -28,8 +28,8 @@ public class EntryPickerDialog extends BottomSheetDialogFragment {
     private String type;
 
     private EditText discount;
-    private TextView gave , got , pending , result1 , gaveBalance , resultTotal;
-    private  double allgave, allGot,balance;
+    private TextView gave , got ,totalt,grandtotalt, pending , result1 , gaveBalance , resultTotal;
+    private  double allgave, allGot,allTotal , allgrandTotal,balance;
 
     @Nullable
     @Override
@@ -48,6 +48,8 @@ public class EntryPickerDialog extends BottomSheetDialogFragment {
 
         allgave = getArguments().getDouble("allGave");
         allGot = getArguments().getDouble("allGot");
+        allTotal = getArguments().getDouble("allTotal");
+        allgrandTotal = getArguments().getDouble("allGrandTotal");
 
        if (getArguments().getString("transaction_type").equals("gave")){
            type = "gave";
@@ -57,7 +59,7 @@ public class EntryPickerDialog extends BottomSheetDialogFragment {
        }
 
 
-       balance = allgave-allGot;
+        balance = allgave-allGot;
         cash = view.findViewById(R.id.cashPick);
         customer = view.findViewById(R.id.custPick);
         party = view.findViewById(R.id.partyPick);
@@ -67,6 +69,8 @@ public class EntryPickerDialog extends BottomSheetDialogFragment {
         result1 = view.findViewById(R.id.result1);
         resultTotal = view.findViewById(R.id.totalResult);
         gaveBalance = view.findViewById(R.id.allgavedis);
+        totalt = view.findViewById(R.id.totalText);
+        grandtotalt = view.findViewById(R.id.grandTotalText);
         discount = view.findViewById(R.id.disText);
 
         discount.addTextChangedListener(new TextWatcher() {
@@ -95,6 +99,8 @@ public class EntryPickerDialog extends BottomSheetDialogFragment {
         gave.setText("All Gave\n₹"+String.valueOf(allgave));
         pending.setText("Pending\n₹"+String.valueOf(allgave-allGot));
         gaveBalance.setText("₹"+String.valueOf(allgave)+" - ");
+        totalt.setText("All Total\n₹"+String.valueOf(allTotal));
+        grandtotalt.setText("All GrandTotal\n₹"+String.valueOf(allgrandTotal));
         calcDiscount();
 
         cash.setOnClickListener(new View.OnClickListener() {
@@ -126,7 +132,7 @@ public class EntryPickerDialog extends BottomSheetDialogFragment {
 
     private void calcDiscount() {
         double dis = allgave * (Double.parseDouble(discount.getText().toString().trim())/100);
-        result1.setText(String.format("%.0f",dis));
-        resultTotal.setText("= ₹"+String.format("%.1f",allgave - (allgave * (Double.parseDouble(discount.getText().toString().trim())/100))));
+        result1.setText("="+String.valueOf(allgave-allGot)+"-"+String.format("%.0f",dis));
+        resultTotal.setText("= ₹"+String.format("%.1f",(allgave-allGot) - (allgave * (Double.parseDouble(discount.getText().toString().trim())/100))));
     }
 }

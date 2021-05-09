@@ -232,17 +232,20 @@ public class CustomCalculator extends LinearLayout implements View.OnClickListen
             case R.id.btnMPlus:
                 //TODO
                 calctext = "";
+                isDecimal=false;
                 mListner.onMemoryPlusPressListner("M+", calctext);
                 break;
             case R.id.btnMminus:
                 //TODO
                 calctext = calctext + "M+";
+                isDecimal=false;
                 mListner.onMemoryMinusPressListner("M-", calctext);
                 break;
             case R.id.btnAdd:
                 //TODO
                 opreand1 = Double.parseDouble(calctext);
                 calctext += "+";
+                isDecimal=false;
                 mListner.onAddButtonPressListner("+", calctext);
                 opreator = "+";
                 calctext = "";
@@ -251,6 +254,7 @@ public class CustomCalculator extends LinearLayout implements View.OnClickListen
                 //TODO
                 opreand1 = Double.parseDouble(calctext);
                 calctext += "-";
+                isDecimal=false;
                 mListner.onSubButtonPressListner("-", calctext);
 
                 opreator = "-";
@@ -260,7 +264,7 @@ public class CustomCalculator extends LinearLayout implements View.OnClickListen
                 //TODO
                 opreand1 = Double.parseDouble(calctext);
                 calctext += "/";
-
+                isDecimal=false;
                 mListner.onDivideButtonPressListner("/", calctext);
 
                 opreator = "/";
@@ -273,25 +277,30 @@ public class CustomCalculator extends LinearLayout implements View.OnClickListen
                 mListner.onMultiplyButtonPressListner("x", calctext);
                 opreator = "*";
                 calctext = "";
+                isDecimal=false;
                 break;
 
 
             case R.id.btnEquals:
-                //TODO
-                if (opreator == "+") {
-                    calctext = String.valueOf(opreand1 + Double.parseDouble(calctext));
-                } else if (opreator == "-") {
-                    calctext = String.valueOf(opreand1 - Double.parseDouble(calctext));
-                } else if (opreator == "/") {
-                    calctext = String.valueOf(opreand1 / Double.parseDouble(calctext));
-                } else if (opreator == "*") {
-                    calctext = String.valueOf(opreand1 * Double.parseDouble(calctext));
+                if (!opreator.equals("")){
+                    //TODO
+                    if (opreator == "+") {
+                        calctext = String.valueOf(opreand1 + Double.parseDouble(calctext));
+                    } else if (opreator == "-") {
+                        calctext = String.valueOf(opreand1 - Double.parseDouble(calctext));
+                    } else if (opreator == "/") {
+                        calctext = String.valueOf(opreand1 / Double.parseDouble(calctext));
+                    } else if (opreator == "*") {
+                        calctext = String.valueOf(opreand1 * Double.parseDouble(calctext));
+                    }
+                    isDecimal=false;
+                    mListner.onEqualsPressListner("=", calctext);
+                    calctext="";
+                    opreand1=0.0;
+                    opreand2=0.0;
+                    opreator="";
                 }
-                mListner.onEqualsPressListner("=", calctext);
-                calctext="";
-                opreand1=0.0;
-                opreand2=0.0;
-                opreator="";
+
                 break;
 
         }

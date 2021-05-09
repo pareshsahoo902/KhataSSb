@@ -360,7 +360,7 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
     private void startAddingToDB(String picDowloadUrl, String ceid) {
 
         MoneyTransactionModel model = new MoneyTransactionModel(ceid, getLocalSession().getString(Constants.SSB_PREF_CID), getLocalSession().getString(Constants.SSB_PREF_KID)
-                , CurrentDate, CurrentDate, picDowloadUrl, partDescription.getText().toString() + "\n" + entryDescription.getText().toString(), itemName.getText().toString() + ": " + descText + commTextDesc, type, totalAmount, getBalance(totalAmount, balance));
+                , CurrentDate, CurrentDate, picDowloadUrl, partDescription.getText().toString() + "\n" + entryDescription.getText().toString(), itemName.getText().toString() + ": " + descText + commTextDesc, type, String.valueOf(totalAmount),String.valueOf(getTotalAmount()) ,false,true);
 
         if (model.getCid() != null) {
             moneyTransactionRef.child(ceid).setValue(model);
@@ -372,17 +372,7 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
 
     }
 
-    private double getBalance(double total, double pending) {
 
-        pending = Math.abs(pending);
-        if (type.equals("got")) {
-            return total + pending;
-
-        } else {
-            return total - pending;
-        }
-
-    }
 
 
     private void uploadImageUri(String ceid) {
@@ -694,6 +684,17 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
         }else{
             entries_text.setText(descText);
         }
+    }
+
+    private double getTotalAmount(){
+        double total =0.0;
+        if (itemBalanceList.size() > 0) {
+            for (int i = 0; i < itemBalanceList.size(); i++) {
+                total += itemBalanceList.get(i);
+            }
+        }
+        return  total;
+
     }
 
     private void calulateTotal() {

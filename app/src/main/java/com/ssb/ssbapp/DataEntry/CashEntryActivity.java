@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -27,6 +28,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -45,6 +47,7 @@ import com.ssb.ssbapp.Utils.UtilsMethod;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.UUID;
 
@@ -64,6 +67,8 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
     private double totalCash, cashAmount;
     private String type;
     String CurrentDate;
+    boolean isClear=false;
+    private ArrayList<MoneyTransactionModel> model;
     private DatabaseReference moneyTransactionRef, custRef, cashRef;
 
     private StorageTask uploadtask;
@@ -71,6 +76,7 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
     private String picDowloadUrl = "";
     private double balance;
     private double cash , discountText;
+    private String opearation ="+";
 
 
     @Override
@@ -111,9 +117,10 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
                 // TODO Auto-generated method stub
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+//                myCalendar.set(Calendar.YEAR, year);
+//                myCalendar.set(Calendar.MONTH, monthOfYear);
+//                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                myCalendar.set(year,monthOfYear,dayOfMonth);
 
                 String myFormat = "dd-MM-yyyy hh:mm:ss a"; //In which you need put here
                 SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
@@ -127,16 +134,27 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
         clearKhata.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                double t = Double.parseDouble(cashEntryText.getText().toString());
-                balance=Math.abs(balance);
-                if (balance>t){
-                    double res = balance - t;
-                    discount.setText(String.format("%.1f", res));
-                    calcDis();
-                }else {
-                    discount.setText("0");
-                    calcDis();
+                if (!cashEntryText.getText().toString().trim().equals("")){
+                    double t = Double.parseDouble(cashEntryText.getText().toString());
+                    balance=Math.abs(balance);
+                    isClear=true;
+                    clearKhata(isClear);
+                    if (balance>t){
+                        double res = balance - t;
+                        discount.setText(String.format("%.1f", res));
+                        calcDis(opearation);
+                    }else if(balance<t) {
+                        opearation="-";
+                        double res = t - balance;
+                        discount.setText(String.format("%.1f", res));
+                        calcDis(opearation);
+                        opearation="+";
+                    }else {
+                        discount.setText("0");
+                        calcDis(opearation);
+                    }
                 }
+
             }
         });
 
@@ -171,7 +189,7 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
-                    calcDis();
+                    calcDis(opearation);
                     totalCash = Double.parseDouble(cashEntryText.getText().toString());
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -181,7 +199,11 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
             @Override
             public void afterTextChanged(Editable s) {
 
-                totalCash = Double.parseDouble(cashEntryText.getText().toString());
+                try {
+                    totalCash = Double.parseDouble(cashEntryText.getText().toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 entriesText.setText(cashType.getText().toString() + " : " + cashEntryText.getText().toString());
                 entriesText.setVisibility(View.VISIBLE);
@@ -197,7 +219,7 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
-                    calcDis();
+                    calcDis(opearation);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -315,13 +337,47 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
     private void startAddingToDB(String dowloadUrl, String ceid) {
 
         MoneyTransactionModel model = new MoneyTransactionModel(ceid, getLocalSession().getString(Constants.SSB_PREF_CID), getLocalSession().getString(Constants.SSB_PREF_KID)
-                , CurrentDate, CurrentDate, dowloadUrl, description.getText().toString(), entriesText.getText().toString(), type, totalCash, getBalance(totalCash, balance));
+                , CurrentDate, CurrentDate, dowloadUrl, description.getText().toString(), entriesText.getText().toString(), type, String.valueOf(totalCash), String.valueOf(totalCash),isClear,false);
 
         if (model.getCid() != null) {
             moneyTransactionRef.child(ceid).setValue(model);
             loadCashDetailsData(ceid);
             startActivity(new Intent(CashEntryActivity.this, SucessActivity.class).putExtra(Constants.SSB_SUCESS_INTENT, "money"));
             finish();
+        }
+
+    }
+
+    private void clearKhata(boolean clearK){
+
+        if (clearK){
+
+            Query query = moneyTransactionRef.orderByChild("cid").equalTo(getLocalSession().getString(Constants.SSB_PREF_CID));
+
+
+            final MoneyTransactionModel[] model = new MoneyTransactionModel[1];
+
+            query.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                    for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                        model[0] = snapshot1.getValue(MoneyTransactionModel.class);
+                        model[0].setCleared(true);
+                        moneyTransactionRef.child(snapshot1.getKey()).setValue(model[0]);
+                    }
+
+                    query.removeEventListener(this);
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+
+            });
+
         }
 
     }
@@ -360,21 +416,27 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
         String cdid = UUID.randomUUID().toString().substring(0, 14);
 
         CashModel cashModel = new CashModel(cdid, ceid, getLocalSession().getString(Constants.SSB_PREF_CID), getLocalSession().getString(Constants.SSB_PREF_KID), cutomerName
-                , dateTextBtn.getText().toString(), dateTextBtn.getText().toString(), type, Double.parseDouble(cashEntryText.getText().toString().trim()));
+                , dateTextBtn.getText().toString(), dateTextBtn.getText().toString(), type, cashEntryText.getText().toString().trim());
 
         if (cashModel.getCid() != null) {
             cashRef.child(cdid).setValue(cashModel);
         }
     }
 
-    private void calcDis() {
+    private void calcDis(String opertor) {
         double disText = 0.0;
-        if (Double.parseDouble(cashEntryText.getText().toString()) >= 0 )
+        if (Double.parseDouble(cashEntryText.getText().toString()) >= 0 && opertor.equals("+")){
             disText = Double.parseDouble(cashEntryText.getText().toString()) + Double.parseDouble(discount.getText().toString());
 
+        }else {
+            disText = Double.parseDouble(cashEntryText.getText().toString()) - Double.parseDouble(discount.getText().toString());
+
+        }
+
+        saveEntry.setText("Entry = "+getCurrencyStr()+String.format("%.2f", disText));
         cashAmount = Double.parseDouble(cashEntryText.getText().toString());
         totalCash = disText;
-        entriesText.setText(cashType.getText().toString() + " : " + cashEntryText.getText().toString() + " + " + discount.getText().toString() + " = " + String.format("%.2f", disText));
+        entriesText.setText(cashType.getText().toString() + " : " + cashEntryText.getText().toString() + opertor + discount.getText().toString() + " = " + String.format("%.2f", disText));
 
     }
 

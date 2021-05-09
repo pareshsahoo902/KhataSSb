@@ -62,10 +62,19 @@ public class TrayTransactionAdapter extends RecyclerView.Adapter<TrayTransaction
             holder.billImage.setVisibility(View.VISIBLE);
         }
 
+        if (model.getStatus().equals("got")) {
+            holder.gaveText.setVisibility(View.GONE);
+            holder.gotText.setVisibility(View.VISIBLE);
+            holder.gotText.setText(String.valueOf(model.getTotal()));
+        } else {
+            holder.gaveText.setVisibility(View.VISIBLE);
+            holder.gaveText.setText( String.valueOf(model.getTotal()));
+        }
+
         int balance = calcBalance(position);
 
         if (balance < 0) {
-            holder.balance.setText("Bal:  " + String.valueOf(balance));
+            holder.balance.setText("Bal:  " + String.valueOf(Math.abs(balance)));
             holder.balance.setBackgroundColor(mContext.getResources().getColor(R.color.liteGreen));
         } else {
             holder.balance.setText("Bal:  " + String.valueOf(balance));
@@ -73,14 +82,7 @@ public class TrayTransactionAdapter extends RecyclerView.Adapter<TrayTransaction
 
         }
 
-        if (model.getStatus().equals("got")) {
-            holder.gaveText.setVisibility(View.GONE);
-            holder.gotText.setText(String.valueOf(model.getTotal()));
-        } else {
-            holder.gotLayout.setVisibility(View.GONE);
-            holder.gaveText.setVisibility(View.VISIBLE);
-            holder.gaveText.setText( String.valueOf(model.getTotal()));
-        }
+
 
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

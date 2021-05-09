@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -41,6 +42,7 @@ public class TrayManagmentActivity extends SSBBaseActivity {
     private Button add_btn;
     private DatabaseReference trayRef;
     private RecyclerView trayMasterRecyler;
+    private TextView countTrayText;
 
     private FirebaseRecyclerOptions<TrayMasterModel> trayOption;
     private FirebaseRecyclerAdapter<TrayMasterModel, TrayListViewHolder> trayRecyclerAdapter;
@@ -54,6 +56,7 @@ public class TrayManagmentActivity extends SSBBaseActivity {
 
         tray_text = findViewById(R.id.tray_nametext);
         add_btn = findViewById(R.id.addTrayBtn);
+        countTrayText = findViewById(R.id.countText);
         trayMasterRecyler = findViewById(R.id.traymasterrecyler);
 
         trayMasterRecyler.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
@@ -80,6 +83,7 @@ public class TrayManagmentActivity extends SSBBaseActivity {
         trayRecyclerAdapter = new FirebaseRecyclerAdapter<TrayMasterModel, TrayListViewHolder>(trayOption) {
             @Override
             protected void onBindViewHolder(@NonNull TrayListViewHolder trayListViewHolder, int i, @NonNull TrayMasterModel trayMasterModel) {
+                countTrayText.setText("Total :"+String.valueOf(trayRecyclerAdapter.getItemCount()));
 
                 trayListViewHolder.trayName.setText(UtilsMethod.capitalize(trayMasterModel.getName()));
 

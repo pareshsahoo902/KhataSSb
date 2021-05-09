@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -37,6 +38,7 @@ public class TrayStock extends SSBBaseActivity {
 
     private RecyclerView trayMasterRecyler;
     private DatabaseReference trayRef;
+    private TextView availbleCount;
     private FirebaseRecyclerOptions<TrayMasterModel> trayOption;
     private FirebaseRecyclerAdapter<TrayMasterModel, TrayStockViewHolder> trayRecyclerAdapter;
     private List<TrayDetailModel> modelItemList;
@@ -50,6 +52,7 @@ public class TrayStock extends SSBBaseActivity {
         setToolbar(getApplicationContext(),"Tray Stock");
 
 
+        availbleCount = findViewById(R.id.availableCount);
         trayMasterRecyler = findViewById(R.id.traystockRecycelr);
 
         trayMasterRecyler.setLayoutManager(new LinearLayoutManager(TrayStock.this,LinearLayoutManager.VERTICAL,false));
@@ -75,6 +78,8 @@ public class TrayStock extends SSBBaseActivity {
                     modelItemList.add(snapshot1.getValue(TrayDetailModel.class));
                 }
 
+                availbleCount.setText("Available: "+getTotalAVailble(modelItemList));
+
             }
 
             @Override
@@ -89,6 +94,19 @@ public class TrayStock extends SSBBaseActivity {
 
 
 
+    }
+
+    private int getTotalAVailble(List<TrayDetailModel> modelList){
+        int total = 0;
+        for (TrayDetailModel model: modelList){
+            if (model.getStatus().equals("got")){
+                total+=model.getTotal();
+            }else{
+                total-=model.getTotal();
+            }
+
+        }
+        return total;
     }
 
 

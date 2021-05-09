@@ -57,6 +57,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
+                            android:layout_marginBottom="20dp"
                             android:weightSum="2">
 
 
@@ -119,36 +120,6 @@
 
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:id="@+id/t"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/give_gettray"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="15dp"
-                            android:orientation="horizontal"
-                            android:background="?attr/selectableItemBackground"
-                            android:weightSum="2">
-
-                            <TextView
-                                android:id="@+id/tray_detail"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1.7"
-                                android:fontFamily="sans-serif-black"
-                                android:text="View Tray Details"
-                                android:textColor="@color/colorAccent"
-                                android:textSize="18sp" />
-
-                            <ImageView
-                                android:layout_width="25dp"
-                                android:layout_height="match_parent"
-                                android:layout_gravity="center_vertical"
-                                android:layout_weight="0.3"
-                                android:rotation="270"
-                                android:src="@drawable/ic_baseline_expand_more_24"
-                                android:tint="@color/colorAccent" />
-                        </LinearLayout>
 
                     </RelativeLayout>
 
