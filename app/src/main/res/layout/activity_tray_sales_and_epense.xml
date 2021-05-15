@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CashDetails.SalesAndExpenseActivity">
+    tools:context=".TrayDetails.TraySalesAndEpense">
 
     <include layout="@layout/toolbar" />
 
@@ -80,7 +80,7 @@
 
 
             <TextView
-                android:id="@+id/totalCash"
+                android:id="@+id/totalTray"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="18dp"
@@ -153,5 +153,6 @@
 
         </LinearLayout>
     </RelativeLayout>
+
 
 </RelativeLayout>

@@ -136,6 +136,9 @@ public class TrayManagmentActivity extends SSBBaseActivity {
                     trayRecyclerAdapter.notifyDataSetChanged();
                 }
             });
+
+            tray_text.setText("");
+
         }
     }
 

@@ -44,7 +44,7 @@ public class CashDetailsActivity extends SSBBaseActivity {
     private LinearLayout expenseReport;
     private double totalGave, totalGot,yesgot , yesgave;
     private ArrayList<CashModel> modelArrayList;
-    private TextView totalIn , totalOut , todaysbalance,cashInHand,entryCount,curentDate;
+    private TextView totalIn , totalOut ,totalCash, todaysbalance,cashInHand,entryCount,curentDate;
     private Query query;
     private CashDetailsAdapter adapter;
     private String yesterdayDate;
@@ -63,6 +63,7 @@ public class CashDetailsActivity extends SSBBaseActivity {
         cashInHand = findViewById(R.id.cashInHand);
         entryCount = findViewById(R.id.entryCount);
         curentDate = findViewById(R.id.curentDate);
+        totalCash = findViewById(R.id.totalCash);
         expenseReport = findViewById(R.id.expenseReport);
         cashRecycler = findViewById(R.id.cashDetailsRecycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
@@ -85,7 +86,6 @@ public class CashDetailsActivity extends SSBBaseActivity {
 
         curentDate.setText(UtilsMethod.getCurrentDate().substring(0,10));
 
-        getYesterdayDate();
 
         adapter = new CashDetailsAdapter(modelArrayList);
         calculateTotalBalance();
@@ -94,14 +94,6 @@ public class CashDetailsActivity extends SSBBaseActivity {
 
     }
 
-    private void getYesterdayDate() {
-        Calendar cal = Calendar.getInstance();
-        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-
-        cal.add(Calendar.DATE, -1);
-        yesterdayDate= dateFormat.format(cal.getTime());
-
-    }
 
     private void calculateTotalBalance() {
         query.addValueEventListener(new ValueEventListener() {
@@ -126,7 +118,7 @@ public class CashDetailsActivity extends SSBBaseActivity {
 
                     }
 
-                    if (snapshot1.child("date").getValue().equals(yesterdayDate)){
+
                         if (snapshot1.child("status").getValue().equals("got")) {
                             double t =  Double.parseDouble((String) snapshot1.child("total").getValue());
                             yesgot += t;
@@ -134,7 +126,7 @@ public class CashDetailsActivity extends SSBBaseActivity {
                             double tg = Double.parseDouble((String) snapshot1.child("total").getValue());
                             yesgave += tg;
                         }
-                    }
+
 
 
                 }
@@ -159,20 +151,21 @@ public class CashDetailsActivity extends SSBBaseActivity {
             todaysbalance.setText(getCurrencyStr()+ String.valueOf(Math.abs(totalGave - totalGot)));
         } else {
             double num =  Math.abs(totalGave - totalGot);
-            todaysbalance.setText(getCurrencyStr()+"-"+ String.valueOf(num));
+            todaysbalance.setText(getCurrencyStr()+ String.valueOf(num));
 
         }
 
 
         if (yesgave - yesgot < 0) {
-            cashInHand.setText(getCurrencyStr()+ String.valueOf(Math.abs(yesgave - yesgot)));
+            totalCash.setText(getCurrencyStr()+ String.valueOf(Math.abs(yesgave - yesgot)));
         } else {
             double num =  Math.abs(yesgave - yesgot);
-            cashInHand.setText(getCurrencyStr()+"-"+ String.valueOf(num));
+            totalCash.setText(getCurrencyStr()+ String.valueOf(num));
 
         }
 
 
+        cashInHand.setText(getCurrencyStr()+String.valueOf(Double.parseDouble(totalCash.getText().toString().substring(1)) - Double.parseDouble(todaysbalance.getText().toString().substring(1))));
 
     }
 

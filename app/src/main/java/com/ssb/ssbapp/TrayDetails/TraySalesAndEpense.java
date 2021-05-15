@@ -1,4 +1,4 @@
-package com.ssb.ssbapp.CashDetails;
+package com.ssb.ssbapp.TrayDetails;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,7 +21,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.ssb.ssbapp.Adapters.CashDetailsAdapter;
+import com.ssb.ssbapp.Adapters.TrayDetailAdapter;
+import com.ssb.ssbapp.TrayDetails.TrayDetailModel;
+import com.ssb.ssbapp.TrayDetails.TraySalesAndEpense;
 import com.ssb.ssbapp.R;
 import com.ssb.ssbapp.Utils.Constants;
 import com.ssb.ssbapp.Utils.SSBBaseActivity;
@@ -34,29 +36,30 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class SalesAndExpenseActivity extends SSBBaseActivity {
+public class TraySalesAndEpense extends SSBBaseActivity {
 
     Button date_minimal, date_maximal;
     RecyclerView dateSaleRecyler;
-    ArrayList<CashModel> totalCash;
-    ArrayList<CashModel> modelArrayList;
+    ArrayList<TrayDetailModel> totalCash;
+    ArrayList<TrayDetailModel> modelArrayList;
     private DatabaseReference cashRef;
     Date minimalDate, maximalDate;
     Query query;
     TextView totalCashText;
     DateFormat dateFormat;
     Calendar calendar2,calendar1;
-    CashDetailsAdapter adapter;
+    TrayDetailAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sales_and_expense);
-        setToolbar(getApplicationContext(), "Cashbook Report");
+        setContentView(R.layout.activity_tray_sales_and_epense);
+        setToolbar(getApplicationContext(), "TrayDetails Report");
+
 
         date_minimal = findViewById(R.id.fromDate);
         date_maximal = findViewById(R.id.toDate);
-        totalCashText = findViewById(R.id.totalCash);
+        totalCashText = findViewById(R.id.totalTray);
         dateSaleRecyler = findViewById(R.id.dateSaleRecyler);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
@@ -64,9 +67,12 @@ public class SalesAndExpenseActivity extends SSBBaseActivity {
         layoutManager.setStackFromEnd(true);
         dateSaleRecyler.setLayoutManager(layoutManager);
         dateSaleRecyler.hasFixedSize();
-        cashRef = FirebaseDatabase.getInstance().getReference().child("cashDetails");
+        cashRef = FirebaseDatabase.getInstance().getReference().child("trayDetails");
         cashRef.keepSynced(true);
         dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
+
+
 
         totalCash = new ArrayList<>();
         modelArrayList = new ArrayList<>();
@@ -108,14 +114,14 @@ public class SalesAndExpenseActivity extends SSBBaseActivity {
                 date_minimal.setText(sdf.format(calendar1.getTime()));
             }
         };
-        adapter= new CashDetailsAdapter(modelArrayList);
+        adapter= new TrayDetailAdapter(modelArrayList);
         dateSaleRecyler.setAdapter(adapter);
 
         date_minimal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                new DatePickerDialog(SalesAndExpenseActivity.this,
+                new DatePickerDialog(TraySalesAndEpense.this,
                         dateSetListener1,calendar1.get(Calendar.YEAR), calendar1.get(Calendar.MONTH),
                         calendar1.get(Calendar.DAY_OF_MONTH)).show();
 
@@ -126,7 +132,7 @@ public class SalesAndExpenseActivity extends SSBBaseActivity {
             @Override
             public void onClick(View v) {
 
-                new DatePickerDialog(SalesAndExpenseActivity.this,
+                new DatePickerDialog(TraySalesAndEpense.this,
                         dateSetListener2,calendar2.get(Calendar.YEAR), calendar2.get(Calendar.MONTH),
                         calendar2.get(Calendar.DAY_OF_MONTH)).show();
 
@@ -174,19 +180,20 @@ public class SalesAndExpenseActivity extends SSBBaseActivity {
 
         getAllCashList();
 
+
     }
 
     private void loadRecyclerFromDate(){
         modelArrayList.clear();
         SimpleDateFormat dateFormat =new SimpleDateFormat("dd-MM-yyyy");
-        for (CashModel model : totalCash){
+        for (TrayDetailModel model : totalCash){
             try {
                 if (isBetween(dateFormat.parse(model.getDate()),minimalDate,maximalDate)){
                     modelArrayList.add(model);
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
-                Toast.makeText(SalesAndExpenseActivity.this, ""+e.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(TraySalesAndEpense.this, ""+e.toString(), Toast.LENGTH_SHORT).show();
 
             }
 
@@ -196,17 +203,17 @@ public class SalesAndExpenseActivity extends SSBBaseActivity {
         }
     }
 
-    private void loadCashDetals(ArrayList<CashModel> modelArrayList) {
+    private void loadCashDetals(ArrayList<TrayDetailModel> modelArrayList) {
 
-        double totalGot = 0;
-        double totalGave = 0;
+        int totalGot = 0;
+        int totalGave = 0;
 
-        for (CashModel model : modelArrayList){
+        for (TrayDetailModel model : modelArrayList){
             if ( model.getStatus().equals("got")) {
-                double t =  Double.parseDouble((String) model.getTotal());
+                int t =  model.getTotal();
                 totalGot += t;
             } else {
-                double tg = Double.parseDouble((String) model.getTotal());
+                int tg = model.getTotal();
                 totalGave += tg;
             }
         }
@@ -214,7 +221,7 @@ public class SalesAndExpenseActivity extends SSBBaseActivity {
         if (totalGave - totalGot < 0) {
             totalCashText.setText("Total:  "+getCurrencyStr()+ String.valueOf(Math.abs(totalGave - totalGot)));
         } else {
-            double num =  Math.abs(totalGave - totalGot);
+            int num =  Math.abs(totalGave - totalGot);
             totalCashText.setText("Total:  "+getCurrencyStr()+ String.valueOf(num));
 
         }
@@ -228,7 +235,7 @@ public class SalesAndExpenseActivity extends SSBBaseActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot snapshot1 : snapshot.getChildren()) {
 
-                    totalCash.add(snapshot1.getValue(CashModel.class));
+                    totalCash.add(snapshot1.getValue(TrayDetailModel.class));
                 }
 
                 loadRecyclerFromDate();
@@ -262,4 +269,8 @@ public class SalesAndExpenseActivity extends SSBBaseActivity {
         }
         return false;
     }
+
+
+
+
 }

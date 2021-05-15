@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -41,8 +43,9 @@ public class TrayDetails extends SSBBaseActivity {
     private FirebaseRecyclerAdapter<TrayDetailModel, CashDetailsViewHolder> entryRecycleradapter;
     private long totalGave, totalGot ,yesgot, yesgave;
     private Query query;
+    private LinearLayout salesReport;
     private ArrayList<TrayDetailModel> modelArrayList;
-    private TextView totalIn , totalOut , todaysbalance,cashInHand,entryCount,curentDate;
+    private TextView totalIn ,totalTray, totalOut , todaysbalance,cashInHand,entryCount,curentDate;
     private String yesterdayDate;
     private TrayDetailAdapter adapter;
 
@@ -57,8 +60,10 @@ public class TrayDetails extends SSBBaseActivity {
         totalIn = findViewById(R.id.totalIn);
         totalOut = findViewById(R.id.totalOut);
         todaysbalance = findViewById(R.id.todaysbalance);
+        totalTray = findViewById(R.id.totalTray);
         cashInHand = findViewById(R.id.cashInHand);
         entryCount = findViewById(R.id.entryCount);
+        salesReport = findViewById(R.id.salesReport);
         curentDate = findViewById(R.id.curentDate);
         cashRecycler = findViewById(R.id.trayDetailsRecycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
@@ -73,6 +78,14 @@ public class TrayDetails extends SSBBaseActivity {
         adapter = new TrayDetailAdapter(modelArrayList);
 
         getYesterdayDate();
+
+
+        salesReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(TrayDetails.this,TraySalesAndEpense.class));
+            }
+        });
 
         curentDate.setText(UtilsMethod.getCurrentDate().substring(0,10));
 
@@ -121,7 +134,6 @@ public class TrayDetails extends SSBBaseActivity {
                     }
 
 
-                    if (date.substring(0,10).equals(yesterdayDate)){
                         if (snapshot1.child("status").getValue().equals("got")) {
                             long t =   (long)snapshot1.child("total").getValue();
                             yesgot += t;
@@ -131,7 +143,7 @@ public class TrayDetails extends SSBBaseActivity {
                         }
                     }
 
-                }
+
                 entryCount.setText(String.valueOf(modelArrayList.size())+" Entry");
 
                 adapter.updateList(modelArrayList);
@@ -151,21 +163,23 @@ public class TrayDetails extends SSBBaseActivity {
         totalOut.setText(String.valueOf(totalGave));
 
         if (totalGave - totalGot < 0) {
-            todaysbalance.setText(getCurrencyStr()+ String.valueOf(Math.abs(totalGave - totalGot)));
+            todaysbalance.setText( String.valueOf(Math.abs(totalGave - totalGot)));
         } else {
             long num =  Math.abs(totalGave - totalGot);
-            todaysbalance.setText(getCurrencyStr()+"-"+ String.valueOf(num));
+            todaysbalance.setText( String.valueOf(num));
 
         }
 
 
         if (yesgave - yesgot < 0) {
-            cashInHand.setText(getCurrencyStr()+ String.valueOf(Math.abs(yesgave - yesgot)));
+            totalTray.setText(String.valueOf(Math.abs(yesgave - yesgot)));
         } else {
             long num =  Math.abs(yesgave - yesgot);
-            cashInHand.setText(getCurrencyStr()+"-"+ String.valueOf(num));
+            totalTray.setText( String.valueOf(num));
 
         }
+
+        cashInHand.setText(getCurrencyStr()+String.valueOf(Integer.parseInt(totalTray.getText().toString()) - Integer.parseInt(todaysbalance.getText().toString())));
 
 
 

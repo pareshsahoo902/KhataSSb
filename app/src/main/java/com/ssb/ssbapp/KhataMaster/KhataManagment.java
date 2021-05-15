@@ -214,6 +214,9 @@ public class KhataManagment extends SSBBaseActivity {
                     khataRecyclerAdapter.notifyDataSetChanged();
                 }
             });
+
+            khata_text.setText("");
+
         }
 
     }
