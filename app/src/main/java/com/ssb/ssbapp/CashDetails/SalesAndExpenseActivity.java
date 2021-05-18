@@ -34,6 +34,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import static com.ssb.ssbapp.Utils.UtilsMethod.isBetween;
+
 public class SalesAndExpenseActivity extends SSBBaseActivity {
 
     Button date_minimal, date_maximal;
@@ -60,8 +62,6 @@ public class SalesAndExpenseActivity extends SSBBaseActivity {
         dateSaleRecyler = findViewById(R.id.dateSaleRecyler);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
-        layoutManager.setReverseLayout(true);
-        layoutManager.setStackFromEnd(true);
         dateSaleRecyler.setLayoutManager(layoutManager);
         dateSaleRecyler.hasFixedSize();
         cashRef = FirebaseDatabase.getInstance().getReference().child("cashDetails");
@@ -252,14 +252,5 @@ public class SalesAndExpenseActivity extends SSBBaseActivity {
 
     }
 
-    public static boolean isBetween(Date date, Date dateStart, Date dateEnd) {
-        if (date != null && dateStart != null && dateEnd != null) {
-            if (date.after(dateStart) && date.before(dateEnd)) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-        return false;
-    }
+
 }

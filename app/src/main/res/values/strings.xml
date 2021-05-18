@@ -12,4 +12,13 @@
     <string name="passwordErr">Password Don\'t match</string>
     <string name="phoneer">Enter Valid Number</string>
 
+
+    <string-array name="filter">
+        <item>All</item>
+        <item>Last Week</item>
+        <item>Last Month</item>
+        <item>This Month</item>
+        <item>From Zero</item>
+    </string-array>
+
 </resources>

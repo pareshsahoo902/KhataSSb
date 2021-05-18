@@ -45,6 +45,7 @@ import com.ssb.ssbapp.Utils.SSBBaseActivity;
 import com.ssb.ssbapp.Utils.UtilsMethod;
 import com.ssb.ssbapp.ViewHolder.CustomerListViewHolder;
 import com.ssb.ssbapp.ViewHolder.MOneyTransactionviewHolder;
+import com.ssb.ssbapp.report.ReportActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -92,6 +93,12 @@ public class MoneyTransaction extends SSBBaseActivity {
         enrtyRef = FirebaseDatabase.getInstance().getReference().child("customerTransaction");
         enrtyRef.keepSynced(true);
 
+        pdfGenerate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MoneyTransaction.this, ReportActivity.class));
+            }
+        });
 
         Query query = enrtyRef.orderByChild("cid").equalTo(getLocalSession().getString(Constants.SSB_PREF_CID));
 

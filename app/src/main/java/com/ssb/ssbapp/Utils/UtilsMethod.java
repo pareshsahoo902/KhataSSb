@@ -23,6 +23,17 @@ public class UtilsMethod {
 
 
 
+    public static boolean isBetween(Date date, Date dateStart, Date dateEnd) {
+        if (date != null && dateStart != null && dateEnd != null) {
+            if (date.after(dateStart) && date.before(dateEnd)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
     /**
      * Used for hiding the keyboard on click anywhere in the screen except on the hardware keyboard
      *
