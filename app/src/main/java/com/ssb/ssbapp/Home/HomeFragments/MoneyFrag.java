@@ -106,7 +106,7 @@ public class MoneyFrag extends Fragment {
         reportView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getContext(), ReportActivity.class));
+                startActivity(new Intent(getContext(), ReportActivity.class).putExtra("cid",""));
             }
         });
         entryRef = FirebaseDatabase.getInstance().getReference().child("customerTransaction");

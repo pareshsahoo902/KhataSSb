@@ -96,7 +96,7 @@ public class MoneyTransaction extends SSBBaseActivity {
         pdfGenerate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MoneyTransaction.this, ReportActivity.class));
+                startActivity(new Intent(MoneyTransaction.this, ReportActivity.class).putExtra("cid",getLocalSession().getString(Constants.SSB_PREF_CID)));
             }
         });
 

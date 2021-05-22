@@ -25,7 +25,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/MyMaterialTheme">
-        <activity android:name=".TrayDetails.TraySalesAndEpense"></activity>
+        <activity android:name=".TrayMaster.TrayStockDetails"></activity>
+        <activity android:name=".TrayDetails.TraySalesAndEpense" />
         <activity android:name=".report.TrayReport" />
         <activity android:name=".report.ReportActivity" />
         <activity android:name=".TrayMaster.TrayStock" />

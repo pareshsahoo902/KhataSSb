@@ -60,6 +60,7 @@ public class ReportActivity extends SSBBaseActivity {
     Calendar calendar2, calendar1;
     private MOneyTransactionAdapter adapter;
 
+    private String cid;
     TextView netBalance, totalIn, totalOut, entriesText, generatePDF, sharePDF;
 
     @Override
@@ -67,6 +68,7 @@ public class ReportActivity extends SSBBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
 
+        cid = getIntent().getStringExtra("cid");
         setToolbar(getApplicationContext(), "MONEY REPORT");
 
         filterSpinner = findViewById(R.id.filterSpinner);
@@ -91,7 +93,12 @@ public class ReportActivity extends SSBBaseActivity {
 
         calendar2 = Calendar.getInstance();
         calendar1 = Calendar.getInstance();
-        query = entryRef.orderByChild("cid").equalTo(getLocalSession().getString(Constants.SSB_PREF_CID));
+        if (cid.equals("")){
+            query = entryRef.orderByChild("kid").equalTo(getLocalSession().getString(Constants.SSB_PREF_KID));
+        }else{
+            query = entryRef.orderByChild("cid").equalTo(cid);
+
+        }
 
         totalEntry = new ArrayList<>();
         modelArrayList = new ArrayList<>();
@@ -245,7 +252,7 @@ public class ReportActivity extends SSBBaseActivity {
         switch (i) {
             case 0:
                 //TODO write logic to set calendar for ALL .
-                getminimalDate();
+                adapter.updateList(totalEntry);
                 break;
             case 1:
                 //TODO write logic to set calendar for LAST WEEK.

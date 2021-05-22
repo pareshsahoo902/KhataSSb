@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -158,6 +159,16 @@ public class TrayStock extends SSBBaseActivity {
                     trayListViewHolder.gave.setText(String.valueOf(trayDetails.get(1)));
                     trayListViewHolder.avaiable.setText(String.valueOf(trayDetails.get(2)));
                 }
+
+                trayListViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Bundle b =new Bundle();
+                        b.putSerializable("Tray_Intent",trayMasterModel);
+                        startActivity(new Intent(TrayStock.this,TrayStockDetails.class)
+                        .putExtras(b));
+                    }
+                });
 
 
             }
