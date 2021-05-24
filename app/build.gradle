@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.ssb.ssbapp"
-        minSdkVersion 21
+        minSdkVersion 26
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -24,10 +24,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    packagingOptions{
+        exclude 'com/itextpdf/io/font/cmap_info.txt'
+        exclude 'com/itextpdf/io/font/cmap/*'
+    }
+
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+
+
 }
 
 
@@ -79,6 +89,9 @@ dependencies {
 
 
     implementation 'com.rengwuxian.materialedittext:library:2.1.4'
+
+    //pdf generator
+    implementation 'com.itextpdf:itext7-core:7.1.3'
 
 
 }

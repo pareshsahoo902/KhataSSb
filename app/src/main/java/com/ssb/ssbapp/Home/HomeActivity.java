@@ -66,6 +66,8 @@ public class HomeActivity extends SSBBaseActivity {
 
         Dexter.withContext(getApplicationContext())
                 .withPermissions(Manifest.permission.CAMERA,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.SEND_SMS)
                 .withListener(new MultiplePermissionsListener() {
                     @Override

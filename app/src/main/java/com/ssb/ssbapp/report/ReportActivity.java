@@ -7,7 +7,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.StrictMode;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -27,6 +31,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.ssb.ssbapp.Adapters.MOneyTransactionAdapter;
 import com.ssb.ssbapp.CashDetails.CashModel;
+import com.ssb.ssbapp.Customer.CustomerModel;
+import com.ssb.ssbapp.PdfGenerator.PDFGenerator;
 import com.ssb.ssbapp.TransactionModel.MoneyTransactionModel;
 import com.ssb.ssbapp.TransactionModel.MoneyTransactionModel;
 import com.ssb.ssbapp.Utils.Constants;
@@ -37,6 +43,7 @@ import com.ssb.ssbapp.R;
 import com.ssb.ssbapp.TransactionModel.MoneyTransactionModel;
 import com.ssb.ssbapp.Utils.SSBBaseActivity;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -56,11 +63,12 @@ public class ReportActivity extends SSBBaseActivity {
     private DatabaseReference entryRef;
     Date minimalDate, maximalDate;
     Query query;
+    CustomerModel currentModel=null;
     SimpleDateFormat dateFormat;
     Calendar calendar2, calendar1;
     private MOneyTransactionAdapter adapter;
 
-    private String cid;
+    private String cid,fileName="";
     TextView netBalance, totalIn, totalOut, entriesText, generatePDF, sharePDF;
 
     @Override
@@ -82,6 +90,7 @@ public class ReportActivity extends SSBBaseActivity {
         totalOut = findViewById(R.id.totalOut);
         entriesText = findViewById(R.id.entryCount);
 
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         layoutManager.setReverseLayout(true);
         layoutManager.setStackFromEnd(true);
@@ -91,12 +100,17 @@ public class ReportActivity extends SSBBaseActivity {
         entryRef.keepSynced(true);
         dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
+
+
+
         calendar2 = Calendar.getInstance();
         calendar1 = Calendar.getInstance();
         if (cid.equals("")){
             query = entryRef.orderByChild("kid").equalTo(getLocalSession().getString(Constants.SSB_PREF_KID));
+            fileName = "Ssb Khata Report";
         }else{
             query = entryRef.orderByChild("cid").equalTo(cid);
+            getUserDetails();
 
         }
 
@@ -215,9 +229,78 @@ public class ReportActivity extends SSBBaseActivity {
             }
         });
 
+        generatePDF.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PDFGenerator pdf = new PDFGenerator(getApplicationContext());
+
+                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+                StrictMode.setVmPolicy(builder.build());
+
+                if(pdf.create(fileName,modelArrayList , currentModel)){
+
+                    File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString(),"SSB/"+fileName+".pdf");
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setDataAndType(Uri.fromFile(file), "application/pdf");
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    startActivity(intent);
+
+                }else{
+
+                    showMessageToast("Report Failed!\ntry Again Later",true);
+                }
+
+            }
+        });
+
+        sharePDF.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PDFGenerator pdf = new PDFGenerator(getApplicationContext());
+
+                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+                StrictMode.setVmPolicy(builder.build());
+
+                if(pdf.create(fileName,modelArrayList , currentModel)){
+
+                    File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString(),"SSB/"+fileName+".pdf");
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.setDataAndType(Uri.fromFile(file), "application/pdf");
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    startActivity(intent);
+
+                }else{
+
+                    showMessageToast("Report Failed!\ntry Again Later",true);
+                }
+
+            }
+        });
+
+
         getAllEntryList();
 
         reportMoneyRecycelr.setAdapter(adapter);
+
+    }
+
+    private void getUserDetails() {
+        DatabaseReference ref =  FirebaseDatabase.getInstance().getReference().child("customers").child(cid);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                currentModel = snapshot.getValue(CustomerModel.class);
+                fileName=currentModel.getName()+UtilsMethod.getCurrentDate().substring(18);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
 
     }
 
@@ -252,7 +335,8 @@ public class ReportActivity extends SSBBaseActivity {
         switch (i) {
             case 0:
                 //TODO write logic to set calendar for ALL .
-                adapter.updateList(totalEntry);
+                modelArrayList=totalEntry;
+                adapter.updateList(modelArrayList);
                 break;
             case 1:
                 //TODO write logic to set calendar for LAST WEEK.
