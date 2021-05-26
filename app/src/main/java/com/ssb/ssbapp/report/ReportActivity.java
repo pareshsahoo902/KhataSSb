@@ -66,6 +66,7 @@ public class ReportActivity extends SSBBaseActivity {
     CustomerModel currentModel=null;
     SimpleDateFormat dateFormat;
     Calendar calendar2, calendar1;
+    boolean isParty;
     private MOneyTransactionAdapter adapter;
 
     private String cid,fileName="";
@@ -236,8 +237,9 @@ public class ReportActivity extends SSBBaseActivity {
 
                 StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
                 StrictMode.setVmPolicy(builder.build());
+                String dates = fromDate.getText().toString() + " - "+ toDate.getText().toString();
 
-                if(pdf.create(fileName,modelArrayList , currentModel)){
+                if(pdf.create(fileName,modelArrayList , currentModel,dates,isParty)){
 
                     File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString(),"SSB/"+fileName+".pdf");
                     Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -260,8 +262,9 @@ public class ReportActivity extends SSBBaseActivity {
 
                 StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
                 StrictMode.setVmPolicy(builder.build());
+                String dates = fromDate.getText().toString() + " - "+ toDate.getText().toString();
 
-                if(pdf.create(fileName,modelArrayList , currentModel)){
+                if(pdf.create(fileName,modelArrayList , currentModel,dates,isParty)){
 
                     File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString(),"SSB/"+fileName+".pdf");
                     Intent intent = new Intent(Intent.ACTION_SEND);
@@ -396,6 +399,9 @@ public class ReportActivity extends SSBBaseActivity {
         modelArrayList.clear();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         for (MoneyTransactionModel model : totalEntry) {
+            if (model.isParty()){
+                isParty=true;
+            }
             try {
                 if (isBetween(dateFormat.parse(model.getDate().substring(0, 10)), minimalDate, maximalDate)) {
                     modelArrayList.add(model);

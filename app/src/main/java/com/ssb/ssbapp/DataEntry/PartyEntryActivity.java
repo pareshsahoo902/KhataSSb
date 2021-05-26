@@ -38,6 +38,7 @@ import com.ssb.ssbapp.DialogHelper.ImagePickerDailog;
 import com.ssb.ssbapp.R;
 import com.ssb.ssbapp.SuccessScreens.SucessActivity;
 import com.ssb.ssbapp.TransactionModel.MoneyTransactionModel;
+import com.ssb.ssbapp.TransactionModel.PartyModel;
 import com.ssb.ssbapp.Utils.Constants;
 import com.ssb.ssbapp.Utils.SSBBaseActivity;
 import com.ssb.ssbapp.Utils.UtilsMethod;
@@ -67,6 +68,7 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
     private ImageView billIMageMoney;
     private Uri picUri;
     boolean isUri = true;
+    String detailText="";
     double cm;
     String CurrentDate, type, commTextDesc = "";
     private DatabaseReference moneyTransactionRef;
@@ -359,8 +361,11 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
 
     private void startAddingToDB(String picDowloadUrl, String ceid) {
 
+        PartyModel partyModel = new PartyModel(totalText.getText().toString().substring(1),commision,fair,labour,extra,Integer.parseInt(commisionText.getText().toString()));
+
+
         MoneyTransactionModel model = new MoneyTransactionModel(ceid, getLocalSession().getString(Constants.SSB_PREF_CID), getLocalSession().getString(Constants.SSB_PREF_KID)
-                , CurrentDate, CurrentDate, picDowloadUrl, partDescription.getText().toString() + "\n" + entryDescription.getText().toString(), itemName.getText().toString() + ": " + descText + commTextDesc, type, String.valueOf(totalAmount),String.valueOf(getTotalAmount()) ,false,true);
+                , CurrentDate, CurrentDate, picDowloadUrl, partDescription.getText().toString() + "\n" + entryDescription.getText().toString(),  descText + commTextDesc, type, String.valueOf(totalAmount),String.valueOf(getTotalAmount()) ,false,true,partyModel,getDetails(itemBalanceList));
 
         if (model.getCid() != null) {
             moneyTransactionRef.child(ceid).setValue(model);
@@ -697,7 +702,7 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
 
     }
 
-    private void calulateTotal() {
+    private double calulateTotal() {
 
         double res = 0;
         if (itemBalanceList.size() > 0) {
@@ -712,6 +717,7 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
 
         }
 
+        return res;
 
     }
 
@@ -761,6 +767,15 @@ public class PartyEntryActivity extends SSBBaseActivity implements CustomCalcula
         }, 2000);
 
 
+    }
+
+    private String getDetails(List<Double> itemBalanceList){
+        String detail ="";
+
+        detail =descText;
+        detail= detail+"\nTotal: "+calulateTotal();
+
+        return detail;
     }
 
     @Override

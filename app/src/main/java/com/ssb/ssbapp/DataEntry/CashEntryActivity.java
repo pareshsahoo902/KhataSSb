@@ -337,7 +337,7 @@ public class CashEntryActivity extends SSBBaseActivity implements ImagePickerDai
     private void startAddingToDB(String dowloadUrl, String ceid) {
 
         MoneyTransactionModel model = new MoneyTransactionModel(ceid, getLocalSession().getString(Constants.SSB_PREF_CID), getLocalSession().getString(Constants.SSB_PREF_KID)
-                , CurrentDate, CurrentDate, dowloadUrl, description.getText().toString(), entriesText.getText().toString(), type, String.valueOf(totalCash), String.valueOf(totalCash),isClear,false);
+                , CurrentDate, CurrentDate, dowloadUrl, description.getText().toString(), entriesText.getText().toString(), type, String.valueOf(totalCash), String.valueOf(totalCash),isClear,false,null,"");
 
         if (model.getCid() != null) {
             moneyTransactionRef.child(ceid).setValue(model);

@@ -281,7 +281,7 @@ public class MoneyEntryActivity extends SSBBaseActivity implements CustomCalcula
     private void startAddingToDB(String picDowloadUrl, String ceid) {
 
         MoneyTransactionModel model = new MoneyTransactionModel(ceid,getLocalSession().getString(Constants.SSB_PREF_CID),getLocalSession().getString(Constants.SSB_PREF_KID)
-                ,CurrentDate,CurrentDate,picDowloadUrl,descripition.getText().toString(),itemName.getText().toString()+": "+descText,type,String.valueOf(totalAmount),String.valueOf(totalAmount),false,false);
+                ,CurrentDate,CurrentDate,picDowloadUrl,descripition.getText().toString(),itemName.getText().toString()+": "+descText,type,String.valueOf(totalAmount),String.valueOf(totalAmount),false,false,null,"");
 
         if (model.getCid()!=null){
             moneyTransactionRef.child(ceid).setValue(model);

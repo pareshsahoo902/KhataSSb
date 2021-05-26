@@ -19,11 +19,14 @@ public class MoneyTransactionModel implements Serializable {
     public boolean isParty;
     public String total;
     public String balance;
+    public String details;
+
+    public PartyModel partyModel;
 
     public MoneyTransactionModel() {
     }
 
-    public MoneyTransactionModel(String ceid, String cid, String kid, String date, String edit_date, String imageurl, String description, String entriesText, String status, String total, String balance ,boolean isCleared, boolean isParty) {
+    public MoneyTransactionModel(String ceid, String cid, String kid, String date, String edit_date, String imageurl, String description, String entriesText, String status, String total, String balance ,boolean isCleared, boolean isParty,PartyModel partyModel,String details) {
 
 
         this.ceid = ceid;
@@ -39,6 +42,8 @@ public class MoneyTransactionModel implements Serializable {
         this.balance = balance;
         this.isCleared = isCleared;
         this.isParty = isParty;
+        this.partyModel = partyModel;
+        this.details = details;
     }
 
     public String getBalance() {
@@ -144,5 +149,21 @@ public class MoneyTransactionModel implements Serializable {
 
     public void setParty(boolean party) {
         isParty = party;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
+
+    public PartyModel getPartyModel() {
+        return partyModel;
+    }
+
+    public void setPartyModel(PartyModel partyModel) {
+        this.partyModel = partyModel;
     }
 }

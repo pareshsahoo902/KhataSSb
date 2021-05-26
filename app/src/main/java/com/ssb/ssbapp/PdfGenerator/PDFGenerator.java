@@ -13,6 +13,7 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.colorspace.PdfColorSpace;
 import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.AreaBreak;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.IBlockElement;
 import com.itextpdf.layout.element.Paragraph;
@@ -38,7 +39,7 @@ import java.util.List;
 public class PDFGenerator {
 
     private Context mContext;
-    private double totalGave , totalGot, netBalance , openingBalance;
+    private double totalGave, totalGot, netBalance, openingBalance;
 
     private ArrayList<MoneyTransactionModel> modelArrayList;
 
@@ -61,17 +62,18 @@ public class PDFGenerator {
                 });
     }
 
-    public boolean create(String filename  , ArrayList<MoneyTransactionModel> itemList , CustomerModel model) {
+    public boolean create(String filename, ArrayList<MoneyTransactionModel> itemList, CustomerModel model,String dateRange, boolean isParty) {
 
         modelArrayList = new ArrayList<>();
         modelArrayList = itemList;
 
         String customerName;
-        if (model==null){
-            customerName="SSB";
-        }else{
+        if (model == null) {
+            customerName = "SSB";
+        } else {
             customerName = model.getName();
         }
+
         calculateValues(itemList);
 
         File ssb = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "SSB");
@@ -80,14 +82,13 @@ public class PDFGenerator {
         }
 
         String pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
-        File file = new File(pdfPath, "SSB/"+filename + ".pdf");
+        File file = new File(pdfPath, "SSB/" + filename + ".pdf");
         OutputStream outputStream = null;
         try {
             outputStream = new FileOutputStream(file);
 
             PdfWriter pdfWriter = new PdfWriter(outputStream);
             PdfDocument pdfDocument = new PdfDocument(pdfWriter);
-
 
 
             Document document = new Document(pdfDocument);
@@ -100,18 +101,18 @@ public class PDFGenerator {
             document.add(paragraph);
 
 
-            Paragraph titlePara = new Paragraph(customerName+"'s Statement" );
+            Paragraph titlePara = new Paragraph(customerName + "'s Statement");
             titlePara.setTextAlignment(TextAlignment.CENTER);
             titlePara.setFontSize(15);
             titlePara.setBold();
             document.add(titlePara);
 
-            document.add(new Paragraph("( 12-1-2020 - 13-2-2020 )").setFontColor(ColorConstants.BLUE).setBold().setTextAlignment(TextAlignment.CENTER));
+            document.add(new Paragraph("("+dateRange+")").setFontColor(ColorConstants.BLUE).setBold().setTextAlignment(TextAlignment.CENTER));
             document.add(new Paragraph("\n"));
 
 
-            float[] widths = {200,200,200,200};
-            Table table1 =  new Table(widths);
+            float[] widths = {200, 200, 200, 200};
+            Table table1 = new Table(widths);
             table1.setTextAlignment(TextAlignment.CENTER);
 
             table1.addCell(new Cell().add(new Paragraph("Opening Balance").setFontSize(14).setTextAlignment(TextAlignment.CENTER)));
@@ -120,37 +121,36 @@ public class PDFGenerator {
             table1.addCell(new Cell().add(new Paragraph("Net Balance").setFontSize(14).setTextAlignment(TextAlignment.CENTER)));
 
 
-            table1.addCell(new Cell(2,1).add(new Paragraph("Rs "+openingBalance).setFontSize(18).setBold().setTextAlignment(TextAlignment.CENTER)));
-            table1.addCell(new Cell(2,1).add(new Paragraph("Rs "+totalGot).setFontSize(18).setBold().setTextAlignment(TextAlignment.CENTER)));
-            table1.addCell(new Cell(2,1).add(new Paragraph("Rs "+totalGave).setFontSize(18).setBold().setTextAlignment(TextAlignment.CENTER)));
-            table1.addCell(new Cell(2,1).add(new Paragraph("Rs "+netBalance).setFontSize(18).setBold().setTextAlignment(TextAlignment.CENTER)));
+            table1.addCell(new Cell(2, 1).add(new Paragraph("Rs " + openingBalance).setFontSize(18).setBold().setTextAlignment(TextAlignment.CENTER)));
+            table1.addCell(new Cell(2, 1).add(new Paragraph("Rs " + totalGot).setFontSize(18).setBold().setTextAlignment(TextAlignment.CENTER)));
+            table1.addCell(new Cell(2, 1).add(new Paragraph("Rs " + totalGave).setFontSize(18).setBold().setTextAlignment(TextAlignment.CENTER)));
+            table1.addCell(new Cell(2, 1).add(new Paragraph("Rs " + netBalance).setFontSize(18).setBold().setTextAlignment(TextAlignment.CENTER)));
 
             document.add(table1);
 
 
-
-            float[] widthColoumn = {150,400,200,200,200};
-            Table table2=  new Table(widthColoumn);
+            float[] widthColoumn = {150, 400, 200, 200, 200};
+            Table table2 = new Table(widthColoumn);
             table2.addCell(new Cell().add(new Paragraph("Date").setBold().setFontSize(14).setBackgroundColor(ColorConstants.LIGHT_GRAY)));
             table2.addCell(new Cell().add(new Paragraph("Details").setBold().setFontSize(14).setBackgroundColor(ColorConstants.LIGHT_GRAY)));
             table2.addCell(new Cell().add(new Paragraph("Got(+)").setTextAlignment(TextAlignment.RIGHT).setBold().setFontSize(14).setBackgroundColor(ColorConstants.LIGHT_GRAY)));
             table2.addCell(new Cell().add(new Paragraph("Gave(-)").setTextAlignment(TextAlignment.RIGHT).setBold().setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontSize(14)));
             table2.addCell(new Cell().add(new Paragraph("Balance").setTextAlignment(TextAlignment.RIGHT).setBold().setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontSize(14)));
 
-            for (int i=0;i<modelArrayList.size();i++){
+            for (int i = 0; i < modelArrayList.size(); i++) {
 
-                table2.addCell(new Cell().add(new Paragraph(modelArrayList.get(i).getDate().substring(0,10)).setTextAlignment(TextAlignment.LEFT).setFontSize(12)));
+                table2.addCell(new Cell().add(new Paragraph(modelArrayList.get(i).getDate().substring(0, 10)).setTextAlignment(TextAlignment.LEFT).setFontSize(12)));
                 table2.addCell(new Cell().add(new Paragraph(modelArrayList.get(i).getDescription()).setFontSize(12)));
-                if (modelArrayList.get(i).getStatus().equals("got")){
-                    table2.addCell(new Cell().add(new Paragraph("Rs"+String.valueOf(modelArrayList.get(i).getTotal())).setTextAlignment(TextAlignment.RIGHT).setFontSize(14)));
+                if (modelArrayList.get(i).getStatus().equals("got")) {
+                    table2.addCell(new Cell().add(new Paragraph("Rs" + String.valueOf(modelArrayList.get(i).getTotal())).setTextAlignment(TextAlignment.RIGHT).setFontSize(14)));
                     table2.addCell(new Cell().add(new Paragraph("").setTextAlignment(TextAlignment.RIGHT).setFontSize(14)));
 
-                }else{
+                } else {
                     table2.addCell(new Cell().add(new Paragraph("").setTextAlignment(TextAlignment.RIGHT).setFontSize(14)));
-                    table2.addCell(new Cell().add(new Paragraph("Rs"+String.valueOf(modelArrayList.get(i).getTotal())).setTextAlignment(TextAlignment.RIGHT).setFontSize(14)));
+                    table2.addCell(new Cell().add(new Paragraph("Rs" + String.valueOf(modelArrayList.get(i).getTotal())).setTextAlignment(TextAlignment.RIGHT).setFontSize(14)));
                 }
 
-                table2.addCell(new Cell().add(new Paragraph("Rs"+String.valueOf(calcBalance(i))).setTextAlignment(TextAlignment.RIGHT).setFontSize(16)));
+                table2.addCell(new Cell().add(new Paragraph("Rs" + String.valueOf(calcBalance(i))).setTextAlignment(TextAlignment.RIGHT).setFontSize(16)));
             }
 
 
@@ -158,15 +158,75 @@ public class PDFGenerator {
             document.add(table2);
 
 
-            float[] column = {550,200,200,200};
-            Table grandTotal=  new Table(column);
+            float[] column = {550, 200, 200, 200};
+            Table grandTotal = new Table(column);
 
             grandTotal.addCell(new Cell().add(new Paragraph("Grand Total").setFontSize(18)).setBackgroundColor(ColorConstants.LIGHT_GRAY));
-            grandTotal.addCell(new Cell().add(new Paragraph("(+)Rs "+ totalGot).setTextAlignment(TextAlignment.RIGHT).setFontSize(16)).setBackgroundColor(ColorConstants.LIGHT_GRAY));
-            grandTotal.addCell(new Cell().add(new Paragraph("(-)Rs "+ totalGave).setTextAlignment(TextAlignment.RIGHT).setFontSize(16)).setBackgroundColor(ColorConstants.LIGHT_GRAY));
-            grandTotal.addCell(new Cell().add(new Paragraph("Rs "+netBalance).setTextAlignment(TextAlignment.RIGHT).setFontColor(ColorConstants.BLUE).setFontSize(18)).setBackgroundColor(ColorConstants.LIGHT_GRAY));
+            grandTotal.addCell(new Cell().add(new Paragraph("(+)Rs " + totalGot).setTextAlignment(TextAlignment.RIGHT).setFontSize(16)).setBackgroundColor(ColorConstants.LIGHT_GRAY));
+            grandTotal.addCell(new Cell().add(new Paragraph("(-)Rs " + totalGave).setTextAlignment(TextAlignment.RIGHT).setFontSize(16)).setBackgroundColor(ColorConstants.LIGHT_GRAY));
+            grandTotal.addCell(new Cell().add(new Paragraph("Rs " + netBalance).setTextAlignment(TextAlignment.RIGHT).setFontColor(ColorConstants.BLUE).setFontSize(18)).setBackgroundColor(ColorConstants.LIGHT_GRAY));
             document.add(new Paragraph("\n"));
             document.add(grandTotal);
+
+            if (isParty) {
+
+                ArrayList<MoneyTransactionModel> modelList = getChalanData(itemList);
+
+                for (int i = 0; i < modelList.size(); i++) {
+
+
+                    document.add(new AreaBreak());
+                    Paragraph chalan = new Paragraph("E-CHALAN RECEIPT " + String.valueOf(i + 1));
+                    chalan.setTextAlignment(TextAlignment.CENTER);
+                    chalan.setFontColor(ColorConstants.BLUE);
+                    chalan.setFontSize(28);
+                    chalan.setBold();
+                    document.add(new Paragraph("\n"));
+
+                    document.add(chalan);
+                    document.add(new Paragraph("\n"));
+
+                    document.add(new Paragraph("\n"));
+                    document.add(new Paragraph("Date: " + modelList.get(i).getDate() + "\tName: " + customerName).setFontSize(20));
+                    document.add(new Paragraph("\n"));
+
+                    document.add(new Paragraph("Details: " + modelList.get(i).getDescription()).setFontSize(20));
+                    document.add(new Paragraph("Particular: " + removeMPlus(modelList.get(i).getDetails()))
+                            .setMarginRight(10).setTextAlignment(TextAlignment.RIGHT).setFontSize(20));
+
+
+                    float[] chalanColoum = {250, 200, 200, 200, 300};
+                    Table chalanT = new Table(chalanColoum);
+                    chalanT.addCell(new Cell().add(new Paragraph("Commision").setBold().setFontSize(14).setBackgroundColor(ColorConstants.LIGHT_GRAY)));
+                    chalanT.addCell(new Cell().add(new Paragraph("Labour").setBold().setFontSize(14).setBackgroundColor(ColorConstants.LIGHT_GRAY)));
+                    chalanT.addCell(new Cell().add(new Paragraph("fair").setBold().setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontSize(14)));
+                    chalanT.addCell(new Cell().add(new Paragraph("Extra").setBold().setFontSize(14).setBackgroundColor(ColorConstants.LIGHT_GRAY)));
+                    chalanT.addCell(new Cell().add(new Paragraph("Total Less").setBold().setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontSize(14)));
+
+
+                    chalanT.addCell(new Cell(2, 1).add(new Paragraph("(" + modelList.get(i).getPartyModel().getCommPercent() + ")"
+                            + String.valueOf(modelList.get(i).getPartyModel().getCommision())).setBold().setFontSize(18)));
+                    chalanT.addCell(new Cell(2, 1).add(new Paragraph(String.valueOf(modelList.get(i).getPartyModel().getLabour())).setBold().setFontSize(18)));
+                    chalanT.addCell(new Cell(2, 1).add(new Paragraph(String.valueOf(modelList.get(i).getPartyModel().getFair())).setBold().setFontSize(18)));
+                    chalanT.addCell(new Cell(2, 1).add(new Paragraph(String.valueOf(modelList.get(i).getPartyModel().getExtra())).setBold().setFontSize(18)));
+                    chalanT.addCell(new Cell(2, 1).add(new Paragraph(String.valueOf(modelList.get(i).getPartyModel().getTotal())).setBold().setFontSize(18)));
+
+
+                    document.add(chalanT);
+
+                    float[] chawidht = {600, 600};
+                    Table chalTotalTabel = new Table(chawidht);
+
+
+                    chalTotalTabel.addCell(new Cell(2, 1).add(new Paragraph("Grand Total").setBold().setFontSize(20).setTextAlignment(TextAlignment.LEFT)).setBackgroundColor(ColorConstants.LIGHT_GRAY));
+                    chalTotalTabel.addCell(new Cell(2, 1).add(new Paragraph(String.valueOf(modelList.get(i).getTotal())).setBold().setFontSize(20).setTextAlignment(TextAlignment.RIGHT)).setBackgroundColor(ColorConstants.LIGHT_GRAY));
+
+                    document.add(new Paragraph("\n"));
+                    document.add(chalTotalTabel);
+
+                }
+            }
+
             document.close();
             return true;
         } catch (FileNotFoundException e) {
@@ -176,11 +236,21 @@ public class PDFGenerator {
         }
     }
 
+
+    private ArrayList<MoneyTransactionModel> getChalanData(ArrayList<MoneyTransactionModel> itemList) {
+        for (MoneyTransactionModel model : itemList) {
+            if (!model.isParty()) {
+                itemList.remove(model);
+            }
+        }
+        return itemList;
+    }
+
     private void calculateValues(ArrayList<MoneyTransactionModel> itemList) {
         totalGot = 0;
         totalGave = 0;
 
-        for (MoneyTransactionModel model : itemList){
+        for (MoneyTransactionModel model : itemList) {
 
             if (model.getStatus().equals("got")) {
                 double t = Double.parseDouble((String) model.getTotal());
@@ -197,24 +267,32 @@ public class PDFGenerator {
     }
 
 
-    private double calcBalance(int position){
-        double balance =0.0;
+    private double calcBalance(int position) {
+        double balance = 0.0;
 
-        if (position==0){
+        if (position == 0) {
             balance = Double.parseDouble(modelArrayList.get(position).getTotal());
             return balance;
-        }else {
-            for (int i =0 ;i<=position;i++){
-                if (modelArrayList.get(i).getStatus().equals("got")){
-                    balance+=Double.parseDouble(modelArrayList.get(i).getTotal());
-                }else {
-                    balance-=Double.parseDouble(modelArrayList.get(i).getTotal());
+        } else {
+            for (int i = 0; i <= position; i++) {
+                if (modelArrayList.get(i).getStatus().equals("got")) {
+                    balance += Double.parseDouble(modelArrayList.get(i).getTotal());
+                } else {
+                    balance -= Double.parseDouble(modelArrayList.get(i).getTotal());
                 }
             }
         }
         return balance;
     }
 
+
+    private String removeMPlus(String s) {
+        String res = s;
+
+        res = s.replaceAll("(M+)", "");
+
+        return res;
+    }
 
 
 }
