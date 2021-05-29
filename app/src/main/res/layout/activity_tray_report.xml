@@ -17,7 +17,7 @@
         android:layout_marginTop="?attr/actionBarSize"
         android:weightSum="3">
 
-        <TextView
+        <Button
             android:id="@+id/fromDate"
             style="@style/appEditTextStyle"
             android:layout_width="match_parent"
@@ -49,7 +49,7 @@
             android:textColor="@color/colorPrimaryDark"
             android:textSize="18dp" />
 
-        <TextView
+        <Button
             android:id="@+id/toDate"
             style="@style/appEditTextStyle"
             android:layout_width="match_parent"
@@ -70,6 +70,54 @@
             android:textStyle="bold" />
     </LinearLayout>
 
+
+
+
+    <LinearLayout
+        android:id="@+id/filterBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dateBar"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        >
+
+        <TextView
+            android:id="@+id/filter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:layout_weight="0.4"
+            android:text="Filter : "
+            android:textColor="@color/black"
+            android:layout_marginLeft="20dp"
+            android:layout_below="@+id/dateBar"
+            />
+
+        <Spinner
+            android:id="@+id/filterSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:gravity="right"
+            android:layout_below="@+id/dateBar"
+            android:layout_weight="0.35"
+            />
+
+        <Spinner
+            android:id="@+id/typeSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginRight="10dp"
+            android:gravity="right"
+            android:layout_below="@+id/dateBar"
+            android:layout_weight="0.25"
+            />
+
+    </LinearLayout>
+
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -78,7 +126,7 @@
         android:textColor="#202020"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="10dp"
-        android:layout_below="@+id/dateBar"
+        android:layout_below="@+id/filterBar"
         android:layout_marginTop="10dp"
 
         />
@@ -91,7 +139,7 @@
         android:textColor="@color/primaryGreen"
         android:layout_marginRight="20dp"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/dateBar"
+        android:layout_below="@+id/filterBar"
         android:layout_marginTop="10dp"
         />
 
@@ -202,7 +250,7 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/reportMoneyRecycelr"
+        android:id="@+id/reportTrayRecycelr"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/tab"
@@ -225,7 +273,7 @@
         android:weightSum="2"
         >
         <TextView
-            android:id="@+id/deleteEntry"
+            android:id="@+id/pdfDownload"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:text="DOWNLOAD"

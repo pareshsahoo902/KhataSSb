@@ -21,4 +21,12 @@
         <item>From Zero</item>
     </string-array>
 
+    <string-array name="type">
+        <item>Tray Statement</item>
+        <item>Tray Due</item>
+        <item>Tray Got</item>
+        <item>Tray Gave</item>
+        <item>Money &amp; Tray Due </item>
+    </string-array>
+
 </resources>

@@ -34,6 +34,7 @@ import com.ssb.ssbapp.Utils.Constants;
 import com.ssb.ssbapp.Utils.SSBBaseActivity;
 import com.ssb.ssbapp.Utils.UtilsMethod;
 import com.ssb.ssbapp.ViewHolder.MOneyTransactionviewHolder;
+import com.ssb.ssbapp.report.TrayReport;
 
 import java.util.ArrayList;
 
@@ -62,6 +63,7 @@ public class TrayTransactionPage extends SSBBaseActivity {
         setToolbar(getApplicationContext(), "  " + UtilsMethod.capitalize(name));
         getBtn = findViewById(R.id.getbtn);
         gaveBtn = findViewById(R.id.gavebtn);
+        pdf = findViewById(R.id.getPdf);
         trayRecycler = findViewById(R.id.trayEntryRecycler);
         geta = findViewById(R.id.geta);
         deleteTrayTransacton = findViewById(R.id.deleteTrayTransacton);
@@ -87,6 +89,14 @@ public class TrayTransactionPage extends SSBBaseActivity {
             }
         });
 
+
+        pdf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(TrayTransactionPage.this, TrayReport.class).putExtra("cid",getLocalSession().getString(Constants.SSB_PREF_CID)));
+            }
+        });
+
         deleteTrayTransacton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,6 +113,8 @@ public class TrayTransactionPage extends SSBBaseActivity {
                         .show();
             }
         });
+
+
 
         enrtyRef = FirebaseDatabase.getInstance().getReference().child("trayTransaction");
         enrtyRef.keepSynced(true);

@@ -26,8 +26,12 @@ import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.ssb.ssbapp.Customer.CustomerModel;
+import com.ssb.ssbapp.Model.TrayMasterModel;
 import com.ssb.ssbapp.TransactionModel.MoneyTransactionModel;
 import com.ssb.ssbapp.TransactionPage.MoneyTransaction;
+import com.ssb.ssbapp.TrayModels.TrayModelItem;
+import com.ssb.ssbapp.TrayModels.TrayTransactionModel;
+import com.ssb.ssbapp.Utils.UtilsMethod;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -42,6 +46,7 @@ public class PDFGenerator {
     private double totalGave, totalGot, netBalance, openingBalance;
 
     private ArrayList<MoneyTransactionModel> modelArrayList;
+    private ArrayList<TrayTransactionModel> trayModelList;
 
     public PDFGenerator(Context mContext) {
         this.mContext = mContext;
@@ -62,7 +67,10 @@ public class PDFGenerator {
                 });
     }
 
-    public boolean create(String filename, ArrayList<MoneyTransactionModel> itemList, CustomerModel model,String dateRange, boolean isParty) {
+
+    ////////////////////////////////////MONEY/////////////////////////////////////////////////////////////
+
+    public boolean createMoneyReport(String filename, ArrayList<MoneyTransactionModel> itemList, CustomerModel model,String dateRange, boolean isParty) {
 
         modelArrayList = new ArrayList<>();
         modelArrayList = itemList;
@@ -245,6 +253,109 @@ public class PDFGenerator {
         }
         return itemList;
     }
+    ////////////////////////////////////TRAY/////////////////////////////////////////////////////////////
+
+    public boolean createTrayDuePdf(String filename, ArrayList<TrayTransactionModel> itemList, ArrayList<TrayMasterModel> trayList, CustomerModel model, String dateRange){
+
+        trayModelList = new ArrayList<>();
+        trayModelList = itemList;
+
+
+        File ssb = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "SSB");
+        if (!ssb.mkdirs()) {
+            ssb.mkdirs();
+        }
+
+        String pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
+        File file = new File(pdfPath, "SSB/" + filename + ".pdf");
+        OutputStream outputStream = null;
+
+
+        try {
+            outputStream = new FileOutputStream(file);
+            PdfWriter pdfWriter = new PdfWriter(outputStream);
+            PdfDocument pdfDocument = new PdfDocument(pdfWriter);
+
+            Document document = new Document(pdfDocument);
+
+            Paragraph paragraph = new Paragraph("SSB");
+            paragraph.setTextAlignment(TextAlignment.CENTER);
+            paragraph.setFontColor(ColorConstants.BLUE);
+            paragraph.setFontSize(28);
+            paragraph.setBold();
+            document.add(paragraph);
+
+
+            Paragraph titlePara = new Paragraph(UtilsMethod.capitalize(model.getName()) + "'s Tray Dues");
+            titlePara.setTextAlignment(TextAlignment.CENTER);
+            titlePara.setFontSize(20);
+            titlePara.setBold();
+            document.add(titlePara);
+
+            Paragraph dateCurrent = new Paragraph("Date: "+ UtilsMethod.getCurrentDate().substring(0,10));
+            dateCurrent.setTextAlignment(TextAlignment.LEFT);
+            dateCurrent.setFontSize(15);
+            document.add(dateCurrent);
+
+            float[] widths = {400, 300};
+            Table table1 = new Table(widths);
+            table1.setTextAlignment(TextAlignment.CENTER);
+
+            table1.addCell(new Cell().add(new Paragraph("Tray Name").setFontSize(16).setBackgroundColor(ColorConstants.GRAY).setTextAlignment(TextAlignment.CENTER)));
+            table1.addCell(new Cell().add(new Paragraph("Due").setFontSize(16).setBackgroundColor(ColorConstants.GRAY).setTextAlignment(TextAlignment.CENTER)));
+
+            int totalCount=0;
+            for (int i =0 ; i<trayList.size();i++){
+                int totalDue = getTrayDue(trayList.get(i).getTid());
+
+                if (totalDue>0){
+                    totalCount +=totalDue;
+                    table1.addCell(new Cell().add(new Paragraph(UtilsMethod.capitalize(trayList.get(i).getName())).setFontSize(16).setTextAlignment(TextAlignment.LEFT)));
+                    table1.addCell(new Cell().add(new Paragraph(String.valueOf(totalDue)).setFontSize(16).setTextAlignment(TextAlignment.CENTER)));
+                }
+            }
+
+
+            Paragraph totalPara = new Paragraph("Total Due: "+ String.valueOf(totalCount));
+            totalPara.setTextAlignment(TextAlignment.LEFT);
+            totalPara.setFontSize(19);
+            totalPara.setBold();
+
+            document.add(new Paragraph("\n"));
+            document.add(table1);
+            document.add(new Paragraph("\n"));
+            document.add(totalPara);
+
+            document.close();
+            return true;
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Log.v("paresh", e.toString());
+            return false;
+        }
+
+    }
+
+    private int getTrayDue(String tid ) {
+        int total =0;
+
+        for (TrayTransactionModel model : trayModelList){
+            if (model.getStatus().equals("gave")){
+
+                for (TrayModelItem modelItem: model.getModelItemArrayList()){
+                    if (modelItem.getId().equals(tid)){
+                        total+=modelItem.getTotalCount();
+                    }
+                }
+
+            }
+        }
+
+
+        return total;
+    }
+
 
     private void calculateValues(ArrayList<MoneyTransactionModel> itemList) {
         totalGot = 0;

@@ -239,7 +239,7 @@ public class ReportActivity extends SSBBaseActivity {
                 StrictMode.setVmPolicy(builder.build());
                 String dates = fromDate.getText().toString() + " - "+ toDate.getText().toString();
 
-                if(pdf.create(fileName,modelArrayList , currentModel,dates,isParty)){
+                if(pdf.createMoneyReport(fileName,modelArrayList , currentModel,dates,isParty)){
 
                     File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString(),"SSB/"+fileName+".pdf");
                     Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -264,7 +264,7 @@ public class ReportActivity extends SSBBaseActivity {
                 StrictMode.setVmPolicy(builder.build());
                 String dates = fromDate.getText().toString() + " - "+ toDate.getText().toString();
 
-                if(pdf.create(fileName,modelArrayList , currentModel,dates,isParty)){
+                if(pdf.createMoneyReport(fileName,modelArrayList , currentModel,dates,isParty)){
 
                     File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString(),"SSB/"+fileName+".pdf");
                     Intent intent = new Intent(Intent.ACTION_SEND);
@@ -338,8 +338,8 @@ public class ReportActivity extends SSBBaseActivity {
         switch (i) {
             case 0:
                 //TODO write logic to set calendar for ALL .
-                modelArrayList=totalEntry;
-                adapter.updateList(modelArrayList);
+                loadCashDetals(totalEntry);
+                adapter.updateList(totalEntry);
                 break;
             case 1:
                 //TODO write logic to set calendar for LAST WEEK.
@@ -411,11 +411,15 @@ public class ReportActivity extends SSBBaseActivity {
                 Toast.makeText(ReportActivity.this, "" + e.toString(), Toast.LENGTH_SHORT).show();
 
             }
-
-
-            loadCashDetals(modelArrayList);
-            adapter.updateList(modelArrayList);
         }
+
+        if (modelArrayList.size()<0){
+            Toast.makeText(this, "empty!", Toast.LENGTH_SHORT).show();
+        }
+
+        loadCashDetals(modelArrayList);
+        adapter.updateList(modelArrayList);
+
     }
 
     private void loadEntriesForZero() {
@@ -432,11 +436,10 @@ public class ReportActivity extends SSBBaseActivity {
                 Toast.makeText(ReportActivity.this, "" + e.toString(), Toast.LENGTH_SHORT).show();
 
             }
-
-
-            loadCashDetals(modelArrayList);
-            adapter.updateList(modelArrayList);
         }
+
+        loadCashDetals(modelArrayList);
+        adapter.updateList(modelArrayList);
 
     }
 
