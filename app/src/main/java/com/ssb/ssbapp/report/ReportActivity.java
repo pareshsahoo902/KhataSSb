@@ -338,8 +338,10 @@ public class ReportActivity extends SSBBaseActivity {
         switch (i) {
             case 0:
                 //TODO write logic to set calendar for ALL .
-                loadCashDetals(totalEntry);
-                adapter.updateList(totalEntry);
+                modelArrayList.clear();
+                modelArrayList.addAll(totalEntry);
+                loadCashDetals(modelArrayList);
+                adapter.updateList(modelArrayList);
                 break;
             case 1:
                 //TODO write logic to set calendar for LAST WEEK.

@@ -337,6 +337,7 @@ public class PDFGenerator {
 
     }
 
+
     private int getTrayDue(String tid ) {
         int total =0;
 
@@ -357,7 +358,133 @@ public class PDFGenerator {
     }
 
 
-    private void calculateValues(ArrayList<MoneyTransactionModel> itemList) {
+    public boolean createTrayDataPdf(String filename, ArrayList<TrayTransactionModel> itemList, ArrayList<TrayMasterModel> trayList, CustomerModel model,String type, String dateRange) {
+        trayModelList = new ArrayList<>();
+        trayModelList = itemList;
+
+
+        File ssb = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "SSB");
+        if (!ssb.mkdirs()) {
+            ssb.mkdirs();
+        }
+
+        String pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
+        File file = new File(pdfPath, "SSB/" + filename + ".pdf");
+        OutputStream outputStream = null;
+
+
+        try {
+            outputStream = new FileOutputStream(file);
+            PdfWriter pdfWriter = new PdfWriter(outputStream);
+            PdfDocument pdfDocument = new PdfDocument(pdfWriter);
+
+            Document document = new Document(pdfDocument);
+
+            Paragraph paragraph = new Paragraph("SSB");
+            paragraph.setTextAlignment(TextAlignment.CENTER);
+            paragraph.setFontColor(ColorConstants.BLUE);
+            paragraph.setFontSize(28);
+            paragraph.setBold();
+            document.add(paragraph);
+
+
+            Paragraph titlePara = new Paragraph(UtilsMethod.capitalize(model.getName()) + "'s Trays Got ");
+            titlePara.setTextAlignment(TextAlignment.CENTER);
+            titlePara.setFontSize(20);
+            titlePara.setBold();
+            document.add(titlePara);
+
+            Paragraph dateCurrent = new Paragraph("Date: " + UtilsMethod.getCurrentDate().substring(0, 10));
+            dateCurrent.setTextAlignment(TextAlignment.LEFT);
+            dateCurrent.setFontSize(15);
+            document.add(dateCurrent);
+
+
+            float[] widthColoumn = {250, 300, 150, 150, 200};
+            Table table2 = new Table(widthColoumn);
+            table2.addCell(new Cell().add(new Paragraph("Date").setBold().setFontSize(16).setBackgroundColor(ColorConstants.LIGHT_GRAY)));
+            table2.addCell(new Cell().add(new Paragraph("Details").setBold().setFontSize(16).setBackgroundColor(ColorConstants.LIGHT_GRAY)));
+            table2.addCell(new Cell().add(new Paragraph("Trays").setTextAlignment(TextAlignment.RIGHT).setBold().setFontSize(16).setBackgroundColor(ColorConstants.LIGHT_GRAY)));
+            table2.addCell(new Cell().add(new Paragraph("Qty").setTextAlignment(TextAlignment.RIGHT).setBold().setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontSize(16)));
+            table2.addCell(new Cell().add(new Paragraph("Balance").setTextAlignment(TextAlignment.RIGHT).setBold().setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontSize(16)));
+
+
+            int total = 0;
+            for (int i=0;i<trayModelList.size();i++){
+                if (trayModelList.get(i).getStatus().equals(type)){
+                    total += trayModelList.get(i).getTotal();
+                    table2.addCell(new Cell().add(new Paragraph(trayModelList.get(i).getDate().substring(0,10)).setBold().setFontSize(12)));
+                    table2.addCell(new Cell().add(new Paragraph(trayModelList.get(i).getDescription()).setBold().setFontSize(14)));
+                    table2.addCell(new Cell().add(new Paragraph(getTrays(trayModelList.get(i))).setTextAlignment(TextAlignment.RIGHT).setBold().setFontSize(14)));
+                    table2.addCell(new Cell().add(new Paragraph(getQty(trayModelList.get(i)))).setTextAlignment(TextAlignment.RIGHT).setBold().setFontSize(14));
+                    table2.addCell(new Cell().add(new Paragraph(String.valueOf(trayModelList.get(i).getTotal())).setTextAlignment(TextAlignment.RIGHT).setBold().setFontSize(14)));
+
+                }
+
+            }
+
+
+            float[] chawidht = {600, 600};
+            Table chalTotalTabel = new Table(chawidht);
+
+            chalTotalTabel.addCell(new Cell(2, 1).add(new Paragraph("Total Balance").setBold().setFontSize(20).setTextAlignment(TextAlignment.LEFT)).setBackgroundColor(ColorConstants.LIGHT_GRAY));
+            chalTotalTabel.addCell(new Cell(2, 1).add(new Paragraph(String.valueOf(total)).setBold().setFontSize(20).setTextAlignment(TextAlignment.RIGHT)).setBackgroundColor(ColorConstants.LIGHT_GRAY));
+
+
+            document.add(new Paragraph("\n"));
+            document.add(table2);
+            document.add(new Paragraph("\n"));
+            document.add(chalTotalTabel);
+
+            document.close();
+
+            return true;
+
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Log.v("paresh", e.toString());
+            return false;
+        }
+    }
+
+    private String getQty(TrayTransactionModel trayTransactionModel) {
+        String total = "";
+
+        for (int i=0;i<trayTransactionModel.getModelItemArrayList().size();i++){
+            if (i==0){
+                total+=String.valueOf(trayTransactionModel.getModelItemArrayList().get(i).getTotalCount());
+            }else{
+                total+="\n"+String.valueOf(trayTransactionModel.getModelItemArrayList().get(i).getTotalCount());
+            }
+        }
+
+        return total;
+
+    }
+
+    private String getTrays(TrayTransactionModel trayTransactionModel) {
+
+        String text = "";
+
+        for (int i=0;i<trayTransactionModel.getModelItemArrayList().size();i++){
+            if (i==0){
+                text+=UtilsMethod.capitalize(trayTransactionModel.getModelItemArrayList().get(i).getName());
+            }else{
+                text+="\n"+UtilsMethod.capitalize(trayTransactionModel.getModelItemArrayList().get(i).getName());
+            }
+        }
+
+        return text;
+    }
+
+
+    public boolean createTrayStatement(String filename, ArrayList<TrayTransactionModel> itemList, ArrayList<TrayMasterModel> trayList, CustomerModel model, String dateRange) {
+        return false;
+    }
+
+
+        private void calculateValues(ArrayList<MoneyTransactionModel> itemList) {
         totalGot = 0;
         totalGave = 0;
 

@@ -53,10 +53,10 @@ import static com.ssb.ssbapp.Utils.UtilsMethod.isBetween;
 
 public class TrayReport extends SSBBaseActivity {
 
-    private String cid,fileName="";
+    private String cid, fileName = "";
     private RecyclerView reportMoneyRecycelr;
     private Button fromDate, toDate;
-    Spinner filterSpinner,typeSpinner;
+    Spinner filterSpinner, typeSpinner;
 
     TextView netBalance, totalIn, totalOut, entriesText, generatePDF, sharePDF;
     TrayTransactionAdapter adapter;
@@ -65,7 +65,7 @@ public class TrayReport extends SSBBaseActivity {
     private DatabaseReference entryRef;
     Date minimalDate, maximalDate;
     Query query;
-    CustomerModel currentModel=null;
+    CustomerModel currentModel = null;
     ArrayList<TrayMasterModel> trayList;
     SimpleDateFormat dateFormat;
     Calendar calendar2, calendar1;
@@ -75,7 +75,7 @@ public class TrayReport extends SSBBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tray_report);
         cid = getIntent().getStringExtra("cid");
-        setToolbar(getApplicationContext(),"TRAY REPORT");
+        setToolbar(getApplicationContext(), "TRAY REPORT");
 
         filterSpinner = findViewById(R.id.filterSpinner);
         typeSpinner = findViewById(R.id.typeSpinner);
@@ -104,10 +104,10 @@ public class TrayReport extends SSBBaseActivity {
 
         getTrayList();
 
-        if (cid.equals("")){
+        if (cid.equals("")) {
             query = entryRef.orderByChild("kid").equalTo(getLocalSession().getString(Constants.SSB_PREF_KID));
             fileName = "Ssb Khata Tray Report";
-        }else{
+        } else {
             query = entryRef.orderByChild("cid").equalTo(cid);
             getUserDetails();
 
@@ -125,7 +125,6 @@ public class TrayReport extends SSBBaseActivity {
                 R.array.type, android.R.layout.simple_spinner_item);
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         typeSpinner.setAdapter(typeAdapter);
-
 
 
         final DatePickerDialog.OnDateSetListener dateSetListener2 = new DatePickerDialog.OnDateSetListener() {
@@ -179,8 +178,6 @@ public class TrayReport extends SSBBaseActivity {
 
             }
         });
-
-
 
 
         filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -245,19 +242,43 @@ public class TrayReport extends SSBBaseActivity {
 
                 StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
                 StrictMode.setVmPolicy(builder.build());
-                String dates = fromDate.getText().toString() + " - "+ toDate.getText().toString();
+                String dates = fromDate.getText().toString() + " - " + toDate.getText().toString();
 
-                if(pdf.createTrayDuePdf(fileName,modelArrayList,trayList , currentModel,dates)){
+                boolean isGenerated = false;
 
-                    File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString(),"SSB/"+fileName+".pdf");
+                switch (typeSpinner.getSelectedItemPosition()) {
+                    case 0:
+                        isGenerated = pdf.createTrayStatement(fileName, modelArrayList, trayList, currentModel, dates);
+                        break;
+                    case 1:
+                        isGenerated = pdf.createTrayDuePdf(fileName, modelArrayList, trayList, currentModel, dates);
+                        break;
+                    case 2:
+                        isGenerated = pdf.createTrayDataPdf(fileName, modelArrayList, trayList, currentModel,"got", dates);
+                        break;
+                    case 3:
+                        isGenerated = pdf.createTrayDataPdf(fileName, modelArrayList, trayList, currentModel,"gave", dates);
+
+                        break;
+                    case 4:
+//                        isGenerated = pdf.createTrayDuePdf(fileName, modelArrayList, trayList, currentModel, dates);
+
+                        break;
+                    default:
+                        break;
+                }
+
+                if (isGenerated) {
+
+                    File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString(), "SSB/" + fileName + ".pdf");
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.setDataAndType(Uri.fromFile(file), "application/pdf");
                     intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     startActivity(intent);
 
-                }else{
+                } else {
 
-                    showMessageToast("Report Failed!\ntry Again Later",true);
+                    showMessageToast("Report Failed!\nTry Later", true);
                 }
 
             }
@@ -270,30 +291,55 @@ public class TrayReport extends SSBBaseActivity {
 
                 StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
                 StrictMode.setVmPolicy(builder.build());
-                String dates = fromDate.getText().toString() + " - "+ toDate.getText().toString();
+                String dates = fromDate.getText().toString() + " - " + toDate.getText().toString();
 
-                if(pdf.createTrayDuePdf(fileName,modelArrayList,trayList , currentModel,dates)){
 
-                    File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString(),"SSB/"+fileName+".pdf");
+                boolean isGenerated = false;
+
+                switch (typeSpinner.getSelectedItemPosition()) {
+                    case 0:
+                        isGenerated = pdf.createTrayStatement(fileName, modelArrayList, trayList, currentModel, dates);
+                        break;
+                    case 1:
+                        isGenerated = pdf.createTrayDuePdf(fileName, modelArrayList, trayList, currentModel, dates);
+                        break;
+                    case 2:
+                        isGenerated = pdf.createTrayDataPdf(fileName, modelArrayList, trayList, currentModel,"got", dates);
+                        break;
+                    case 3:
+                        isGenerated = pdf.createTrayDataPdf(fileName, modelArrayList, trayList, currentModel,"gave", dates);
+
+                        break;
+                    case 4:
+//                        isGenerated = pdf.createTrayDuePdf(fileName, modelArrayList, trayList, currentModel, dates);
+
+                        break;
+                    default:
+                        break;
+                }
+
+
+
+                if (isGenerated) {
+
+                    File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString(), "SSB/" + fileName + ".pdf");
                     Intent intent = new Intent(Intent.ACTION_SEND);
                     intent.setDataAndType(Uri.fromFile(file), "application/pdf");
                     intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     startActivity(intent);
 
-                }else{
+                } else {
 
-                    showMessageToast("Report Failed!\ntry Again Later",true);
+                    showMessageToast("Report Failed!\nTry Later", true);
                 }
 
             }
         });
 
 
-
         getAllEntryList();
 
         reportMoneyRecycelr.setAdapter(adapter);
-
 
 
     }
@@ -303,19 +349,19 @@ public class TrayReport extends SSBBaseActivity {
         trayList = new ArrayList<>();
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull  DataSnapshot snapshot) {
-                if (snapshot.exists()){
-                    for (DataSnapshot snapshot1 : snapshot.getChildren()){
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                         trayList.add(snapshot1.getValue(TrayMasterModel.class));
                     }
                 }
 
-                Toast.makeText(TrayReport.this, ""+trayList.get(0).getName(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(TrayReport.this, "" + trayList.get(0).getName(), Toast.LENGTH_SHORT).show();
 
             }
 
             @Override
-            public void onCancelled(@NonNull  DatabaseError error) {
+            public void onCancelled(@NonNull DatabaseError error) {
 
                 finish();
             }
@@ -349,8 +395,6 @@ public class TrayReport extends SSBBaseActivity {
     }
 
 
-
-
     private void loadRecyclerFromDate() {
 
         modelArrayList.clear();
@@ -359,7 +403,7 @@ public class TrayReport extends SSBBaseActivity {
 
             try {
                 if (isBetween(dateFormat.parse(model.getDate().substring(0, 10)), minimalDate, maximalDate)) {
-                    Log.v("paresh",model.getTeid());
+                    Log.v("paresh", model.getTeid());
                     modelArrayList.add(model);
                 }
             } catch (ParseException e) {
@@ -382,9 +426,10 @@ public class TrayReport extends SSBBaseActivity {
         switch (i) {
             case 0:
                 //TODO write logic to set calendar for ALL .
-
-                loadCashDetals(totalEntry);
-                adapter.updateList(totalEntry);
+                modelArrayList.clear();
+                modelArrayList.addAll(totalEntry);
+                loadCashDetals(modelArrayList);
+                adapter.updateList(modelArrayList);
                 break;
             case 1:
                 //TODO write logic to set calendar for LAST WEEK.
@@ -468,19 +513,19 @@ public class TrayReport extends SSBBaseActivity {
                 double t = model.getTotal();
                 totalGot += t;
             } else {
-                double tg =  model.getTotal();
+                double tg = model.getTotal();
                 totalGave += tg;
             }
         }
 
-        totalIn.setText( String.valueOf(totalGot));
-        totalOut.setText( String.valueOf(totalGave));
-        entriesText.setText(String.valueOf(modelArrayList.size())+"Entries");
+        totalIn.setText(String.valueOf(totalGot));
+        totalOut.setText(String.valueOf(totalGave));
+        entriesText.setText(String.valueOf(modelArrayList.size()) + "Entries");
         if (totalGave - totalGot < 0) {
-            netBalance.setText("Total:  " +  String.valueOf(Math.abs(totalGave - totalGot)));
+            netBalance.setText("Total:  " + String.valueOf(Math.abs(totalGave - totalGot)));
         } else {
             double num = Math.abs(totalGave - totalGot);
-            netBalance.setText("Total:  " +  String.valueOf(num));
+            netBalance.setText("Total:  " + String.valueOf(num));
 
         }
 
@@ -489,13 +534,13 @@ public class TrayReport extends SSBBaseActivity {
 
 
     private void getUserDetails() {
-        DatabaseReference ref =  FirebaseDatabase.getInstance().getReference().child("customers").child(cid);
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("customers").child(cid);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 currentModel = snapshot.getValue(CustomerModel.class);
-                fileName=currentModel.getName()+"Tray"+ UtilsMethod.getCurrentDate().substring(18);
+                fileName = currentModel.getName() + "Tray" + UtilsMethod.getCurrentDate().substring(18);
 
             }
 
@@ -507,7 +552,6 @@ public class TrayReport extends SSBBaseActivity {
 
 
     }
-
 
 
 }
