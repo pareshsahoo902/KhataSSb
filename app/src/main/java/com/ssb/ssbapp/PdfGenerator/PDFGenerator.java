@@ -17,6 +17,7 @@ import com.itextpdf.layout.element.AreaBreak;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.IBlockElement;
 import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Tab;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.property.TextAlignment;
@@ -480,7 +481,204 @@ public class PDFGenerator {
 
 
     public boolean createTrayStatement(String filename, ArrayList<TrayTransactionModel> itemList, ArrayList<TrayMasterModel> trayList, CustomerModel model, String dateRange) {
-        return false;
+
+        trayModelList = new ArrayList<>();
+        trayModelList = itemList;
+
+
+        File ssb = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "SSB");
+        if (!ssb.mkdirs()) {
+            ssb.mkdirs();
+        }
+
+        String pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
+        File file = new File(pdfPath, "SSB/" + filename + ".pdf");
+        OutputStream outputStream = null;
+
+        if (trayList.size()<=0){
+            return false;
+        }
+
+        try {
+            outputStream = new FileOutputStream(file);
+            PdfWriter pdfWriter = new PdfWriter(outputStream);
+            PdfDocument pdfDocument = new PdfDocument(pdfWriter);
+
+            Document document = new Document(pdfDocument);
+
+            Paragraph paragraph = new Paragraph("SSB");
+            paragraph.setTextAlignment(TextAlignment.CENTER);
+            paragraph.setFontColor(ColorConstants.BLUE);
+            paragraph.setFontSize(28);
+            paragraph.setBold();
+            document.add(paragraph);
+
+
+            Paragraph titlePara = new Paragraph(UtilsMethod.capitalize(model.getName()) + "'s Tray  Statement ");
+            titlePara.setTextAlignment(TextAlignment.CENTER);
+            titlePara.setFontSize(20);
+            titlePara.setBold();
+            document.add(titlePara);
+
+            Paragraph dateCurrent = new Paragraph("Date: " + UtilsMethod.getCurrentDate().substring(0, 10));
+            dateCurrent.setTextAlignment(TextAlignment.LEFT);
+            dateCurrent.setFontSize(15);
+            document.add(dateCurrent);
+
+
+            float[] widths = {200, 200, 200, 200};
+            Table table1 = new Table(widths);
+            table1.setTextAlignment(TextAlignment.CENTER);
+
+            table1.addCell(new Cell().add(new Paragraph("Opening Balance").setFontSize(14).setTextAlignment(TextAlignment.CENTER)));
+            table1.addCell(new Cell().add(new Paragraph("Total Got").setFontSize(14).setTextAlignment(TextAlignment.CENTER)));
+            table1.addCell(new Cell().add(new Paragraph("Total Gave").setFontSize(14).setTextAlignment(TextAlignment.CENTER)));
+            table1.addCell(new Cell().add(new Paragraph("Net Balance").setFontSize(14).setTextAlignment(TextAlignment.CENTER)));
+
+
+            table1.addCell(new Cell(2, 1).add(new Paragraph("3000").setFontSize(18).setBold().setTextAlignment(TextAlignment.CENTER)));
+            table1.addCell(new Cell(2, 1).add(new Paragraph("400").setFontSize(18).setBold().setTextAlignment(TextAlignment.CENTER)));
+            table1.addCell(new Cell(2, 1).add(new Paragraph("200").setFontSize(18).setBold().setTextAlignment(TextAlignment.CENTER)));
+            table1.addCell(new Cell(2, 1).add(new Paragraph("300").setFontSize(18).setBold().setTextAlignment(TextAlignment.CENTER)));
+            document.add(new Paragraph("\n"));
+            document.add(table1);
+
+
+
+            ArrayList<Float> floatList =new ArrayList<>();
+            if (trayList.size()>0 && trayList.size()<6){
+                floatList.clear();
+               floatList.add(120f);
+               floatList.add(120f);
+
+               for (int i =0;i<trayList.size();i++){
+                   floatList.add(60f);
+               }
+
+
+            }else if (trayList.size()>=6 && trayList.size()<10){
+                floatList.clear();
+                floatList.add(100f);
+                floatList.add(100f);
+
+                for (int i =0;i<trayList.size();i++){
+                    floatList.add(70f);
+                }
+            }else if(trayList.size()>=10 && trayList.size()<15){
+                floatList.clear();
+                floatList.add(80f);
+                floatList.add(80f);
+
+                for (int i =0;i<trayList.size();i++){
+                    floatList.add(50f);
+                }
+            }else{
+                floatList.clear();
+                floatList.add(60f);
+                floatList.add(60f);
+
+                for (int i =0;i<trayList.size();i++){
+                    floatList.add(30f);
+                }
+            }
+
+
+            float[] tableWidthRange = new float[floatList.size()];
+            int index = 0;
+
+            for (Float f : floatList) {
+                tableWidthRange[index++] = (f != null ? f : Float.NaN); // Or whatever default you want.
+            }
+            Log.v("paresh", String.valueOf(trayList.size())+"\n"+tableWidthRange.length);
+
+
+            Table tableStatement = new Table(tableWidthRange);
+            tableStatement.addCell(new Cell().add(new Paragraph("Date").setBold().setFontSize(13).setBackgroundColor(ColorConstants.LIGHT_GRAY)));
+            tableStatement.addCell(new Cell().add(new Paragraph("Details").setBold().setFontSize(13).setBackgroundColor(ColorConstants.LIGHT_GRAY)));
+
+            for (TrayMasterModel model1 : trayList){
+                tableStatement.addCell(new Cell().add(new Paragraph(model1.getName()+"\nGot | Gave").setTextAlignment(TextAlignment.CENTER).setBold().setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontSize(6)));
+            }
+
+
+            for (TrayTransactionModel item : itemList){
+                tableStatement.addCell(new Cell().add(new Paragraph(item.getDate().substring(0,10)).setTextAlignment(TextAlignment.LEFT).setFontSize(10)));
+                tableStatement.addCell(new Cell().add(new Paragraph(item.getDescription()).setTextAlignment(TextAlignment.LEFT).setFontSize(10)));
+
+                for (int i =0;i<trayList.size();i++){
+                    int c= getCTray(item.getModelItemArrayList(),trayList.get(i).getTid());
+                    if (c>0){
+                        if (item.getStatus().equals("got")){
+                            tableStatement.addCell(new Cell().add(new Paragraph(c+" | 0\nBal:0").setTextAlignment(TextAlignment.CENTER).setFontSize(6)));
+
+                        }else{
+                            tableStatement.addCell(new Cell().add(new Paragraph("0 | "+c+"\nBal:0").setTextAlignment(TextAlignment.CENTER).setFontSize(6)));
+
+                        }
+
+                    }else{
+                        tableStatement.addCell(new Cell().add(new Paragraph("0 | 0\nBal:0").setTextAlignment(TextAlignment.CENTER).setFontSize(6)));
+
+                    }
+                }
+            }
+
+
+            document.add(new Paragraph("\n"));
+            document.add(tableStatement);
+
+            float[] chawidht = {600, 600};
+            Table chalTotalTabel = new Table(chawidht);
+
+            chalTotalTabel.addCell(new Cell(2, 1).add(new Paragraph("Total Tray Balance").setBold().setFontSize(20).setTextAlignment(TextAlignment.LEFT)).setBackgroundColor(ColorConstants.LIGHT_GRAY));
+            chalTotalTabel.addCell(new Cell(2, 1).add(new Paragraph(String.valueOf(getTotalTrayBalance(itemList))).setBold().setFontSize(20).setTextAlignment(TextAlignment.RIGHT)).setBackgroundColor(ColorConstants.LIGHT_GRAY));
+
+            document.add(new Paragraph("\n"));
+            document.add(chalTotalTabel);
+
+            document.close();
+            return true;
+
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Log.v("paresh", e.toString());
+            return false;
+        }
+
+    }
+
+    private int getTotalTrayBalance(ArrayList<TrayTransactionModel> itemList) {
+
+        int tot = 0;
+        int tgot = 0,tgave=0;
+        for (TrayTransactionModel model : itemList){
+            if (model.getStatus().equals("got")) {
+
+                tgot += model.getTotal();
+            } else {
+
+                tgave +=  model.getTotal();;
+            }
+        }
+
+        if (tgave>tgot){
+
+        }else{
+            tot = tgot-tgave;
+        }
+
+        return tot;
+    }
+
+    private int getCTray(ArrayList<TrayModelItem> items , String tid){
+        int count =0;
+        for (TrayModelItem item: items){
+            if (item.getId().equals(tid)){
+                count=item.getTotalCount();
+            }
+        }
+        return count;
     }
 
 
