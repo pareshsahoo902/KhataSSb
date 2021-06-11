@@ -520,10 +520,17 @@ public class PDFGenerator {
             titlePara.setBold();
             document.add(titlePara);
 
+
+            document.add(new Paragraph("("+dateRange+")").setFontColor(ColorConstants.BLUE).setBold().setTextAlignment(TextAlignment.CENTER));
+            document.add(new Paragraph("\n"));
+
+
             Paragraph dateCurrent = new Paragraph("Date: " + UtilsMethod.getCurrentDate().substring(0, 10));
             dateCurrent.setTextAlignment(TextAlignment.LEFT);
             dateCurrent.setFontSize(15);
             document.add(dateCurrent);
+
+            int total = getTotalTrayBalance(itemList);
 
 
             float[] widths = {200, 200, 200, 200};
@@ -536,10 +543,10 @@ public class PDFGenerator {
             table1.addCell(new Cell().add(new Paragraph("Net Balance").setFontSize(14).setTextAlignment(TextAlignment.CENTER)));
 
 
-            table1.addCell(new Cell(2, 1).add(new Paragraph("3000").setFontSize(18).setBold().setTextAlignment(TextAlignment.CENTER)));
-            table1.addCell(new Cell(2, 1).add(new Paragraph("400").setFontSize(18).setBold().setTextAlignment(TextAlignment.CENTER)));
-            table1.addCell(new Cell(2, 1).add(new Paragraph("200").setFontSize(18).setBold().setTextAlignment(TextAlignment.CENTER)));
-            table1.addCell(new Cell(2, 1).add(new Paragraph("300").setFontSize(18).setBold().setTextAlignment(TextAlignment.CENTER)));
+            table1.addCell(new Cell(2, 1).add(new Paragraph("00").setFontSize(18).setBold().setTextAlignment(TextAlignment.CENTER)));
+            table1.addCell(new Cell(2, 1).add(new Paragraph(""+totalGot).setFontSize(18).setBold().setTextAlignment(TextAlignment.CENTER)));
+            table1.addCell(new Cell(2, 1).add(new Paragraph(""+totalGave).setFontSize(18).setBold().setTextAlignment(TextAlignment.CENTER)));
+            table1.addCell(new Cell(2, 1).add(new Paragraph(""+total).setFontSize(18).setBold().setTextAlignment(TextAlignment.CENTER)));
             document.add(new Paragraph("\n"));
             document.add(table1);
 
@@ -597,7 +604,7 @@ public class PDFGenerator {
             tableStatement.addCell(new Cell().add(new Paragraph("Details").setBold().setFontSize(13).setBackgroundColor(ColorConstants.LIGHT_GRAY)));
 
             for (TrayMasterModel model1 : trayList){
-                tableStatement.addCell(new Cell().add(new Paragraph(model1.getName()+"\nGot | Gave").setTextAlignment(TextAlignment.CENTER).setBold().setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontSize(6)));
+                tableStatement.addCell(new Cell().add(new Paragraph(model1.getName()+"\n"+String.valueOf(getTrayTotal(itemList,model1.getTid(),"got"))+" | "+String.valueOf(getTrayTotal(itemList,model1.getTid(),"gave"))).setTextAlignment(TextAlignment.CENTER).setBold().setBackgroundColor(ColorConstants.LIGHT_GRAY).setFontSize(6)));
             }
 
 
@@ -668,6 +675,9 @@ public class PDFGenerator {
             tot = tgot-tgave;
         }
 
+        totalGave= tgave;
+        totalGot= tgot;
+
         return tot;
     }
 
@@ -702,6 +712,22 @@ public class PDFGenerator {
         openingBalance = 0.0;
     }
 
+    private int getTrayTotal(ArrayList<TrayTransactionModel> modelList , String tid, String type){
+
+        int t = 0;
+
+        for (TrayTransactionModel model:modelList){
+            if (model.getStatus().equals(type)){
+                for (TrayModelItem ite:model.getModelItemArrayList()){
+                    if (ite.getId().equals(tid)){
+                        t+=ite.getTotalCount();
+                    }
+                }
+            }
+        }
+        return t;
+
+    }
 
     private double calcBalance(int position) {
         double balance = 0.0;

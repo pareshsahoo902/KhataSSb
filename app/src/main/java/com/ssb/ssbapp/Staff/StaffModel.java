@@ -5,14 +5,14 @@ import java.io.Serializable;
 public class StaffModel implements Serializable {
 
 
-    String name , aadhar ,contact,branch , profile_image, date_of_joining;
+    String name , aadhar ,contact,branch , profile_image, date_of_joining,last_salary;
     boolean admin;
     int type , salary;
 
     public StaffModel() {
     }
 
-    public StaffModel(String name, String aadhar, String contact, String branch, String profile_image, String date_of_joining, boolean admin, int type, int salary) {
+    public StaffModel(String name, String aadhar, String contact, String branch, String profile_image, String date_of_joining, boolean admin, int type, int salary, String last_salary) {
         this.name = name;
         this.aadhar = aadhar;
         this.contact = contact;
@@ -22,6 +22,7 @@ public class StaffModel implements Serializable {
         this.admin = admin;
         this.type = type;
         this.salary = salary;
+        this.last_salary= last_salary;
     }
 
     public String getName() {
@@ -94,5 +95,13 @@ public class StaffModel implements Serializable {
 
     public void setSalary(int salary) {
         this.salary = salary;
+    }
+
+    public String getLast_salary() {
+        return last_salary;
+    }
+
+    public void setLast_salary(String last_salary) {
+        this.last_salary = last_salary;
     }
 }
