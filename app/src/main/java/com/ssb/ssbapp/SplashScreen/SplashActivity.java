@@ -47,6 +47,15 @@ public class SplashActivity extends SSBBaseActivity {
             }
         },500);
 
+
+
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -59,8 +68,5 @@ public class SplashActivity extends SSBBaseActivity {
                 }
             }
         },2500);
-
-
-
     }
 }

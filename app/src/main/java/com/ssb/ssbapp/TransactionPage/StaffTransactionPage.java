@@ -1,7 +1,9 @@
 package com.ssb.ssbapp.TransactionPage;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,13 +26,17 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import com.ssb.ssbapp.CashDetails.CashDetailsActivity;
+import com.ssb.ssbapp.KhataMaster.KhataManagment;
 import com.ssb.ssbapp.Model.KhataModel;
 import com.ssb.ssbapp.R;
 import com.ssb.ssbapp.Staff.SalaryModel;
 import com.ssb.ssbapp.Staff.StaffModel;
+import com.ssb.ssbapp.TransactionModel.MoneyTransactionModel;
+import com.ssb.ssbapp.Utils.Constants;
 import com.ssb.ssbapp.Utils.SSBBaseActivity;
 import com.ssb.ssbapp.Utils.UtilsMethod;
 import com.ssb.ssbapp.ViewHolder.SalaryTransactionViewHolder;
@@ -39,6 +46,7 @@ import com.ssb.ssbapp.salary.CreditSalaryBottomSheet;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -51,13 +59,15 @@ public class StaffTransactionPage extends SSBBaseActivity {
     TextView name, DOJ, salary;
     Button viewDetails;
     CardView creditBtn;
-    boolean isPayDay=false;
+    boolean isPayDay=true;
     String payDate = "";
+    TextView geta;
     private RecyclerView staffTransactionRecycler;
     DatabaseReference staffRef;
     private FirebaseRecyclerOptions<SalaryModel> staffoptions;
     private FirebaseRecyclerAdapter<SalaryModel, SalaryTransactionViewHolder> staffRecycleradapter;
-
+    private double totalGave, totalGot;
+    private ArrayList<SalaryModel> modelArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +79,7 @@ public class StaffTransactionPage extends SSBBaseActivity {
         staffImage = findViewById(R.id.staff_image);
         name = findViewById(R.id.staffNameTitle);
         DOJ = findViewById(R.id.staffDateOfJoining);
+        geta = findViewById(R.id.geta);
         salary = findViewById(R.id.staffSalary);
         viewDetails = findViewById(R.id.viewStaffdetails);
         creditBtn = findViewById(R.id.creditBtn);
@@ -79,7 +90,30 @@ public class StaffTransactionPage extends SSBBaseActivity {
         staffTransactionRecycler.hasFixedSize();
 
         staffRef = FirebaseDatabase.getInstance().getReference().child("staffTransaction");
+        staffRef.keepSynced(true);
 
+        Query query = staffRef.orderByChild("staffID").equalTo(mStaff.getAadhar());
+
+        modelArrayList = new ArrayList<>();
+
+
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                modelArrayList.clear();
+                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                    modelArrayList.add(snapshot1.getValue(SalaryModel.class));
+                }
+                updateBalance(modelArrayList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+        });
 
         viewDetails.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,7 +125,10 @@ public class StaffTransactionPage extends SSBBaseActivity {
         creditBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString("sid",mStaff.getAadhar());
                 CreditSalaryBottomSheet bottomSheet = new CreditSalaryBottomSheet();
+                bottomSheet.setArguments(bundle);
                 bottomSheet.show(getSupportFragmentManager(), "Credit Salary");
             }
         });
@@ -99,6 +136,23 @@ public class StaffTransactionPage extends SSBBaseActivity {
         loadStaffDetails();
         checkCreditSalaryStatus();
         loadTransaction();
+    }
+
+    private void updateBalance(ArrayList<SalaryModel> modelArrayList) {
+
+        totalGave=0.0;
+        totalGot=0.0;
+        for (SalaryModel model:modelArrayList){
+            if (model.getStatus().equals("got")){
+                totalGot+=model.getAmount();
+            }else{
+                totalGave+=model.getAmount();
+            }
+        }
+
+        double total = totalGot-totalGave;
+        geta.setText("Total Pending Salary : "+getCurrencyStr()+String.valueOf(total));
+
     }
 
     private void checkCreditSalaryStatus() {
@@ -120,7 +174,7 @@ public class StaffTransactionPage extends SSBBaseActivity {
             public void onDataChange(@NonNull  DataSnapshot snapshot) {
                 if (snapshot.exists()){
                     for (DataSnapshot snapshot1:snapshot.getChildren()){
-                        if (snapshot1.getKey().equals(payDate+"Salary")){
+                        if (snapshot1.getKey().equals(payDate+mStaff.getAadhar())){
                             isPayDay=false;
                             
                         }else {
@@ -153,9 +207,9 @@ public class StaffTransactionPage extends SSBBaseActivity {
 
     private void giveSalary() {
 
-        SalaryModel model = new SalaryModel(payDate+"Salary",(double) (mStaff.getSalary()),UtilsMethod.getCurrentDate(),"got");
+        SalaryModel model = new SalaryModel(payDate+"Salary",(double) (mStaff.getSalary()),UtilsMethod.getCurrentDate(),"got",mStaff.getAadhar());
 
-        staffRef.child(payDate+"Salary").setValue(model);
+        staffRef.child(payDate+mStaff.getAadhar()).setValue(model);
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         ref.child("staff").child(mStaff.getAadhar()).child("last_salary").setValue(payDate);
@@ -179,6 +233,25 @@ public class StaffTransactionPage extends SSBBaseActivity {
                     salaryTransactionViewHolder.got.setText(getCurrencyStr() + String.valueOf(salaryModel.getAmount()));
 
                 }
+
+                salaryTransactionViewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        new AlertDialog.Builder(StaffTransactionPage.this)
+                                .setTitle(Html.fromHtml("<font color='#03503E'>Delete Salary Entry</font>"))
+                                .setMessage("Are you sure you want to delete all data attached to this khata ?")
+                                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // Continue with delete operation
+                                        staffRef.child(salaryModel.getSid()).removeValue();
+                                    }
+                                })
+                                .setNegativeButton("NO", null)
+                                .show();
+
+                        return true;
+                    }
+                });
             }
 
             @NonNull

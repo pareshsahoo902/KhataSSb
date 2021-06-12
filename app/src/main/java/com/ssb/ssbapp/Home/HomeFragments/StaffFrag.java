@@ -12,14 +12,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import com.ssb.ssbapp.R;
+import com.ssb.ssbapp.Sessions.LocalSession;
 import com.ssb.ssbapp.Staff.StaffModel;
 import com.ssb.ssbapp.TransactionPage.StaffTransactionPage;
 import com.ssb.ssbapp.Utils.UtilsMethod;
@@ -27,15 +32,16 @@ import com.ssb.ssbapp.ViewHolder.StaffListItem;
 import com.ssb.ssbapp.ViewHolder.StaffViewHolder;
 
 import static com.ssb.ssbapp.Utils.Constants.SSB_EMPLOYEE_DETAILS;
+import static com.ssb.ssbapp.Utils.Constants.SSB_PREF_KID;
 
 public class StaffFrag extends Fragment {
 
     RecyclerView staffRecycler;
-    private DatabaseReference staffRef;
-
+    private DatabaseReference staffRef,staffTransaction;
+    private double totalGave, totalGot;
     private FirebaseRecyclerOptions<StaffModel> staffoptions;
     private FirebaseRecyclerAdapter<StaffModel, StaffListItem> staffRecycleradapter;
-
+private TextView gavemoney , getmoney;
     public StaffFrag() {
         // Required empty public constructor
     }
@@ -46,6 +52,8 @@ public class StaffFrag extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_staff, container, false);
 
+        gavemoney = view.findViewById(R.id.gavemoney);
+        getmoney = view.findViewById(R.id.getmoney);
         staffRecycler = view.findViewById(R.id.stafffragrecycler);
         staffRecycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         staffRecycler.hasFixedSize();
@@ -53,11 +61,53 @@ public class StaffFrag extends Fragment {
         staffRef = FirebaseDatabase.getInstance().getReference().child("staff");
         staffRef.keepSynced(true);
 
+        staffTransaction = FirebaseDatabase.getInstance().getReference().child("staffTransaction");
+        staffTransaction.keepSynced(true);
 
         loadStaffMemebers();
-
+        calculateGotGave();
         return view;
     }
+
+
+
+    private void calculateGotGave() {
+
+        staffTransaction.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                totalGot = 0;
+                totalGave = 0;
+                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+
+                        if (snapshot1.child("status").getValue().equals("got")) {
+                            long t =  (long)snapshot1.child("amount").getValue();
+                            totalGot += t;
+                        } else {
+                            long tg =  (long)snapshot1.child("amount").getValue();
+
+                            totalGave += tg;
+                        }
+
+
+                }
+                calcText();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+    }
+
+
+
+
 
     private void loadStaffMemebers() {
         staffoptions = new FirebaseRecyclerOptions.Builder<StaffModel>()
@@ -100,6 +150,18 @@ public class StaffFrag extends Fragment {
         staffRecycler.setAdapter(staffRecycleradapter);
         staffRecycleradapter.startListening();
 
+    }
+
+
+    private void calcText() {
+
+        if (totalGave - totalGot < 0) {
+            gavemoney.setText("₹" + String.valueOf(Math.abs(totalGave - totalGot)));
+        } else {
+            double num = (double) Math.abs(totalGave - totalGot);
+            getmoney.setText("₹" + String.valueOf(num));
+
+        }
     }
 
 

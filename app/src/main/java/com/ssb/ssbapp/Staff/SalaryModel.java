@@ -2,6 +2,7 @@ package com.ssb.ssbapp.Staff;
 
 public class SalaryModel {
     String sid;
+    String staffID;
     double amount;
     String date;
     String status;
@@ -9,11 +10,12 @@ public class SalaryModel {
     public SalaryModel() {
     }
 
-    public SalaryModel(String sid, double amount, String date, String status) {
+    public SalaryModel(String sid, double amount, String date, String status,String staffID) {
         this.sid = sid;
         this.amount = amount;
         this.date = date;
         this.status = status;
+        this.staffID=staffID;
     }
 
     public String getSid() {
@@ -42,6 +44,14 @@ public class SalaryModel {
 
     public String getStatus() {
         return status;
+    }
+
+    public String getStaffID() {
+        return staffID;
+    }
+
+    public void setStaffID(String staffID) {
+        this.staffID = staffID;
     }
 
     public void setStatus(String status) {

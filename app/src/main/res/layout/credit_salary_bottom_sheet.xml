@@ -32,6 +32,8 @@
             android:id="@+id/amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_baseline_monetization_on_24"
+            android:drawableTint="@color/colorPrimary"
             android:hint="Amount"
             android:inputType="numberDecimal"
             android:text=""
@@ -41,6 +43,34 @@
     </com.google.android.material.textfield.TextInputLayout>
 
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/slaryDate"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cust_name"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_weight="1"
+        android:textColorHint="@color/colorPrimaryDark"
+        app:boxStrokeColor="@color/colorPrimaryDark"
+        app:boxStrokeWidth="1dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/salaryDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:cursorVisible="false"
+            android:drawableEnd="@drawable/ic_baseline_calendar_today_24"
+            android:drawableTint="@color/colorPrimary"
+            android:focusable="false"
+            android:hint="Salary Date"
+            android:inputType="none"
+            android:textColor="@color/headingTextColor"
+            android:textSize="18dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
 
     <com.google.android.material.button.MaterialButton
@@ -48,7 +78,7 @@
         style="@style/appButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_below="@+id/cust_name"
+        android:layout_below="@+id/slaryDate"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="40dp"
         android:layout_marginRight="30dp"

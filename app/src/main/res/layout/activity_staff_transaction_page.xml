@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:text="Total Salary Credited  : ₹  0"
             android:textColor="@color/primaryRed"
-            android:textSize="20dp"
+            android:textSize="17dp"
             android:textStyle="bold"
             android:layout_gravity="center_vertical|start"
             android:layout_marginLeft="20dp"
@@ -40,7 +40,7 @@
             android:layout_height="35dp"
             android:layout_gravity="center_vertical|end"
             android:layout_marginRight="20dp"
-            android:src="@drawable/pdf"
+            android:src="@drawable/ic_baseline_delete_24"
             android:tint="@color/colorPrimary"
             />
     </androidx.cardview.widget.CardView>
@@ -52,7 +52,8 @@
         android:layout_marginTop="7dp"
         android:layout_below="@+id/statusbar"
         android:orientation="horizontal"
-        android:padding="5dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="10dp"
         android:weightSum="4"
 
         >
