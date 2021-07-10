@@ -121,6 +121,7 @@ public class TrayEntryActivity extends SSBBaseActivity implements ImagePickerDai
         availableRecycler = findViewById(R.id.availableTrayRecycler);
         availableRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         availableRecycler.hasFixedSize();
+        availableRecycler.isNestedScrollingEnabled();
 
         userStorage = FirebaseStorage.getInstance().getReference().child("SSB").child("Tray Transaction Image");
 
@@ -468,20 +469,23 @@ public class TrayEntryActivity extends SSBBaseActivity implements ImagePickerDai
                         saveEntry.setTag(false);
                         if (isAdded[0]) {
                             isAdded[0] = false;
-                            trayListViewHolder.enterTrayText.setFocusable(true);
+                            showProgress();
                             deleteTrayFromList(trayMasterModel.getTid());
+
                             trayListViewHolder.enterTrayText.setText("");
                             saveEntry.setText("Total =" + String.valueOf(getTotalTray()));
                             trayListViewHolder.add.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_add_circle_outline_24));
                             trayListViewHolder.add.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimaryDark)));
+
                         } else {
                             isAdded[0] = true;
-                            trayListViewHolder.enterTrayText.setFocusable(false);
                             hideKeybaord(v);
+                            showProgress();
                             trayLists.add(new TrayModelItem(trayMasterModel.getTid(), trayMasterModel.getName(), Integer.parseInt(trayListViewHolder.enterTrayText.getText().toString())));
                             trayListViewHolder.add.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_close_24));
                             trayListViewHolder.add.setBackgroundTintList(ColorStateList.valueOf(Color.RED));
                             saveEntry.setText("Total =" + String.valueOf(getTotalTray()));
+                            dismissProgress();
 
                         }
 
@@ -514,11 +518,19 @@ public class TrayEntryActivity extends SSBBaseActivity implements ImagePickerDai
     }
 
     private void deleteTrayFromList(String tid) {
+
+        TrayModelItem item = null;
+
         for (TrayModelItem modelItem : trayLists) {
             if (modelItem.getId().equals(tid)) {
-                trayLists.remove(modelItem);
+                item=modelItem;
+                dismissProgress();
                 showMessageToast("Tray Removed", false);
             }
+        }
+        if (item!=null){
+            trayLists.remove(item);
+
         }
     }
 

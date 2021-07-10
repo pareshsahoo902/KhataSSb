@@ -11,6 +11,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import com.ssb.ssbapp.R;
 import com.ssb.ssbapp.TransactionModel.MoneyTransactionModel;
@@ -31,9 +36,12 @@ public class TrayTransactionAdapter extends RecyclerView.Adapter<TrayTransaction
 
     private ArrayList<TrayTransactionModel> modelArrayList;
     private Context mContext;
+    private boolean isName;
 
-    public TrayTransactionAdapter(ArrayList<TrayTransactionModel> modelArrayList, Context mContext) {
+
+    public TrayTransactionAdapter(ArrayList<TrayTransactionModel> modelArrayList, Context mContext, boolean isName) {
         this.mContext = mContext;
+        this.isName=isName;
         updateList(modelArrayList);
     }
 
@@ -48,6 +56,27 @@ public class TrayTransactionAdapter extends RecyclerView.Adapter<TrayTransaction
     public void onBindViewHolder(@NonNull TrayTransactionViewHolder holder, int position) {
 
         TrayTransactionModel model = modelArrayList.get(position);
+
+        if (isName){
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+            ref.child("customers").child(model.getCid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()){
+                        holder.name.setText((String)snapshot.child("name").getValue());
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+            holder.name.setVisibility(View.VISIBLE);
+        }
+
+
         holder.dateText.setText("Date: "+model.getDate().substring(0,10));
         holder.detailText.setText(model.getDescription());
         holder.descriptionText.setVisibility(View.VISIBLE);
@@ -60,6 +89,17 @@ public class TrayTransactionAdapter extends RecyclerView.Adapter<TrayTransaction
             Picasso.with(mContext).load(model.getImageUrl())
                     .into(holder.billImage);
             holder.billImage.setVisibility(View.VISIBLE);
+        }
+        if (model.getDescription().length()<1){
+            holder.detailText.setVisibility(View.GONE);
+        }
+
+
+        if (isName){
+
+            holder.balance.setVisibility(View.GONE);
+            holder.billImage.setVisibility(View.GONE);
+            holder.trayCountText.setVisibility(View.GONE);
         }
 
         if (model.getStatus().equals("got")) {
@@ -81,7 +121,6 @@ public class TrayTransactionAdapter extends RecyclerView.Adapter<TrayTransaction
             holder.balance.setBackgroundColor(mContext.getResources().getColor(R.color.litered));
 
         }
-
 
 
 

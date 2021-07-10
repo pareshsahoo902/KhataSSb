@@ -21,13 +21,14 @@
     <application
         android:name=".Utils.FirebaseHelper"
         android:allowBackup="true"
-        android:requestLegacyExternalStorage="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/MyMaterialTheme">
-        <activity android:name=".TrayMaster.TrayStockDetails"></activity>
+        <activity android:name=".DailyReport.DailyReport"></activity>
+        <activity android:name=".TrayMaster.TrayStockDetails" />
         <activity android:name=".TrayDetails.TraySalesAndEpense" />
         <activity android:name=".report.TrayReport" />
         <activity android:name=".report.ReportActivity" />

@@ -139,6 +139,7 @@ public class CashDetailsActivity extends SSBBaseActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+
             }
         });
     }

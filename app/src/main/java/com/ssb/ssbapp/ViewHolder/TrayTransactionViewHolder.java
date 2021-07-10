@@ -12,7 +12,7 @@ import com.ssb.ssbapp.R;
 
 public class TrayTransactionViewHolder extends RecyclerView.ViewHolder {
 
-    public TextView dateText,detailText,trayCountText,descriptionText,gaveText,gotText,balance;
+    public TextView dateText,detailText,trayCountText,descriptionText,gaveText,gotText,balance,name;
     public ImageView billImage;
     public FrameLayout gotLayout, gaveLayout;
 
@@ -29,5 +29,7 @@ public class TrayTransactionViewHolder extends RecyclerView.ViewHolder {
         gotLayout = itemView.findViewById(R.id.gotFrame);
         gaveLayout = itemView.findViewById(R.id.giveFrame);
         balance = itemView.findViewById(R.id.balanceText);
+        name = itemView.findViewById(R.id.nameCus);
+        name.setVisibility(View.GONE);
     }
 }

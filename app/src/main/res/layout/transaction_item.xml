@@ -22,12 +22,25 @@
             android:layout_weight="0.2"
             >
             <TextView
+                android:id="@+id/nameCus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:layout_marginLeft="10dp"
+                android:layout_alignParentLeft="true"
+
+
+                />
+
+            <TextView
                 android:id="@+id/dateText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="12dp"
                 android:textStyle="bold"
                 android:textColor="@color/black"
+                android:layout_below="@+id/nameCus"
                 android:gravity="center"
                 android:fontFamily="@font/roboto_slab"
                 android:layout_marginLeft="10dp"
@@ -39,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="12dp"
                 android:textColor="@color/black"
-                android:layout_below="@+id/dateText"
+                android:layout_below="@+id/descriptionText"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp"
                 />
@@ -59,11 +72,11 @@
                 android:id="@+id/descriptionText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="10dp"
+                android:textSize="14dp"
                 android:textColor="@color/black"
                 android:visibility="gone"
                 android:fontFamily="@font/roboto_slab"
-                android:layout_below="@+id/amountText"
+                android:layout_below="@+id/dateText"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp"
                 />
@@ -73,7 +86,7 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:scaleType="centerCrop"
-                android:layout_below="@+id/descriptionText"
+                android:layout_below="@+id/amountText"
                 android:layout_marginTop="7dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginBottom="5dp"
@@ -122,6 +135,7 @@
 
 
     </LinearLayout>
+
 
 
 

@@ -112,7 +112,7 @@ public class ViewTransactonPage extends SSBBaseActivity implements ShareablePick
     private void loadDetails() {
 
 
-        entryText.setText(moneyTransactionModel.getEntriesText());
+        entryText.setText(moneyTransactionModel.getDescription()+"\n"+moneyTransactionModel.getEntriesText());
         date.setText(moneyTransactionModel.getDate());
         desc.setText(moneyTransactionModel.getDescription());
         amountTotal.setText("Amt:" + getCurrencyStr() + String.valueOf(moneyTransactionModel.getTotal()));

@@ -26,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ssb.ssbapp.Customer.CustomerModel;
 import com.ssb.ssbapp.DialogHelper.AddCustomerBottomSheet;
+import com.ssb.ssbapp.Model.CalcModel;
 import com.ssb.ssbapp.R;
 import com.ssb.ssbapp.Sessions.LocalSession;
 import com.ssb.ssbapp.TransactionPage.TrayTransactionPage;
@@ -33,6 +34,9 @@ import com.ssb.ssbapp.Utils.Constants;
 import com.ssb.ssbapp.Utils.UtilsMethod;
 import com.ssb.ssbapp.ViewHolder.CustomerListViewHolder;
 import com.ssb.ssbapp.report.TrayReport;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static com.ssb.ssbapp.Utils.Constants.SSB_PREF_KID;
 
@@ -46,6 +50,7 @@ public class TrayFrag extends Fragment {
     private LinearLayout reportView;
     private FirebaseRecyclerOptions<CustomerModel> custoptions;
     private FirebaseRecyclerAdapter<CustomerModel, CustomerListViewHolder> custRecycleradapter;
+    private Set<CalcModel> GotT, GaveT;
 
     public TrayFrag() {
         // Required empty public constructor
@@ -68,6 +73,8 @@ public class TrayFrag extends Fragment {
         custRecycler.hasFixedSize();
 
         custRef = FirebaseDatabase.getInstance().getReference().child("customers");
+        GotT = new HashSet<CalcModel>();
+        GaveT = new HashSet<CalcModel>();
 
         trayFab = view.findViewById(R.id.floatingActionButtontray);
         reportView.setOnClickListener(new View.OnClickListener() {
@@ -87,8 +94,9 @@ public class TrayFrag extends Fragment {
         customeEntryrRef = FirebaseDatabase.getInstance().getReference().child("trayTransaction");
         customeEntryrRef.keepSynced(true);
 
+
         loadCustomers();
-        calculateGotGave();
+//        calculateGotGave();
 
         return view;
     }
@@ -153,14 +161,20 @@ public class TrayFrag extends Fragment {
                             viewHolder.status.setTextColor(Color.parseColor("#FFCC0000"));
                             viewHolder.status.setText("You'll give");
                             viewHolder.amount.setText(String.valueOf(Math.abs(tGV - tGO))+" Trays");
+                            GotT.add( new CalcModel(custModel.getUid(), Math.abs(tGV - tGO)));
+
                         } else {
                             viewHolder.amount.setTextColor(Color.parseColor("#FF669900"));
                             viewHolder.status.setTextColor(Color.parseColor("#FF669900"));
                             int num = (int) Math.abs(tGV - tGO);
                             viewHolder.status.setText("You'll get");
                             viewHolder.amount.setText(String.valueOf(Math.abs(num))+" Trays");
+                            GaveT.add( new CalcModel(custModel.getUid(), Math.abs(tGV - tGO)));
+
 
                         }
+
+                        calcText();
                     }
 
                     @Override
@@ -193,49 +207,26 @@ public class TrayFrag extends Fragment {
     }
 
 
-    private void calculateGotGave() {
-
-        customeEntryrRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                totalGot = 0;
-                totalGave = 0;
-                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-                    if (snapshot1.child("kid").getValue().equals(LocalSession.getString(SSB_PREF_KID))) {
-                        if (snapshot1.child("status").getValue().equals("got")) {
-                            long t = (long) snapshot1.child("total").getValue();
-                            totalGot += t;
-                        } else {
-                            long tg = (long) snapshot1.child("total").getValue();
-                            totalGave += tg;
-                        }
-                    }
-
-                }
-                calcText();
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-
-    }
 
 
     private void calcText() {
+        totalGot=0;
+        totalGave=0;
 
-        if (totalGave - totalGot < 0) {
-            gavemoney.setText("↑ "+String.valueOf(Math.abs(totalGave - totalGot)));
-        } else {
-            int num = (int) Math.abs(totalGave - totalGot);
-            getmoney.setText("↓ "+ String.valueOf(num));
-
+        for (CalcModel d : GotT) {
+            totalGot += d.getAmountTray();
         }
+
+        for (CalcModel d1 : GaveT) {
+            totalGave += d1.getAmountTray();
+        }
+
+
+        getmoney.setText("↑"+String.valueOf(totalGave));
+
+        gavemoney.setText("↓"+String.valueOf(totalGot));
+
+
     }
 
 
@@ -244,12 +235,13 @@ public class TrayFrag extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        calcText();
         custRecycleradapter.startListening();
     }
 
     @Override
     public void onResume() {
-        calculateGotGave();
+       calcText();
         super.onResume();
     }
 

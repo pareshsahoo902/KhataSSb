@@ -247,12 +247,14 @@ public class PDFGenerator {
 
 
     private ArrayList<MoneyTransactionModel> getChalanData(ArrayList<MoneyTransactionModel> itemList) {
+        ArrayList<MoneyTransactionModel> models;
+        models= new ArrayList<>();
         for (MoneyTransactionModel model : itemList) {
-            if (!model.isParty()) {
-                itemList.remove(model);
+            if (model.isParty()) {
+                models.add(model);
             }
         }
-        return itemList;
+        return models;
     }
     ////////////////////////////////////TRAY/////////////////////////////////////////////////////////////
 

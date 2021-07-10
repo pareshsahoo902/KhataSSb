@@ -154,7 +154,7 @@ public class TrayReport extends SSBBaseActivity {
             }
         };
 
-        adapter = new TrayTransactionAdapter(modelArrayList, TrayReport.this);
+        adapter = new TrayTransactionAdapter(modelArrayList, TrayReport.this,false);
 
         fromDate.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -155,13 +155,10 @@ private TextView gavemoney , getmoney;
 
     private void calcText() {
 
-        if (totalGave - totalGot < 0) {
-            gavemoney.setText("₹" + String.valueOf(Math.abs(totalGave - totalGot)));
-        } else {
-            double num = (double) Math.abs(totalGave - totalGot);
-            getmoney.setText("₹" + String.valueOf(num));
 
-        }
+        getmoney.setText("₹" + String.valueOf(totalGave));
+
+        gavemoney.setText("₹" + String.valueOf(totalGot));
     }
 
 

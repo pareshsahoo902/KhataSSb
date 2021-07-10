@@ -13,7 +13,7 @@ import com.ssb.ssbapp.R;
 public class MOneyTransactionviewHolder extends RecyclerView.ViewHolder {
 
 
-    public TextView amountTotal , desc, entryText , date , balance , gotText,gaveText;
+    public TextView amountTotal , desc, entryText , date , balance , gotText,gaveText,name;
     public FrameLayout gaveLayout, gotLayout;
     public ImageView billIMage;
 
@@ -30,6 +30,8 @@ public class MOneyTransactionviewHolder extends RecyclerView.ViewHolder {
         gaveLayout = itemView.findViewById(R.id.giveFrame);
         gotLayout = itemView.findViewById(R.id.gotFrame);
         billIMage = itemView.findViewById(R.id.billIMage);
+        name = itemView.findViewById(R.id.nameCus);
+        name.setVisibility(View.GONE);
 
     }
 }

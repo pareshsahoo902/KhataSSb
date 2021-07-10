@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.ssb.ssbapp.BuildConfig;
 import com.ssb.ssbapp.CashDetails.CashDetailsActivity;
+import com.ssb.ssbapp.DailyReport.DailyReport;
 import com.ssb.ssbapp.Home.HomeActivity;
 import com.ssb.ssbapp.KhataMaster.KhataManagment;
 import com.ssb.ssbapp.Login.LoginActivity;
@@ -38,7 +39,7 @@ import com.ssb.ssbapp.Utils.FirebaseHelper;
 
 public class DashboardFrag extends Fragment {
 
-    private CardView logout,trayDetaisl,trayStock, khataCard, trayCard, staffCard,moneyDetails;
+    private CardView logout,trayDetaisl,trayStock,dailyReport, khataCard, trayCard, staffCard,moneyDetails;
     private TextView profile_name,versionName;
     private ImageView profile_pic;
     private FrameLayout edit_btn;
@@ -63,6 +64,7 @@ public class DashboardFrag extends Fragment {
         trayDetaisl = v.findViewById(R.id.TRAYinfo);
         versionName = v.findViewById(R.id.versionID);
         trayStock = v.findViewById(R.id.trayStock);
+        dailyReport = v.findViewById(R.id.dailyReport);
 
         versionName.setText("v"+ BuildConfig.VERSION_NAME);
 
@@ -81,6 +83,13 @@ public class DashboardFrag extends Fragment {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getContext(), TrayDetails.class));
+
+            }
+        });
+        dailyReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), DailyReport.class));
 
             }
         });

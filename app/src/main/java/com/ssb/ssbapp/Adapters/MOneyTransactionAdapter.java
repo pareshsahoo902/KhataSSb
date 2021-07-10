@@ -11,6 +11,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import com.ssb.ssbapp.R;
 import com.ssb.ssbapp.TransactionModel.MoneyTransactionModel;
@@ -28,9 +33,11 @@ public class MOneyTransactionAdapter extends RecyclerView.Adapter<MOneyTransacti
 
     private ArrayList<MoneyTransactionModel> modelArrayList;
     private Context mCOntext;
+    private boolean isName;
 
-    public MOneyTransactionAdapter(ArrayList<MoneyTransactionModel> modelArrayList, Context mCOntext) {
+    public MOneyTransactionAdapter(ArrayList<MoneyTransactionModel> modelArrayList, Context mCOntext, boolean isName) {
         this.mCOntext = mCOntext;
+        this.isName=isName;
        updateList(modelArrayList);
     }
 
@@ -43,6 +50,25 @@ public class MOneyTransactionAdapter extends RecyclerView.Adapter<MOneyTransacti
     @Override
     public void onBindViewHolder(@NonNull MOneyTransactionviewHolder moneyTransactionviewHolder, int position) {
         MoneyTransactionModel moneyTransactionModel = (MoneyTransactionModel)modelArrayList.get(position);
+
+        if (isName){
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+            ref.child("customers").child(moneyTransactionModel.getCid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()){
+                        moneyTransactionviewHolder.name.setText((String)snapshot.child("name").getValue());
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+            moneyTransactionviewHolder.name.setVisibility(View.VISIBLE);
+        }
 
         if (moneyTransactionModel.getStatus().equals("got")) {
             moneyTransactionviewHolder.gotText.setText(getCurrencyStr() + String.valueOf(moneyTransactionModel.getTotal()));
@@ -60,8 +86,9 @@ public class MOneyTransactionAdapter extends RecyclerView.Adapter<MOneyTransacti
         }
 
         moneyTransactionviewHolder.entryText.setText(moneyTransactionModel.getEntriesText());
-        moneyTransactionviewHolder.date.setText(moneyTransactionModel.getDate().substring(0,10));
+        moneyTransactionviewHolder.date.setText("Date: "+moneyTransactionModel.getDate().substring(0,10));
         moneyTransactionviewHolder.amountTotal.setText("Amt:" + getCurrencyStr() + String.valueOf(moneyTransactionModel.getTotal()));
+
 
         double balance = calcBalance(position);
         if (balance < 0) {
@@ -78,6 +105,13 @@ public class MOneyTransactionAdapter extends RecyclerView.Adapter<MOneyTransacti
             moneyTransactionviewHolder.billIMage.setVisibility(View.VISIBLE);
         }
 
+        if (isName){
+
+            moneyTransactionviewHolder.amountTotal.setVisibility(View.GONE);
+            moneyTransactionviewHolder.balance.setVisibility(View.GONE);
+            moneyTransactionviewHolder.billIMage.setVisibility(View.GONE);
+        }
+
 
         moneyTransactionviewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +125,7 @@ public class MOneyTransactionAdapter extends RecyclerView.Adapter<MOneyTransacti
                 );
             }
         });
+
 
 
     }

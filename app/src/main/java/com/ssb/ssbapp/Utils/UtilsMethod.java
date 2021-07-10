@@ -54,15 +54,8 @@ public class UtilsMethod {
      * @return
      */
     public static String capitalize(String capString){
-        String collect[] = capString.split(" ");
-        String capitalizedStr = "";
-        for (int i = 0; i < collect.length; i++) {
-            collect[i] = collect[i].trim().toLowerCase();
-            if (collect[i].isEmpty() == false) {
-                capitalizedStr = capitalizedStr + collect[i].substring(0, 1).toUpperCase() + collect[i].substring(1) + " ";
-            }
-        }
-        return capitalizedStr.trim();
+
+        return capString;
     }
 
 

@@ -123,7 +123,7 @@ public class TrayTransactionPage extends SSBBaseActivity {
 
         model = new ArrayList<>();
 
-        adapter = new TrayTransactionAdapter(model,getApplicationContext());
+        adapter = new TrayTransactionAdapter(model,getApplicationContext(),false);
         trayRecycler.setAdapter(adapter);
 
         query.addValueEventListener(new ValueEventListener() {

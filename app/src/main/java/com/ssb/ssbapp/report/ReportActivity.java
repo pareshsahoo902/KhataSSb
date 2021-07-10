@@ -163,7 +163,7 @@ public class ReportActivity extends SSBBaseActivity {
             }
         });
 
-        adapter = new MOneyTransactionAdapter(modelArrayList, ReportActivity.this);
+        adapter = new MOneyTransactionAdapter(modelArrayList, ReportActivity.this,false);
         toDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

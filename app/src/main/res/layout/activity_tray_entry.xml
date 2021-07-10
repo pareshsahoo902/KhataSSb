@@ -54,7 +54,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/availableTrayRecycler"
                 android:layout_width="match_parent"
-                android:layout_height="370dp"
+                android:layout_height="wrap_content"
                 android:text="New Entries"
                 android:layout_marginRight="10dp"
                 tools:listitem="@layout/tray_detail_item"

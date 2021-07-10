@@ -172,6 +172,8 @@ public class MoneyTransaction extends SSBBaseActivity {
                 bundle.putString("transaction_type", "gave");
                 bundle.putDouble("allGave", totalGave);
                 bundle.putDouble("allGot", totalGot);
+                bundle.putDouble("allTotal", subTotal);
+                bundle.putDouble("allGrandTotal", subGrandTotal);
                 dailog.setArguments(bundle);
                 dailog.show(getSupportFragmentManager(), "Select Entry Type !");
             }
@@ -213,7 +215,7 @@ public class MoneyTransaction extends SSBBaseActivity {
 
     private void loadEntryInRecycler() {
 
-        adapter = new MOneyTransactionAdapter(model, getApplicationContext());
+        adapter = new MOneyTransactionAdapter(model, getApplicationContext(),false);
         entryRecyclerView.setAdapter(adapter);
 
 

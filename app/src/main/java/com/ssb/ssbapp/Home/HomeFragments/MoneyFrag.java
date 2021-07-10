@@ -35,6 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.ssb.ssbapp.Customer.CustomerModel;
 import com.ssb.ssbapp.DialogHelper.AddCustomerBottomSheet;
 import com.ssb.ssbapp.KhataMaster.KhataManagment;
+import com.ssb.ssbapp.Model.CalcModel;
 import com.ssb.ssbapp.R;
 import com.ssb.ssbapp.Sessions.LocalSession;
 import com.ssb.ssbapp.Staff.StaffModel;
@@ -45,20 +46,25 @@ import com.ssb.ssbapp.ViewHolder.CustomerListViewHolder;
 import com.ssb.ssbapp.ViewHolder.StaffListItem;
 import com.ssb.ssbapp.report.ReportActivity;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static com.ssb.ssbapp.Utils.Constants.SSB_PREF_KID;
 
 public class MoneyFrag extends Fragment {
 
     private FloatingActionButton moneyFab;
     private RecyclerView custRecycler;
-    private DatabaseReference custRef,entryRef , customeEntryrRef,trayTranRef;
+    private DatabaseReference custRef, entryRef, customeEntryrRef, trayTranRef;
     private EditText searchBar;
     private double totalGave, totalGot;
     private String searchText;
     private LinearLayout reportView;
-    private TextView gavemoney , getmoney ,countMoney;
+    private TextView gavemoney, getmoney, countMoney;
     private FirebaseRecyclerOptions<CustomerModel> custoptions;
     private FirebaseRecyclerAdapter<CustomerModel, CustomerListViewHolder> custRecycleradapter;
+
+    private Set<CalcModel> GotT, GaveT;
 
     public MoneyFrag() {
         // Required empty public constructor
@@ -102,11 +108,14 @@ public class MoneyFrag extends Fragment {
             }
         });
 
+        GotT = new HashSet<CalcModel>();
+        GaveT = new HashSet<CalcModel>();
+
 
         reportView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getContext(), ReportActivity.class).putExtra("cid",""));
+                startActivity(new Intent(getContext(), ReportActivity.class).putExtra("cid", ""));
             }
         });
         entryRef = FirebaseDatabase.getInstance().getReference().child("customerTransaction");
@@ -144,7 +153,7 @@ public class MoneyFrag extends Fragment {
                     }
 
                 }
-                calcText();
+//                calcText();
 
             }
 
@@ -159,14 +168,23 @@ public class MoneyFrag extends Fragment {
 
 
     private void calcText() {
+        totalGot=0.0;
+        totalGave=0.0;
 
-        if (totalGave - totalGot < 0) {
-            gavemoney.setText("₹" + String.valueOf(Math.abs(totalGave - totalGot)));
-        } else {
-            double num = (double) Math.abs(totalGave - totalGot);
-            getmoney.setText("₹" + String.valueOf(num));
-
+        for (CalcModel d : GotT) {
+            totalGot += d.getAmount();
         }
+
+        for (CalcModel d1 : GaveT) {
+            totalGave += d1.getAmount();
+        }
+
+
+        getmoney.setText("₹" + String.valueOf(totalGave));
+
+        gavemoney.setText("₹" + String.valueOf(totalGot));
+
+
     }
 
 
@@ -182,7 +200,7 @@ public class MoneyFrag extends Fragment {
         custRecycleradapter = new FirebaseRecyclerAdapter<CustomerModel, CustomerListViewHolder>(custoptions) {
             @Override
             protected void onBindViewHolder(@NonNull CustomerListViewHolder viewHolder, int i, @NonNull CustomerModel custModel) {
-                countMoney.setText(String.valueOf(custRecycleradapter.getItemCount())+" Customers");
+                countMoney.setText(String.valueOf(custRecycleradapter.getItemCount()) + " Customers");
 
                 viewHolder.nameCust.setText(UtilsMethod.capitalize(custModel.getName()));
 //                viewHolder.amount.setText("Salary : "+"₹"+String.valueOf(custModel.get())+"/Month");
@@ -210,7 +228,7 @@ public class MoneyFrag extends Fragment {
                                         // Continue with delete operation
                                         deletetransactionInDB(custModel.getUid());
                                         custRef.child(custModel.getUid()).removeValue();
-                                        countMoney.setText(String.valueOf(custRecycleradapter.getItemCount()-1)+" Customers");
+                                        countMoney.setText(String.valueOf(custRecycleradapter.getItemCount() - 1) + " Customers");
 
                                     }
                                 })
@@ -225,8 +243,8 @@ public class MoneyFrag extends Fragment {
                     public void onClick(View v) {
 
                         startActivity(new Intent(getContext(), MoneyTransaction.class)
-                        .putExtra("name",custModel.getName()));
-                        LocalSession.putString(Constants.SSB_PREF_CID,custModel.getUid());
+                                .putExtra("name", custModel.getName()));
+                        LocalSession.putString(Constants.SSB_PREF_CID, custModel.getUid());
                     }
                 });
 
@@ -253,14 +271,19 @@ public class MoneyFrag extends Fragment {
                             viewHolder.status.setTextColor(Color.parseColor("#FFCC0000"));
                             viewHolder.status.setText("You'll give");
                             viewHolder.amount.setText("₹" + String.valueOf(Math.abs(tGV - tGO)));
+                            GotT.add( new CalcModel(custModel.getUid(), Math.abs(tGV - tGO)));
                         } else {
                             viewHolder.amount.setTextColor(Color.parseColor("#FF669900"));
                             viewHolder.status.setTextColor(Color.parseColor("#FF669900"));
                             int num = (int) Math.abs(tGV - tGO);
                             viewHolder.status.setText("You'll get");
                             viewHolder.amount.setText("₹" + String.valueOf(Math.abs(num)));
+                            GaveT.add( new CalcModel(custModel.getUid(), Math.abs(tGV - tGO)));
+
 
                         }
+
+                        calcText();
                     }
 
                     @Override
@@ -330,14 +353,14 @@ public class MoneyFrag extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        calculateGotGave();
+       calcText();
         custRecycleradapter.startListening();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        calculateGotGave();
+       calcText();
     }
 
     @Override
